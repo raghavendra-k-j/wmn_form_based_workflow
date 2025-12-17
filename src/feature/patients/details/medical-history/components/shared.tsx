@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import type { ReactNode } from 'react';
 import { ChevronDown, ChevronUp, Settings, X, Trash2, Plus } from 'lucide-react';
 
 /* ============================================================================

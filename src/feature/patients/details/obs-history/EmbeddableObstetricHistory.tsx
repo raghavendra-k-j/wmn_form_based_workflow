@@ -1,4 +1,4 @@
-import { useState, useMemo, type ReactNode } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
@@ -9,8 +9,7 @@ import {
   Eye,
   Edit3,
   ExternalLink,
-  AlertCircle,
-  Calendar
+  AlertCircle
 } from 'lucide-react';
 
 /* ============================================================================
@@ -227,7 +226,7 @@ function SummaryView({ data }: { data: ObstetricHistoryData }) {
         <div className="space-y-1">
           <p className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wide">Previous Pregnancies</p>
           <div className="flex flex-wrap gap-1.5">
-            {pastRecords.map((record, idx) => (
+            {pastRecords.map((record) => (
               <div 
                 key={record.id} 
                 className={`flex items-center gap-1.5 px-2 py-1 rounded border text-xs ${
@@ -287,7 +286,7 @@ export function EmbeddableObstetricHistory({
   defaultCollapsed = true,
   className = '',
   obstetricHistoryPath = '../obstetric-history',
-  onLMPChange
+  // onLMPChange
 }: EmbeddableObstetricHistoryProps) {
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(!defaultCollapsed);

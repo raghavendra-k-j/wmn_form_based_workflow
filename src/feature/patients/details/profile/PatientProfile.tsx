@@ -1,4 +1,4 @@
-import { Edit } from 'lucide-react';
+// import { Edit } from 'lucide-react';
 
 const patientData = {
   id: 'WMN-1027',
