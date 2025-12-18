@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sidebar } from './Sidebar';
+import { Sidebar } from './sidebar';
 
 /** Layout component props */
 interface LayoutProps {
@@ -7,17 +7,19 @@ interface LayoutProps {
   children?: React.ReactNode;
 }
 
-/** Main layout wrapper with sidebar for hospital management system */
+/** Main layout wrapper with sidebar - Carbon Design Theme */
 export function Layout({ children }: LayoutProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-zinc-100 via-zinc-50 to-zinc-100">
+    <div className="flex h-screen overflow-hidden bg-zinc-50">
       <Sidebar isCollapsed={isCollapsed} onToggle={() => setIsCollapsed(!isCollapsed)} />
       <main 
-        className={`flex-1 transition-all duration-300 min-h-screen bg-gradient-to-b from-zinc-50 to-zinc-100 ${
-          isCollapsed ? 'ml-[76px]' : 'ml-[240px]'
-        }`}
+        className="flex-1 h-full overflow-hidden bg-white relative"
+        style={{
+          marginLeft: isCollapsed ? 64 : 240,
+          transition: 'margin-left 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
       >
         <div className="h-full">
           {children}

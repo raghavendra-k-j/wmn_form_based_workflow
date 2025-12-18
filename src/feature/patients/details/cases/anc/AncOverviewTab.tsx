@@ -56,7 +56,6 @@ export function AncOverviewTab({ bookingData, updateBooking, expandedSections, t
     <div className="space-y-0">
       {/* Obstetric History - Shows LMP, GA, EDD */}
       <EmbeddableObstetricHistory 
-        mode="summary"
         defaultCollapsed={false}
       />
 

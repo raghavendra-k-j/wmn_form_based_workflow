@@ -1,23 +1,37 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Layout } from './layout';
-import { PatientListPage, PatientDetailsPage, NewPatientPage } from './feature/patients';
-import { PatientDetailsPageV2 } from './feature/patients/details';
+import { Layout } from './feature/layout';
+import { PatientListPageV2, PatientDetailsPageV2 } from './feature/patientsv2';
+import { ModulePlaceholder } from './feature/shared/components/ModulePlaceholder';
+import { 
+  homeRoute, 
+  appointmentsRoute, 
+  staffsRoute, 
+  doctorsRoute, 
+  settingsRoute, 
+  patientsRoute 
+} from './feature/shared/routes/admin-routes';
 
 function App() {
   return (
     <BrowserRouter>
       <Layout>
         <Routes>
-          {/* Default redirect to patients */}
-          <Route path="/" element={<Navigate to="/patients" replace />} />
+          {/* Main Module Routes */}
+          <Route path={homeRoute} element={<ModulePlaceholder title="Dashboard" />} />
+          <Route path={appointmentsRoute} element={<ModulePlaceholder title="Appointments" />} />
+          <Route path={staffsRoute} element={<ModulePlaceholder title="Staff Management" />} />
+          <Route path={doctorsRoute} element={<ModulePlaceholder title="Doctor Directory" />} />
+          <Route path={settingsRoute} element={<ModulePlaceholder title="System Settings" />} />
           
-          {/* Patient routes */}
-          <Route path="/patients" element={<PatientListPage />} />
-          <Route path="/patients/new" element={<NewPatientPage />} />
-          <Route path="/patients/:patientId/*" element={<PatientDetailsPageV2 />} />
+          {/* Patient Management (v2) */}
+          <Route path={patientsRoute} element={<PatientListPageV2 />} />
+          <Route path={`${patientsRoute}/:patientId/*`} element={<PatientDetailsPageV2 />} />
           
-          {/* Catch-all redirect */}
-          <Route path="*" element={<Navigate to="/patients" replace />} />
+          {/* Legacy or Redirects */}
+          <Route path="/patients/*" element={<Navigate to={patientsRoute} replace />} />
+          
+          {/* Catch-all redirect to Dashboard */}
+          <Route path="*" element={<Navigate to={homeRoute} replace />} />
         </Routes>
       </Layout>
     </BrowserRouter>
