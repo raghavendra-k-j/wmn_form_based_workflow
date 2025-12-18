@@ -1,73 +1,59 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-
-export type HistorySectionId = 
-  | 'pastHistory'
-  | 'personalHistory'
-  | 'familyHistory'
-  | 'presentMedication';
-
-export interface HistorySection {
-  id: HistorySectionId;
-  label: string;
-  isEnabled: boolean;
-}
+import React, { createContext, useContext, useState } from 'react';
 
 interface MedicalHistoryContextType {
-  sections: HistorySection[];
-  toggleSection: (id: HistorySectionId) => void;
-  enableAll: () => void;
-  hasEnabledSections: boolean;
+  isEditMode: boolean;
+  setEditMode: (mode: boolean) => void;
+  expandedSections: Record<string, boolean>;
+  toggleSection: (id: string) => void;
+  expandAll: () => void;
+  collapseAll: () => void;
 }
-
-const DEFAULT_SECTIONS: HistorySection[] = [
-  { id: 'pastHistory', label: 'Past History', isEnabled: true },
-  { id: 'personalHistory', label: 'Personal History', isEnabled: true },
-  { id: 'familyHistory', label: 'Family History', isEnabled: true },
-  { id: 'presentMedication', label: 'Present Medication', isEnabled: true },
-];
-
-const STORAGE_KEY = 'medical-history-config';
 
 const MedicalHistoryContext = createContext<MedicalHistoryContextType | undefined>(undefined);
 
-export function MedicalHistoryProvider({ children }: { children: React.ReactNode }) {
-  const [sections, setSections] = useState<HistorySection[]>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        // Validate stored sections against current valid IDs
-        const parsed = JSON.parse(stored) as HistorySection[];
-        const validIds = DEFAULT_SECTIONS.map(s => s.id);
-        const validSections = parsed.filter(s => validIds.includes(s.id));
-        // If we have all valid sections, use them; otherwise reset to defaults
-        if (validSections.length === DEFAULT_SECTIONS.length) {
-          return validSections;
-        }
-      }
-    } catch (e) {
-      console.warn('Failed to load medical history config', e);
-    }
-    return DEFAULT_SECTIONS;
+export function MedicalHistoryProvider({ children, initialEditMode = false }: { children: React.ReactNode; initialEditMode?: boolean }) {
+  const [isEditMode, setEditMode] = useState(initialEditMode);
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+    pastHistory: false,
+    personalHistory: false,
+    familyHistory: false,
+    presentMedication: false,
   });
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(sections));
-  }, [sections]);
-
-  const toggleSection = (id: HistorySectionId) => {
-    setSections(prev => prev.map(section => 
-      section.id === id ? { ...section, isEnabled: !section.isEnabled } : section
-    ));
+  const toggleSection = (id: string) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
   };
 
-  const enableAll = () => {
-    setSections(DEFAULT_SECTIONS);
-  }
+  const expandAll = () => {
+    setExpandedSections({
+      pastHistory: true,
+      personalHistory: true,
+      familyHistory: true,
+      presentMedication: true,
+    });
+  };
 
-  const hasEnabledSections = sections.some(s => s.isEnabled);
+  const collapseAll = () => {
+    setExpandedSections({
+      pastHistory: false,
+      personalHistory: false,
+      familyHistory: false,
+      presentMedication: false,
+    });
+  };
 
   return (
-    <MedicalHistoryContext.Provider value={{ sections, toggleSection, enableAll, hasEnabledSections }}>
+    <MedicalHistoryContext.Provider value={{ 
+      isEditMode, 
+      setEditMode,
+      expandedSections,
+      toggleSection,
+      expandAll,
+      collapseAll
+    }}>
       {children}
     </MedicalHistoryContext.Provider>
   );

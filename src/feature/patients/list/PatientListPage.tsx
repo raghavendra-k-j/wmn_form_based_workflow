@@ -120,7 +120,10 @@ export function PatientListPage() {
           </button>
 
           {/* Add Patient Button */}
-          <button className="h-9 px-4 bg-zinc-900 text-white rounded-md text-sm font-medium hover:bg-zinc-800 transition-all flex items-center gap-2 shadow-sm">
+          <button 
+            onClick={() => navigate('/patients/new')}
+            className="h-9 px-4 bg-zinc-900 text-white rounded-md text-sm font-medium hover:bg-zinc-800 transition-all flex items-center gap-2 shadow-sm"
+          >
             <Plus className="w-4 h-4" />
             Add Patient
           </button>

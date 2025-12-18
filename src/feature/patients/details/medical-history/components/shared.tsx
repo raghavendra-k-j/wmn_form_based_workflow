@@ -247,8 +247,9 @@ interface StatusToggleProps<T extends string> {
 export function StatusToggle<T extends string>({ 
   value, 
   options, 
-  onChange 
-}: StatusToggleProps<T>) {
+  onChange,
+  readOnly = false
+}: StatusToggleProps<T> & { readOnly?: boolean }) {
   const currentIndex = options.findIndex(o => o.value === value);
   const currentOption = options[currentIndex] || options[0];
   
@@ -256,6 +257,14 @@ export function StatusToggle<T extends string>({
     const nextIndex = (currentIndex + 1) % options.length;
     onChange(options[nextIndex].value);
   };
+
+  if (readOnly) {
+    return (
+      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium border min-w-[70px] justify-center ${currentOption.className}`}>
+        {currentOption.label}
+      </span>
+    );
+  }
 
   return (
     <button 
@@ -285,7 +294,16 @@ export function TableInput({
   placeholder, 
   className = '',
   isBold = false,
-}: TableInputProps) {
+  readOnly = false,
+}: TableInputProps & { readOnly?: boolean }) {
+  if (readOnly) {
+    return (
+      <span className={`block w-full py-1.5 text-sm ${isBold ? 'font-medium text-zinc-900' : 'text-zinc-600'} ${className}`}>
+        {value || <span className="text-zinc-300">-</span>}
+      </span>
+    );
+  }
+
   return (
     <input 
       type="text" 

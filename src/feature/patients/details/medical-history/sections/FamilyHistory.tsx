@@ -1,76 +1,75 @@
-import { useState, useEffect } from 'react';
-import { CheckCircle2, Circle, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useMedicalHistory } from '../MedicalHistoryContext';
 import {
-  SectionCard,
-  ConfigureDrawer,
-  SearchInput,
+  AddButton,
   DataTable,
-  TableRow,
+  DeleteButton,
+  DragHandle,
+  SearchInput,
+  SectionBadge,
+  SectionCard,
+  StatusToggle,
   TableCell,
   TableInput,
-  DragHandle,
-  DeleteButton,
-  AddButton,
-  SectionBadge,
+  TableRow,
 } from '../components/shared';
 
 interface FamilyHistoryItem {
   id: string;
-  name: string;
-  familyMember: string;
-  status: 'active' | 'inactive';
+  condition: string;
+  relationship: 'Parent' | 'Sibling' | 'Grandparent' | 'Other';
+  status: 'positive' | 'negative' | 'unknown';
   notes: string;
 }
+
+const STATUS_OPTIONS = [
+  { value: 'positive' as const, label: 'Positive', className: 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100' },
+  { value: 'negative' as const, label: 'Negative', className: 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100' },
+  { value: 'unknown' as const, label: 'Unknown', className: 'bg-zinc-50 text-zinc-500 border-zinc-200 hover:bg-zinc-100' },
+];
+
+const REL_OPTIONS = [
+  { value: 'Parent' as const, label: 'Parent', className: 'bg-blue-50 text-blue-700 border-blue-200' },
+  { value: 'Sibling' as const, label: 'Sibling', className: 'bg-purple-50 text-purple-700 border-purple-200' },
+  { value: 'Grandparent' as const, label: 'Grandparent', className: 'bg-amber-50 text-amber-700 border-amber-200' },
+  { value: 'Other' as const, label: 'Other', className: 'bg-zinc-50 text-zinc-700 border-zinc-200' },
+];
 
 const DEFAULT_ITEMS_LIST = [
   'Diabetes',
   'Hypertension',
-  'Thyroid',
+  'Heart Disease',
+  'Cancer',
   'Stroke',
-  'TB',
-  'Cancers',
-  'Twin',
-  'Physically',
-  'Mentally challenged',
-  'Thromboembolism',
-  'Psychiatric Problems',
-  'Others'
+  'Mental Illness',
+  'Asthma',
+  'Autoimmune'
 ];
 
-const DEFAULTS_STORAGE_KEY = 'family-history-defaults';
-
-const columns = [
-  { key: 'name', label: 'Name', width: '28%' },
-  { key: 'familyMember', label: 'Family Member', width: '22%' },
-  { key: 'status', label: 'Status', width: '15%' },
-  { key: 'notes', label: 'Notes', width: '30%' },
+const columns = (isEditMode: boolean) => [
+  { key: 'condition', label: 'Condition', width: isEditMode ? '28%' : '50%' },
+  { key: 'relationship', label: 'Relation', width: isEditMode ? '18%' : '25%' },
+  { key: 'status', label: 'Status', width: isEditMode ? '18%' : '25%' },
+  ...(isEditMode ? [{ key: 'notes', label: 'Notes', width: '31%' }] : []),
   { key: 'actions', label: '', width: '5%' },
 ];
 
 export function FamilyHistory() {
-  const [defaults, setDefaults] = useState<string[]>(() => {
-    try {
-      const stored = localStorage.getItem(DEFAULTS_STORAGE_KEY);
-      return stored ? JSON.parse(stored) : DEFAULT_ITEMS_LIST;
-    } catch {
-      return DEFAULT_ITEMS_LIST;
-    }
-  });
+  const { isEditMode, expandedSections, toggleSection } = useMedicalHistory();
 
   const [items, setItems] = useState<FamilyHistoryItem[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isConfiguringDefaults, setIsConfiguringDefaults] = useState(false);
-  const [tempDefaults, setTempDefaults] = useState<string[]>([]);
-  const [newDefaultItem, setNewDefaultItem] = useState('');
-  const [isExpanded, setIsExpanded] = useState(true);
+  
+  const isExpanded = expandedSections['familyHistory'];
 
   useEffect(() => {
     if (items.length === 0) {
-      const initialItems = defaults.map((name, index) => ({
+      const initialItems = DEFAULT_ITEMS_LIST.map((name, index) => ({
         id: `default-${index}`,
-        name: name,
-        familyMember: '',
-        status: 'inactive' as const,
+        condition: name,
+        relationship: 'Parent' as const,
+        status: 'unknown' as const,
         notes: ''
       }));
       setItems(initialItems);
@@ -80,9 +79,9 @@ export function FamilyHistory() {
   const handleAdd = () => {
     const newItem: FamilyHistoryItem = {
       id: Date.now().toString(),
-      name: '',
-      familyMember: '',
-      status: 'active',
+      condition: '',
+      relationship: 'Parent',
+      status: 'unknown',
       notes: ''
     };
     setItems([...items, newItem]);
@@ -98,123 +97,115 @@ export function FamilyHistory() {
     ));
   };
 
-  const toggleStatus = (id: string) => {
+  const handleStatusChange = (id: string, status: any) => {
     setItems(items.map(item => 
-      item.id === id ? { ...item, status: item.status === 'active' ? 'inactive' : 'active' } : item
+      item.id === id ? { ...item, status } : item
     ));
   };
 
-  const openDefaultsConfig = () => {
-    setTempDefaults([...defaults]);
-    setIsConfiguringDefaults(true);
+  const handleRelChange = (id: string, relationship: any) => {
+    setItems(items.map(item => 
+      item.id === id ? { ...item, relationship } : item
+    ));
   };
 
-  const saveDefaults = () => {
-    setDefaults(tempDefaults);
-    localStorage.setItem(DEFAULTS_STORAGE_KEY, JSON.stringify(tempDefaults));
-    setIsConfiguringDefaults(false);
-  };
+  const filteredItems = items.filter(i => {
+    const matchesSearch = i.condition.toLowerCase().includes(searchQuery.toLowerCase());
+    if (isEditMode) return matchesSearch;
+    return matchesSearch && i.status === 'positive';
+  });
 
-  const filteredItems = items.filter(i => 
-    i.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const activeCount = items.filter(i => i.status === 'active').length;
+  const positiveCount = items.filter(i => i.status === 'positive').length;
 
   return (
     <>
       <SectionCard
         title="Family History"
         icon={<Users className="w-4 h-4 text-blue-500" />}
-        badge={<SectionBadge count={activeCount} label="active" color="green" />}
+        badge={<SectionBadge count={positiveCount} label="positive" color="blue" />}
         isExpanded={isExpanded}
-        onToggle={() => setIsExpanded(!isExpanded)}
-        showConfigureButton
-        onConfigure={openDefaultsConfig}
+        onToggle={() => toggleSection('familyHistory')}
       >
-        <SearchInput 
-          value={searchQuery} 
-          onChange={setSearchQuery} 
-          placeholder="Search conditions..." 
-        />
+        {isEditMode ? (
+          <>
+            <SearchInput 
+              value={searchQuery} 
+              onChange={setSearchQuery} 
+              placeholder="Search family history..." 
+            />
 
-        <DataTable columns={columns} isEmpty={filteredItems.length === 0} emptyMessage="No family history records">
-          {filteredItems.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>
-                <div className="flex items-center gap-1.5">
-                  <DragHandle className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <TableInput 
-                    value={item.name}
-                    onChange={(v) => handleChange(item.id, 'name', v)}
-                    placeholder="Condition Name"
-                    isBold
-                  />
-                </div>
-              </TableCell>
-              <TableCell>
-                <TableInput 
-                  value={item.familyMember}
-                  onChange={(v) => handleChange(item.id, 'familyMember', v)}
-                  placeholder="e.g. Mother, Father"
-                />
-              </TableCell>
-              <TableCell>
-                <button 
-                  onClick={() => toggleStatus(item.id)}
-                  className={`flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium transition-colors border ${
-                    item.status === 'active' 
-                      ? 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100' 
-                      : 'bg-zinc-50 text-zinc-500 border-zinc-200 hover:bg-zinc-100'
-                  }`}
-                >
-                  {item.status === 'active' ? (
-                    <><CheckCircle2 className="w-3 h-3" /> Yes</>
-                  ) : (
-                    <><Circle className="w-3 h-3" /> No</>
-                  )}
-                </button>
-              </TableCell>
-              <TableCell>
-                <TableInput 
-                  value={item.notes}
-                  onChange={(v) => handleChange(item.id, 'notes', v)}
-                  placeholder="Add notes..."
-                />
-              </TableCell>
-              <TableCell showOnHover>
-                <DeleteButton onClick={() => handleDelete(item.id)} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </DataTable>
+            <DataTable columns={columns(isEditMode)} isEmpty={filteredItems.length === 0} emptyMessage="No family history records">
+              {filteredItems.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <div className="flex items-center gap-1.5">
+                      <DragHandle className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <TableInput 
+                        value={item.condition}
+                        onChange={(v) => handleChange(item.id, 'condition', v)}
+                        placeholder="Condition Name"
+                        isBold
+                        readOnly={!isEditMode}
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <StatusToggle
+                      value={item.relationship}
+                      options={REL_OPTIONS}
+                      onChange={(val) => handleRelChange(item.id, val)}
+                      readOnly={!isEditMode}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <StatusToggle
+                      value={item.status}
+                      options={STATUS_OPTIONS}
+                      onChange={(val) => handleStatusChange(item.id, val)}
+                      readOnly={!isEditMode}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TableInput 
+                      value={item.notes}
+                      onChange={(v) => handleChange(item.id, 'notes', v)}
+                      placeholder="Notes"
+                      readOnly={!isEditMode}
+                    />
+                  </TableCell>
+                  <TableCell showOnHover>
+                    <DeleteButton onClick={() => handleDelete(item.id)} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </DataTable>
 
-        <div className="flex justify-end pt-2 border-t border-zinc-100">
-          <AddButton onClick={handleAdd} label="Add Record" color="blue" />
-        </div>
+            <div className="flex justify-end pt-2 border-t border-zinc-100">
+              <AddButton onClick={handleAdd} label="Add Condition" color="blue" />
+            </div>
+          </>
+        ) : (
+          /* Summary View - Badge Display */
+          <div className="py-2">
+            {filteredItems.length === 0 ? (
+              <p className="text-sm text-zinc-400 italic">No positive family history</p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {filteredItems.map((item) => (
+                  <div 
+                    key={item.id}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border bg-blue-50 text-blue-700 border-blue-200"
+                  >
+                    <span className="font-semibold">{item.condition}</span>
+                    <span className="opacity-60">•</span>
+                    <span className="opacity-75">{item.relationship}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </SectionCard>
-
-      <ConfigureDrawer
-        isOpen={isConfiguringDefaults}
-        onClose={() => setIsConfiguringDefaults(false)}
-        title="Configure Defaults"
-        subtitle="Family History Conditions"
-        accentColor="from-blue-50"
-        description="These conditions will be automatically added for new patients."
-        items={tempDefaults}
-        newItemValue={newDefaultItem}
-        onNewItemChange={setNewDefaultItem}
-        onAddItem={() => {
-          if (newDefaultItem.trim()) {
-            setTempDefaults([...tempDefaults, newDefaultItem.trim()]);
-            setNewDefaultItem('');
-          }
-        }}
-        onRemoveItem={(index) => setTempDefaults(tempDefaults.filter((_, i) => i !== index))}
-        onSave={saveDefaults}
-        inputPlaceholder="Add new condition"
-        emptyText="No default conditions set."
-      />
     </>
   );
 }
