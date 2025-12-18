@@ -1,14 +1,16 @@
 import { useState, type ReactNode } from 'react';
-import { Heart, ClipboardList, Calendar } from 'lucide-react';
+import { Heart, ClipboardList, Calendar, FlaskConical, Pill } from 'lucide-react';
 import { AncOverviewTab, type AncBookingData } from './AncOverviewTab';
 import { AncVisitsTab } from './AncVisitsTab';
 import { AncVisitPage, type AncVisit } from './AncVisitPage';
+import { AncTestsScansTab } from './AncTestsScansTab';
+import { AncPrescriptionsTab } from './AncPrescriptionsTab';
 
 /* ============================================================================
  * TAB COMPONENTS
  * ============================================================================ */
 
-type TabType = 'overview' | 'visits';
+type TabType = 'overview' | 'visits' | 'tests' | 'prescriptions';
 
 interface TabButtonProps {
   active: boolean;
@@ -171,6 +173,20 @@ export function AncCaseView() {
         >
           Visits
         </TabButton>
+        <TabButton 
+          active={activeTab === 'tests'} 
+          onClick={() => setActiveTab('tests')}
+          icon={<FlaskConical className="w-4 h-4" />}
+        >
+          Tests & Scans
+        </TabButton>
+        <TabButton 
+          active={activeTab === 'prescriptions'} 
+          onClick={() => setActiveTab('prescriptions')}
+          icon={<Pill className="w-4 h-4" />}
+        >
+          Prescriptions
+        </TabButton>
       </div>
 
       {/* Tab Content */}
@@ -191,6 +207,12 @@ export function AncCaseView() {
               onEditVisit={handleEditVisit}
               onDeleteVisit={deleteVisit}
             />
+          )}
+          {activeTab === 'tests' && (
+            <AncTestsScansTab />
+          )}
+          {activeTab === 'prescriptions' && (
+            <AncPrescriptionsTab />
           )}
         </div>
       </div>

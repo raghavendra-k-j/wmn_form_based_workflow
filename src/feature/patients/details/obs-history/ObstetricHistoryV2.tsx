@@ -3,8 +3,6 @@ import {
   Plus, 
   Trash2, 
   Baby, 
-  Activity, 
-  Calculator,
   X,
   Save,
   Check,
@@ -12,90 +10,20 @@ import {
   Database,
   Eraser
 } from 'lucide-react';
-
-/* ========================================
-   TYPES
-======================================== */
-type OutcomeType = 'Ongoing' | 'Live Birth' | 'Stillbirth' | 'Miscarriage' | 'Abortion' | 'Ectopic';
-type DeliveryMode = 'NVD' | 'LSCS' | 'Instrumental' | 'Vacuum' | 'Forceps' | 'NA';
-type Gender = 'Male' | 'Female' | 'Other' | 'NA';
-type BabyStatus = 'Living' | 'Deceased' | 'NA';
-
-interface PregnancyRecord {
-  id: string;
-  outcome: OutcomeType;
-  year?: string;
-  lmpDate?: string;
-  gestationWeeks?: number;
-  deliveryMode: DeliveryMode;
-  birthWeight?: string;
-  gender: Gender;
-  babyStatus: BabyStatus;
-  complications: string[];
-  remarks: string;
-}
-
-/* ========================================
-   MOCK DATA (For Prototype Testing)
-======================================== */
-const SAMPLE_DATA: PregnancyRecord[] = [
-  {
-    id: '1',
-    outcome: 'Live Birth',
-    year: '2019',
-    gestationWeeks: 39,
-    deliveryMode: 'NVD',
-    birthWeight: '3.1 kg',
-    gender: 'Female',
-    babyStatus: 'Living',
-    complications: [],
-    remarks: ''
-  },
-  {
-    id: '2',
-    outcome: 'Miscarriage',
-    year: '2021',
-    gestationWeeks: 8,
-    deliveryMode: 'NA',
-    birthWeight: '',
-    gender: 'NA',
-    babyStatus: 'NA',
-    complications: [],
-    remarks: ''
-  },
-  {
-    id: 'current',
-    outcome: 'Ongoing',
-    lmpDate: '2024-06-15',
-    deliveryMode: 'NA',
-    birthWeight: '',
-    gender: 'NA',
-    babyStatus: 'NA',
-    complications: [],
-    remarks: ''
-  }
-];
-
-const COMMON_COMPLICATIONS = [
-  'Pre-eclampsia', 'Gestational Diabetes', 'PPH', 'Preterm Labor', 'IUGR', 'Placenta Previa'
-];
-
-/* ========================================
-   HELPERS
-======================================== */
-function calculateGA(lmpDate: string): { weeks: number; days: number } {
-  const lmp = new Date(lmpDate);
-  const today = new Date();
-  const diffTime = today.getTime() - lmp.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  return { weeks: Math.floor(diffDays / 7), days: diffDays % 7 };
-}
-
-function calculateEDD(lmpDate: string): string {
-  const lmp = new Date(lmpDate);
-  lmp.setDate(lmp.getDate() + 280);
-  return lmp.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-}
+import { 
+  type OutcomeType, 
+  type DeliveryMode, 
+  type Gender, 
+  type BabyStatus, 
+  type PregnancyRecord, 
+  COMMON_COMPLICATIONS, 
+  MOCK_PREGNANCY_DATA,
+  calculateGA, 
+  calculateEDD, 
+  calculateGTPAL,
+  GTPALBar,
+  PregnancyOutcomeBadge
+} from './ObstetricCommon';
 
 /* ========================================
    MAIN COMPONENT
@@ -119,7 +47,7 @@ export function ObstetricHistoryV2() {
   });
 
   // Prototype Helpers
-  const loadSampleData = () => setRecords(SAMPLE_DATA);
+  const loadSampleData = () => setRecords(MOCK_PREGNANCY_DATA);
   const clearAllData = () => setRecords([]);
 
   /* ========================================
@@ -134,21 +62,7 @@ export function ObstetricHistoryV2() {
   const currentEDD = currentPregnancy?.lmpDate ? calculateEDD(currentPregnancy.lmpDate) : null;
 
   // GTPAL Calculation
-  const gtpalScore = useMemo(() => {
-    const gravida = records.length;
-    const term = pastRecords.filter(r => (r.gestationWeeks || 0) >= 37 && (r.outcome === 'Live Birth' || r.outcome === 'Stillbirth')).length;
-    const preterm = pastRecords.filter(r => {
-      const weeks = r.gestationWeeks || 0;
-      return weeks >= 20 && weeks < 37 && (r.outcome === 'Live Birth' || r.outcome === 'Stillbirth');
-    }).length;
-    const abortions = pastRecords.filter(r => {
-      const weeks = r.gestationWeeks || 0;
-      return weeks < 20 || r.outcome === 'Miscarriage' || r.outcome === 'Abortion' || r.outcome === 'Ectopic';
-    }).length;
-    const living = pastRecords.filter(r => r.babyStatus === 'Living').length;
-
-    return { g: gravida, t: term, p: preterm, a: abortions, l: living };
-  }, [records, pastRecords]);
+  const gtpalScore = useMemo(() => calculateGTPAL(records), [records]);
 
   /* ========================================
      HANDLERS
@@ -246,25 +160,8 @@ export function ObstetricHistoryV2() {
       </div>
 
       {/* ===== SCORE BAR ===== */}
-      <div className="px-6 py-3 bg-zinc-50 border-b border-zinc-100 flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <Calculator className="w-4 h-4 text-zinc-400" />
-          <span className="text-sm font-semibold text-zinc-500">GTPAL:</span>
-        </div>
-        <div className="flex items-center gap-2">
-          {[
-            { label: 'G', value: gtpalScore.g, color: 'bg-blue-100 text-blue-700', title: 'Gravida' },
-            { label: 'T', value: gtpalScore.t, color: 'bg-emerald-100 text-emerald-700', title: 'Term (≥37w)' },
-            { label: 'P', value: gtpalScore.p, color: 'bg-amber-100 text-amber-700', title: 'Preterm (20-36w)' },
-            { label: 'A', value: gtpalScore.a, color: 'bg-rose-100 text-rose-700', title: 'Abortions (<20w)' },
-            { label: 'L', value: gtpalScore.l, color: 'bg-indigo-100 text-indigo-700', title: 'Living' },
-          ].map(item => (
-            <div key={item.label} className={`flex items-center rounded ${item.color}`} title={item.title}>
-              <span className="px-2 py-1 text-xs font-bold">{item.label}</span>
-              <span className="px-1.5 py-1 text-xs font-black">{item.value}</span>
-            </div>
-          ))}
-        </div>
+      <div className="px-6 py-1 bg-zinc-50 border-b border-zinc-100">
+        <GTPALBar score={gtpalScore} />
       </div>
 
       {/* ===== CURRENT PREGNANCY CARD ===== */}
@@ -333,14 +230,7 @@ export function ObstetricHistoryV2() {
                   <td className="px-6 py-3 text-zinc-400 font-medium text-xs">{index + 1}</td>
                   <td className="px-6 py-3 font-semibold text-zinc-700">{record.year}</td>
                   <td className="px-6 py-3">
-                    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium
-                      ${record.outcome === 'Live Birth' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' :
-                        record.outcome === 'Stillbirth' ? 'bg-zinc-100 text-zinc-700 border border-zinc-200' :
-                        'bg-rose-50 text-rose-700 border border-rose-100'}
-                    `}>
-                      {record.outcome === 'Live Birth' ? <Baby className="w-3 h-3" /> : <Activity className="w-3 h-3" />}
-                      {record.outcome}
-                    </span>
+                    <PregnancyOutcomeBadge outcome={record.outcome} />
                   </td>
                   <td className="px-6 py-3 text-zinc-600">
                     <div className="flex items-center gap-2">
@@ -593,3 +483,5 @@ export function ObstetricHistoryV2() {
     </div>
   );
 }
+
+export default ObstetricHistoryV2;
