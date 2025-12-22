@@ -11,6 +11,8 @@ import { MedicalHistoryPage } from './medical-history';
 import { ObstetricHistoryPage } from './obs-history';
 import { GynaeFormPage } from './gynae-form';
 import { PncFormPage } from './pnc-form';
+import { AncFormPage } from './anc-form';
+import { BaselineInfoPage } from './anc-baseline/page';
 
 /** Patient Details Layout - Wrapper with context provider */
 function PatientDetailsLayout() {
@@ -39,11 +41,15 @@ function PatientDetailsLayout() {
           <Route path="pnc" element={<PncPage />} />
           <Route path="gynae" element={<GynaePage />} />
           
+          {/* ANC Baseline Information */}
+          <Route path="anc-baseline" element={<BaselineInfoPage />} />
+          
           {/* History & Form Pages */}
           <Route path="medical-history" element={<MedicalHistoryPage />} />
           <Route path="obstetric-history" element={<ObstetricHistoryPage />} />
           <Route path="gynae-form" element={<GynaeFormPage />} />
           <Route path="pnc-form" element={<PncFormPage />} />
+          <Route path="anc-form" element={<AncFormPage />} />
           
           {/* Catch-all redirect to profile */}
           <Route path="*" element={<Navigate to="profile" replace />} />

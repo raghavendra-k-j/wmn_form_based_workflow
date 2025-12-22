@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Baby, Calendar, Heart, Stethoscope, Check, ClipboardList } from 'lucide-react';
+import { Baby, Calendar, Heart, Check } from 'lucide-react';
 import { PncFormProvider, usePncForm } from './context';
 
 /* =============================================================================
@@ -134,7 +134,7 @@ function CheckboxInput({ label, checked, onChange }: {
   onChange: (v: boolean) => void;
 }) {
   return (
-    <label className="flex items-center gap-2 cursor-pointer group">
+    <label className="flex items-center gap-2 cursor-pointer group" onClick={() => onChange(!checked)}>
       <div className={`w-5 h-5 border flex items-center justify-center transition-colors ${
         checked ? 'bg-rose-600 border-rose-600' : 'bg-white border-zinc-300 group-hover:border-zinc-400'
       }`}>

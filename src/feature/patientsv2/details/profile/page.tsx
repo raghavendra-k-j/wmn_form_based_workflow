@@ -7,11 +7,9 @@ import {
   Mail, 
   Briefcase, 
   MessageSquare, 
-  Globe, 
   Hash, 
   UserPlus,
   Edit2,
-  X,
   Save,
   Droplets
 } from 'lucide-react';

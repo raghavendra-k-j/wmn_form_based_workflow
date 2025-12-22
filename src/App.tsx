@@ -8,8 +8,11 @@ import {
   staffsRoute, 
   doctorsRoute, 
   settingsRoute, 
-  patientsRoute 
+  patientsRoute,
+  gyanyEncounterRoute
 } from './feature/shared/routes/admin-routes';
+
+import { GyanyEncounterView, GuyiniEncounterProvider } from './feature/cases/gynae/encounter';
 
 function App() {
   return (
@@ -26,6 +29,16 @@ function App() {
           {/* Patient Management (v2) */}
           <Route path={patientsRoute} element={<PatientListPageV2 />} />
           <Route path={`${patientsRoute}/:patientId/*`} element={<PatientDetailsPageV2 />} />
+
+          {/* Encounter Routes */}
+          <Route 
+            path={gyanyEncounterRoute} 
+            element={
+              <GuyiniEncounterProvider>
+                <GyanyEncounterView />
+              </GuyiniEncounterProvider>
+            } 
+          />
           
           {/* Legacy or Redirects */}
           <Route path="/patients/*" element={<Navigate to={patientsRoute} replace />} />

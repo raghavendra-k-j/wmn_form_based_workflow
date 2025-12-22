@@ -1,7 +1,6 @@
 import { createContext, useContext, useReducer, type ReactNode } from 'react';
 import {
   type ObstetricHistoryState,
-  type ObstetricHistoryAction,
   type PregnancyRecord,
   initialObstetricHistoryState,
   obstetricHistoryReducer,

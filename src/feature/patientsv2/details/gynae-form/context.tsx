@@ -1,7 +1,6 @@
 import { createContext, useContext, useReducer, type ReactNode } from 'react';
 import {
   type GynaeFormState,
-  type GynaeFormAction,
   type MenstrualHistory,
   type PresentingComplaints,
   type Vitals,

@@ -187,15 +187,27 @@ function CaseContextMenu() {
 
       {/* Case Navigation */}
       <div className="flex flex-col bg-white">
+        {/* Baseline Information - For ANC only */}
+        {currentCase === 'anc' && (
+          <MenuButton 
+            icon={FileEdit} 
+            label="Baseline Information"
+            bgColor="bg-emerald-50"
+            textColor="text-emerald-600"
+            onClick={() => goTo('anc-baseline')} 
+            active={isActive('anc-baseline')}
+          />
+        )}
+
         {/* Visit History/Summary - For ANC and Gynae only */}
         {currentCase !== 'pnc' && (
           <MenuButton 
             icon={ClipboardList} 
-            label={currentCase === 'gynae' ? 'Visit History' : 'Visit Summary'}
+            label="Visit History"
             bgColor={config.bgColor}
             textColor={config.textColor}
             onClick={() => goTo(currentCase)} 
-            active={isActive(`/${currentCase}`) && !isActive('form') && !isActive('history')}
+            active={isActive(`/${currentCase}`) && !isActive('form') && !isActive('history') && !isActive('baseline')}
           />
         )}
 
