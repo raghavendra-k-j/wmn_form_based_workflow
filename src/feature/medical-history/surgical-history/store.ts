@@ -1,6 +1,5 @@
 import { makeAutoObservable } from 'mobx';
 import type { SurgicalHistoryItem } from './types';
-import { DEFAULT_SURGERY_NAMES } from './types';
 
 /** Mock previous visit data for simulation */
 const MOCK_PREVIOUS_SURGERIES: SurgicalHistoryItem[] = [

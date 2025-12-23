@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Plus, X, Baby, Copy, XCircle } from 'lucide-react';
+import { Plus, X, Copy, XCircle } from 'lucide-react';
 import { usePreviousPregnanciesStore } from './context';
 import { GTPALBar, PregnancyRow, EmptyState } from '../shared/components';
 import { OUTCOME_OPTIONS, DELIVERY_MODE_OPTIONS, GENDER_OPTIONS } from '../shared/types';
