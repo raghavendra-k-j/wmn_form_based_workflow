@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './feature/layout';
-import { PatientListPageV2, PatientDetailsPageV2 } from './feature/patientsv2';
+
+import { PatientV3Page, PatientListPageV3 } from './feature/patientv3';
 import { ModulePlaceholder } from './feature/shared/components/ModulePlaceholder';
 import { 
   homeRoute, 
@@ -27,12 +28,23 @@ function App() {
           <Route path={settingsRoute} element={<ModulePlaceholder title="System Settings" />} />
           
           {/* Patient Management (v2) */}
-          <Route path={patientsRoute} element={<PatientListPageV2 />} />
-          <Route path={`${patientsRoute}/:patientId/*`} element={<PatientDetailsPageV2 />} />
+          {/* Patient Management (v3) */}
+          <Route path={patientsRoute} element={<PatientListPageV3 />} />
+          <Route path={`${patientsRoute}/:patientId/*`} element={<PatientV3Page />} />
 
           {/* Encounter Routes */}
           <Route 
             path={gyanyEncounterRoute} 
+            element={
+              <GuyiniEncounterProvider>
+                <GyanyEncounterView />
+              </GuyiniEncounterProvider>
+            } 
+          />
+          
+          {/* Gynae Encounter - From Case List Navigation */}
+          <Route 
+            path="/cases/gynae/encounter/:caseId" 
             element={
               <GuyiniEncounterProvider>
                 <GyanyEncounterView />

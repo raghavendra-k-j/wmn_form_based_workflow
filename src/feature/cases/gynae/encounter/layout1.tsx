@@ -12,6 +12,8 @@ import {
   LayoutGrid,
 } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useGuyiniEncounterStore } from './context';
 import { GuyiniEncounterTab, GuyiniEncounterTabConfig, GuyiniEncounterTabList } from './store';
 import { TabContent } from './tabs/renderer';
@@ -58,7 +60,7 @@ const TabButton = observer(({ tab, isActive, onClick }: { tab: GuyiniEncounterTa
   
   return (
     <button
-      className={`gyany-encounter-tab-button ${isActive ? 'gyany-encounter-tab-button--active' : ''}`}
+      className={`gyany-encounter-tab-button cursor-pointer ${isActive ? 'gyany-encounter-tab-button--active' : ''}`}
       onClick={() => onClick(tab)}
       type="button"
     >
@@ -70,6 +72,21 @@ const TabButton = observer(({ tab, isActive, onClick }: { tab: GuyiniEncounterTa
 
 export const GyanyEncounterLayout1 = observer(() => {
   const store = useGuyiniEncounterStore();
+  const navigate = useNavigate();
+  const { patientId, encounterId, tab: urlTab } = useParams<{ patientId: string; encounterId: string; tab: string }>();
+
+  // Sync tab from URL on mount or URL change
+  useEffect(() => {
+    if (urlTab && Object.values(GuyiniEncounterTab).includes(urlTab as GuyiniEncounterTab)) {
+      store.setActiveTab(urlTab as GuyiniEncounterTab);
+    }
+  }, [urlTab, store]);
+
+  // Navigate to tab URL
+  const navigateToTab = (tab: GuyiniEncounterTab) => {
+    store.setActiveTab(tab);
+    navigate(`/patientv3/${patientId}/gynae/${encounterId}/${tab}`, { replace: true });
+  };
 
   return (
     <div className="gyany-encounter-layout h-full flex flex-col bg-white">
@@ -84,7 +101,7 @@ export const GyanyEncounterLayout1 = observer(() => {
               key={tab}
               tab={tab}
               isActive={store.activeTab === tab}
-              onClick={(t) => store.setActiveTab(t)}
+              onClick={(t) => navigateToTab(t)}
             />
           ))}
         </div>
@@ -97,3 +114,4 @@ export const GyanyEncounterLayout1 = observer(() => {
     </div>
   );
 });
+

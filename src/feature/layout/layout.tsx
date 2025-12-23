@@ -9,7 +9,7 @@ interface LayoutProps {
 
 /** Main layout wrapper with sidebar - Carbon Design Theme */
 export function Layout({ children }: LayoutProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
     <div className="flex h-screen overflow-hidden bg-zinc-50">

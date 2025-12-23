@@ -10,6 +10,8 @@ interface AutocompleteInputProps {
   placeholder?: string;
   buttonLabel?: string;
   variant?: 'amber' | 'blue' | 'purple' | 'teal';
+  /** When false, only predefined suggestions can be selected. Custom values are not allowed. */
+  allowCustom?: boolean;
 }
 
 const buttonVariants = {
@@ -52,6 +54,7 @@ export function AutocompleteInput({
   placeholder = 'Type to search...',
   buttonLabel = 'Add',
   variant = 'blue',
+  allowCustom = false,
 }: AutocompleteInputProps) {
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -79,6 +82,18 @@ export function AutocompleteInput({
     return [...startsWithMatches, ...containsMatches];
   })();
 
+  // Check if input exactly matches a suggestion (case-insensitive)
+  const isExactMatch = suggestions.some(
+    (s) => s.toLowerCase() === inputValue.trim().toLowerCase()
+  );
+
+  // Determine if Add button should be enabled
+  // If allowCustom is true: enable when there's input
+  // If allowCustom is false: enable only when input exactly matches a suggestion
+  const isAddButtonEnabled = allowCustom 
+    ? inputValue.trim().length > 0 
+    : isExactMatch;
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -104,11 +119,15 @@ export function AutocompleteInput({
   };
 
   const handleAddCustom = () => {
-    if (inputValue.trim()) {
-      onSelect(inputValue.trim());
-      setInputValue('');
-      setIsOpen(false);
-    }
+    const trimmed = inputValue.trim();
+    if (!trimmed) return;
+    
+    // If custom not allowed, only add if it matches a suggestion exactly
+    if (!allowCustom && !isExactMatch) return;
+    
+    onSelect(trimmed);
+    setInputValue('');
+    setIsOpen(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -134,7 +153,7 @@ export function AutocompleteInput({
         e.preventDefault();
         if (highlightedIndex >= 0 && highlightedIndex < filteredSuggestions.length) {
           handleSelect(filteredSuggestions[highlightedIndex]);
-        } else if (inputValue.trim()) {
+        } else if (isAddButtonEnabled) {
           handleAddCustom();
         }
         break;
@@ -184,7 +203,7 @@ export function AutocompleteInput({
         <button
           type="button"
           onClick={handleAddCustom}
-          disabled={!inputValue.trim()}
+          disabled={!isAddButtonEnabled}
           className={`px-3 py-1.5 text-[11px] font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer ${buttonVariants[variant]}`}
         >
           {buttonLabel}

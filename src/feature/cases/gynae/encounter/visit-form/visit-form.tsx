@@ -20,7 +20,7 @@ const MENSTRUAL_PATTERN_OPTIONS = ['Regular', 'Irregular'];
 
 const FLOW_OPTIONS = ['Light', 'Moderate', 'Heavy'];
 
-const DYSMENORRHEA_OPTIONS = ['None', 'Mild', 'Moderate', 'Severe'];
+const DYSMENORRHEA_OPTIONS = ['Yes', 'No'];
 
 const MICTURITION_OPTIONS = ['Normal', 'Burning', 'Frequency', 'Urgency', 'Incontinence', 'Dysuria', 'Nocturia'];
 
@@ -194,12 +194,12 @@ export const VisitForm = observer(() => {
             placeholder="Days of bleeding"
           />
         </FormField>
-        <FormField label="Dysmenorrhea">
+        <FormField label="Pain with periods">
           <SelectInput
             value={dysmenorrhea}
             onChange={setDysmenorrhea}
             options={DYSMENORRHEA_OPTIONS}
-            placeholder="Pain with periods"
+            placeholder="Select..."
           />
         </FormField>
       </div>

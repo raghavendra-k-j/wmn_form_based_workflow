@@ -13,6 +13,8 @@ import {
   LayoutGrid
 } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useGuyiniEncounterStore } from './context';
 import { GuyiniEncounterTab, GuyiniEncounterTabConfig } from './store';
 import { TabContent } from './tabs/renderer';
@@ -75,7 +77,7 @@ const SideNavButton = observer(({ tab, isActive, onClick }: { tab: GuyiniEncount
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-3 px-3 py-2 text-[13px] font-medium rounded-md transition-colors ${
+      className={`w-full flex items-center gap-3 px-3 py-2 text-[13px] font-medium rounded-md transition-colors cursor-pointer ${
         isActive 
           ? 'bg-slate-100 text-zinc-900' 
           : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-700'
@@ -98,17 +100,32 @@ const LAYOUT2_TOP_TABS = [
 
 export const GyanyEncounterLayout2 = observer(() => {
   const store = useGuyiniEncounterStore();
+  const navigate = useNavigate();
+  const { patientId, encounterId, tab: urlTab } = useParams<{ patientId: string; encounterId: string; tab: string }>();
   const activeTab = store.activeTab;
+
+  // Sync tab from URL on mount or URL change
+  useEffect(() => {
+    if (urlTab && Object.values(GuyiniEncounterTab).includes(urlTab as GuyiniEncounterTab)) {
+      store.setActiveTab(urlTab as GuyiniEncounterTab);
+    }
+  }, [urlTab, store]);
+
+  // Navigate to tab URL
+  const navigateToTab = (tab: GuyiniEncounterTab) => {
+    store.setActiveTab(tab);
+    navigate(`/patientv3/${patientId}/gynae/${encounterId}/${tab}`, { replace: true });
+  };
 
   // Determining top-level active state
   const isHistoryActive = isHistoryTab(activeTab);
 
   const handleTabClick = (tabConfig: typeof LAYOUT2_TOP_TABS[0]) => {
     if (tabConfig.tab) {
-      store.setActiveTab(tabConfig.tab);
+      navigateToTab(tabConfig.tab);
     } else if (tabConfig.id === 'history') {
       // Default to Past History when clicking Medical History group
-      store.setActiveTab(GuyiniEncounterTab.PAST_HISTORY);
+      navigateToTab(GuyiniEncounterTab.PAST_HISTORY);
     }
   };
 
@@ -152,7 +169,7 @@ export const GyanyEncounterLayout2 = observer(() => {
                   key={tab}
                   tab={tab}
                   isActive={activeTab === tab}
-                  onClick={() => store.setActiveTab(tab)}
+                  onClick={() => navigateToTab(tab)}
                 />
               ))}
             </div>
