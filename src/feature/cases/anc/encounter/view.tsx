@@ -1,11 +1,11 @@
 import { ArrowLeft, ChevronRight } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GyanyEncounterLayout2 } from './layout2';
+import { AncEncounterLayout } from './layout';
 import './style.css';
 
-/** Gyany Encounter View - Main layout */
-export const GyanyEncounterView = observer(() => {
+/** ANC Encounter View - Main entry point with header */
+export const AncEncounterView = observer(() => {
   const navigate = useNavigate();
   const { encounterId } = useParams<{ encounterId: string }>();
 
@@ -18,29 +18,28 @@ export const GyanyEncounterView = observer(() => {
   const caseLabel = isNewCase ? 'New Case' : encounterId;
 
   return (
-    <div className="gyany-encounter-layout h-full flex flex-col overflow-hidden">
+    <div className="anc-encounter-layout h-full flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="gyany-encounter-header shrink-0 z-20 relative">
-        <div className="gyany-encounter-header__left">
+      <header className="anc-encounter-header shrink-0 z-20 relative">
+        <div className="anc-encounter-header__left">
           <button 
             onClick={handleBack}
-            className="gyany-encounter-back-button"
+            className="anc-encounter-back-button"
             title="Back"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
           <div className="flex items-center gap-1">
-            <span className="text-zinc-500 text-sm font-medium">Gynaecological Visits</span>
+            <span className="text-zinc-500 text-sm font-medium">Antenatal Visits</span>
             <ChevronRight className="w-4 h-4 text-zinc-400" />
-            <h2 className="gyany-encounter-title">
+            <h2 className="anc-encounter-title">
               {caseLabel}
             </h2>
           </div>
-          
         </div>
         
         <div className="flex items-center gap-4">
-          <button className="gyany-encounter-save-button">
+          <button className="anc-encounter-save-button">
             Save
           </button>
         </div>
@@ -48,9 +47,8 @@ export const GyanyEncounterView = observer(() => {
 
       {/* Layout Content */}
       <div className="flex-1 overflow-hidden relative">
-        <GyanyEncounterLayout2 />
+        <AncEncounterLayout />
       </div>
     </div>
   );
 });
-

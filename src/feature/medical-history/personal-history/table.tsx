@@ -73,7 +73,7 @@ const PreviousVisitSummary = observer(() => {
 /**
  * Personal History Table Component
  */
-export const PersonalHistoryTable = observer(() => {
+export const PersonalHistoryTable = observer(({ hideAddOption = true }: { hideAddOption?: boolean }) => {
   const store = usePersonalHistoryStore();
 
   const existingHabits = store.items.map((i) => i.habit.toLowerCase());
@@ -100,6 +100,7 @@ export const PersonalHistoryTable = observer(() => {
             placeholder="Add habit or factor..."
             buttonLabel="Add"
             variant="teal"
+            hidden={hideAddOption}
           />
         </div>
 
@@ -168,7 +169,7 @@ export const PersonalHistoryTable = observer(() => {
               />
             </TableCell>
             <TableCell>
-              <DeleteButton onClick={() => store.removeItem(item.id)} />
+              <DeleteButton onClick={() => store.removeItem(item.id)} hidden={hideAddOption} />
             </TableCell>
           </TableRow>
         ))}
@@ -181,6 +182,7 @@ export const PersonalHistoryTable = observer(() => {
           placeholder="Add habit or factor..."
           buttonLabel="Add"
           variant="teal"
+          hidden={hideAddOption}
         />
       </div>
 

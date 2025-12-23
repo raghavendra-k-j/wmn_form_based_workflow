@@ -4,6 +4,8 @@ import { PatientSidebar } from './sidebar/sidebar';
 import { ProfilePage } from './profile/page';
 import { CaseListPage } from './cases/page';
 import { GyanyEncounterView, GuyiniEncounterProvider } from '../cases/gynae/encounter';
+import { AncEncounterView, AncEncounterProvider } from '../cases/anc/encounter';
+import { CurrentPregnancyPage } from '../current-pregnancy';
 
 /** Patient V3 Layout - Wrapper with sidebar and content area */
 function PatientV3Layout() {
@@ -23,11 +25,24 @@ function PatientV3Layout() {
           {/* Profile Page */}
           <Route path="profile" element={<ProfilePage />} />
           
+          {/* Current Pregnancy */}
+          <Route path="current-pregnancy" element={<CurrentPregnancyPage />} />
+          
           {/* Case List - All Cases */}
           <Route path="cases" element={<CaseListPage />} />
           
           {/* Case List - Filtered by type */}
           <Route path="cases/:caseType" element={<CaseListPage />} />
+          
+          {/* ANC Encounter - With nested routes */}
+          <Route 
+            path="anc/:encounterId/*" 
+            element={
+              <AncEncounterProvider>
+                <AncEncounterView />
+              </AncEncounterProvider>
+            } 
+          />
           
           {/* Gynae Encounter - Nested within patient layout */}
           <Route 

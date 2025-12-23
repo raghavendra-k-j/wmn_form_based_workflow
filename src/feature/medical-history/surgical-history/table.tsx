@@ -65,7 +65,7 @@ const PreviousVisitSummary = observer(() => {
 /**
  * Surgical History Table Component
  */
-export const SurgicalHistoryTable = observer(() => {
+export const SurgicalHistoryTable = observer(({ hideAddOption = true }: { hideAddOption?: boolean }) => {
   const store = useSurgicalHistoryStore();
 
   // Get suggestions
@@ -93,6 +93,7 @@ export const SurgicalHistoryTable = observer(() => {
             placeholder="Add surgery..."
             buttonLabel="Add"
             variant="teal"
+            hidden={hideAddOption}
           />
         </div>
 
@@ -140,7 +141,7 @@ export const SurgicalHistoryTable = observer(() => {
               />
             </TableCell>
             <TableCell>
-              <DeleteButton onClick={() => store.removeItem(item.id)} />
+              <DeleteButton onClick={() => store.removeItem(item.id)} hidden={hideAddOption} />
             </TableCell>
           </TableRow>
         ))}
@@ -153,6 +154,7 @@ export const SurgicalHistoryTable = observer(() => {
           placeholder="Add surgery..."
           buttonLabel="Add"
           variant="teal"
+          hidden={hideAddOption}
         />
       </div>
     </div>

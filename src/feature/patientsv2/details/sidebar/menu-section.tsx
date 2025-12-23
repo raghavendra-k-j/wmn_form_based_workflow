@@ -8,6 +8,7 @@ import {
   ClipboardList, 
   FileEdit,
   FolderOpen,
+  HeartPulse,
   History, 
   Stethoscope, 
   UserCircle, 
@@ -220,6 +221,18 @@ function CaseContextMenu() {
             textColor="text-rose-600"
             onClick={() => goTo('pnc-form')} 
             active={isActive('pnc-form')}
+          />
+        )}
+
+        {/* Current Pregnancy - For ANC and PNC cases */}
+        {(currentCase === 'anc' || currentCase === 'pnc') && (
+          <MenuButton 
+            icon={HeartPulse} 
+            label="Current Pregnancy"
+            bgColor="bg-pink-50"
+            textColor="text-pink-600"
+            onClick={() => goTo('current-pregnancy')} 
+            active={isActive('current-pregnancy')}
           />
         )}
 

@@ -36,9 +36,13 @@ export function AddButton({ onClick, label, variant = 'blue' }: AddButtonProps) 
 
 interface DeleteButtonProps {
   onClick: () => void;
+  /** When true, the button is hidden */
+  hidden?: boolean;
 }
 
-export function DeleteButton({ onClick }: DeleteButtonProps) {
+export function DeleteButton({ onClick, hidden = false }: DeleteButtonProps) {
+  if (hidden) return null;
+  
   return (
     <button
       type="button"

@@ -32,7 +32,7 @@ const PreviousVisitSummary = observer(() => {
             <TableCell>
               <span className="text-[12px] font-medium text-zinc-700">{item.name}</span>
             </TableCell>
-            <TableCell></TableCell>
+            <TableCell>&nbsp;</TableCell>
           </TableRow>
         ))}
       </DataTable>
@@ -40,7 +40,7 @@ const PreviousVisitSummary = observer(() => {
   );
 });
 
-export const AllergiesTable = observer(() => {
+export const AllergiesTable = observer(({ hideAddOption = true }: { hideAddOption?: boolean }) => {
   const store = useAllergiesStore();
 
   const existingItems = store.items.map((i) => i.name.toLowerCase());
@@ -66,6 +66,7 @@ export const AllergiesTable = observer(() => {
             placeholder="Add allergy..."
             buttonLabel="Add"
             variant="teal"
+            hidden={hideAddOption}
           />
         </div>
 
@@ -94,7 +95,7 @@ export const AllergiesTable = observer(() => {
               />
             </TableCell>
             <TableCell>
-              <DeleteButton onClick={() => store.removeItem(item.id)} />
+              <DeleteButton onClick={() => store.removeItem(item.id)} hidden={hideAddOption} />
             </TableCell>
           </TableRow>
         ))}
@@ -107,6 +108,7 @@ export const AllergiesTable = observer(() => {
           placeholder="Add allergy..."
           buttonLabel="Add"
           variant="teal"
+          hidden={hideAddOption}
         />
       </div>
     </div>

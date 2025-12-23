@@ -137,8 +137,8 @@ export const GyanyEncounterLayout2 = observer(() => {
     if (tabConfig.tab) {
       navigateToTab(tabConfig.tab);
     } else if (tabConfig.id === 'history') {
-      // Default to Past History when clicking Medical History group
-      navigateToTab(GuyiniEncounterTab.PAST_HISTORY);
+      // Default to Overview when clicking Medical History group
+      navigateToTab(GuyiniEncounterTab.MEDICAL_HISTORY_OVERVIEW);
     }
   };
 

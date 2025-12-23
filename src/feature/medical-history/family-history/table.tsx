@@ -79,7 +79,7 @@ const PreviousVisitSummary = observer(() => {
 /**
  * Family History Table Component
  */
-export const FamilyHistoryTable = observer(() => {
+export const FamilyHistoryTable = observer(({ hideAddOption = true }: { hideAddOption?: boolean }) => {
   const store = useFamilyHistoryStore();
 
   // Suggest default conditions that are not yet in the list (if we want uniqueness, but here duplicate conditions might be valid for different relations)
@@ -112,6 +112,7 @@ export const FamilyHistoryTable = observer(() => {
             placeholder="Add condition..."
             buttonLabel="Add"
             variant="teal"
+            hidden={hideAddOption}
           />
         </div>
 
@@ -172,7 +173,7 @@ export const FamilyHistoryTable = observer(() => {
               />
             </TableCell>
             <TableCell>
-              <DeleteButton onClick={() => store.removeItem(item.id)} />
+              <DeleteButton onClick={() => store.removeItem(item.id)} hidden={hideAddOption} />
             </TableCell>
           </TableRow>
         ))}
@@ -185,6 +186,7 @@ export const FamilyHistoryTable = observer(() => {
           placeholder="Add condition..."
           buttonLabel="Add"
           variant="teal"
+          hidden={hideAddOption}
         />
       </div>
 

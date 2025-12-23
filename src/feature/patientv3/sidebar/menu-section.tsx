@@ -4,6 +4,7 @@ import {
   ChevronRight, 
   ChevronUp,
   FolderOpen,
+  HeartPulse,
   UserCircle, 
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -40,6 +41,16 @@ export function MenuSection() {
           textColor="text-indigo-600"
           onClick={() => goTo('profile')} 
           active={location.pathname.includes('/profile')}
+        />
+
+        {/* Current Pregnancy */}
+        <MenuButton 
+          icon={HeartPulse} 
+          label="Current Pregnancy" 
+          bgColor="bg-pink-50"
+          textColor="text-pink-600"
+          onClick={() => goTo('current-pregnancy')} 
+          active={location.pathname.includes('/current-pregnancy')}
         />
 
         {/* All Visits - Navigates and Expands */}

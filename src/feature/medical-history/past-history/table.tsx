@@ -80,7 +80,7 @@ const PreviousVisitSummary = observer(() => {
  * Past History Table Component (without section header)
  * For embedding in other layouts where the header is managed externally
  */
-export const PastHistoryTable = observer(() => {
+export const PastHistoryTable = observer(({ hideAddOption = true }: { hideAddOption?: boolean }) => {
   const store = usePastHistoryStore();
 
   // Get suggestions that are not already added
@@ -108,6 +108,7 @@ export const PastHistoryTable = observer(() => {
             placeholder="Add disease..."
             buttonLabel="Add"
             variant="teal"
+            hidden={hideAddOption}
           />
         </div>
 
@@ -163,7 +164,7 @@ export const PastHistoryTable = observer(() => {
               />
             </TableCell>
             <TableCell>
-              <DeleteButton onClick={() => store.removeCondition(item.id)} />
+              <DeleteButton onClick={() => store.removeCondition(item.id)} hidden={hideAddOption} />
             </TableCell>
           </TableRow>
         ))}
@@ -176,6 +177,7 @@ export const PastHistoryTable = observer(() => {
           placeholder="Add disease..."
           buttonLabel="Add"
           variant="teal"
+          hidden={hideAddOption}
         />
       </div>
 

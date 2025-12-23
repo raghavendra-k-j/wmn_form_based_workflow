@@ -12,6 +12,8 @@ interface AutocompleteInputProps {
   variant?: 'amber' | 'blue' | 'purple' | 'teal';
   /** When false, only predefined suggestions can be selected. Custom values are not allowed. */
   allowCustom?: boolean;
+  /** When true, the entire input is hidden */
+  hidden?: boolean;
 }
 
 const buttonVariants = {
@@ -55,7 +57,10 @@ export function AutocompleteInput({
   buttonLabel = 'Add',
   variant = 'blue',
   allowCustom = false,
+  hidden = false,
 }: AutocompleteInputProps) {
+  // If hidden, return null immediately
+  if (hidden) return null;
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);

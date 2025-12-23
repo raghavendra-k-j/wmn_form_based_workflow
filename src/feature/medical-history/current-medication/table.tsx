@@ -63,7 +63,7 @@ const PreviousVisitSummary = observer(() => {
 /**
  * Current Medication Table Component
  */
-export const CurrentMedicationTable = observer(() => {
+export const CurrentMedicationTable = observer(({ hideAddOption = true }: { hideAddOption?: boolean }) => {
   const store = useCurrentMedicationStore();
 
   const existingItems = store.items.map((i) => i.name.toLowerCase());
@@ -90,6 +90,7 @@ export const CurrentMedicationTable = observer(() => {
             placeholder="Add medication..."
             buttonLabel="Add"
             variant="teal"
+            hidden={hideAddOption}
           />
         </div>
 
@@ -154,7 +155,7 @@ export const CurrentMedicationTable = observer(() => {
               />
             </TableCell>
             <TableCell>
-              <DeleteButton onClick={() => store.removeItem(item.id)} />
+              <DeleteButton onClick={() => store.removeItem(item.id)} hidden={hideAddOption} />
             </TableCell>
           </TableRow>
         ))}
@@ -167,6 +168,7 @@ export const CurrentMedicationTable = observer(() => {
           placeholder="Add medication..."
           buttonLabel="Add"
           variant="teal"
+          hidden={hideAddOption}
         />
       </div>
     </div>

@@ -13,6 +13,7 @@ import { GynaeFormPage } from './gynae-form';
 import { PncFormPage } from './pnc-form';
 import { AncFormPage } from './anc-form';
 import { BaselineInfoPage } from './anc-baseline/page';
+import { CurrentPregnancyPage } from '../../current-pregnancy';
 
 /** Patient Details Layout - Wrapper with context provider */
 function PatientDetailsLayout() {
@@ -45,6 +46,7 @@ function PatientDetailsLayout() {
           <Route path="anc-baseline" element={<BaselineInfoPage />} />
           
           {/* History & Form Pages */}
+          <Route path="current-pregnancy" element={<CurrentPregnancyPage />} />
           <Route path="medical-history" element={<MedicalHistoryPage />} />
           <Route path="obstetric-history" element={<ObstetricHistoryPage />} />
           <Route path="gynae-form" element={<GynaeFormPage />} />
