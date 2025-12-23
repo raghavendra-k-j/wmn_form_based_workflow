@@ -18,6 +18,7 @@ import {
   settingsRoute,
   staffsRoute
 } from '../shared/routes/admin-routes';
+import { UserSimulator } from '../session';
 
 /** Sidebar menu item configuration */
 interface MenuItem {
@@ -86,6 +87,9 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
         </div>
       </div>
 
+      {/* User Simulation - For Prototyping */}
+      <UserSimulator isCollapsed={isCollapsed} />
+
       {/* Navigation - High Density */}
       <nav className="flex-1 py-4 flex flex-col gap-0.5 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-zinc-800">
         {menuItems.map((item) => {
@@ -125,28 +129,8 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
 
       {/* Footer - Integrated Density */}
       <div className="mt-auto border-t border-[#2d3148] bg-[#1a1d2e]">
-        {/* User Profile */}
-        <div className={`flex items-center gap-3 p-4 bg-[#252836]/40 ${isCollapsed ? 'justify-center' : 'px-5 py-4'}`}>
-          <div className="relative shrink-0">
-            <div className="w-9 h-9 flex items-center justify-center text-[13px] font-bold bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-lg">
-              SK
-            </div>
-            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-[#1a1d2e] rounded-full" />
-          </div>
-          {!isCollapsed && (
-            <div className="flex-1 min-w-0">
-              <div className="text-[13px] font-bold text-white truncate leading-tight">
-                Dr. Sanjay Kumar
-              </div>
-              <div className="text-[11px] text-zinc-500 truncate mt-0.5">
-                sanjay@clinic.com
-              </div>
-            </div>
-          )}
-        </div>
-
         {/* Global Controls */}
-        <div className="flex flex-col border-t border-[#2d3148]">
+        <div className="flex flex-col">
           {/* Logout */}
           <button
             onClick={() => console.log('Logout clicked')}

@@ -10,7 +10,7 @@ import {
   TestTube, 
   CreditCard,
   FileText,
-  LayoutGrid
+  LayoutGrid,
 } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -18,6 +18,7 @@ import { useEffect } from 'react';
 import { useGuyiniEncounterStore } from './context';
 import { GuyiniEncounterTab, GuyiniEncounterTabConfig } from './store';
 import { TabContent } from './tabs/renderer';
+import { useSession } from '../../../session';
 
 /** Grouping definitions - includes Overview as first item */
 const MEDICAL_HISTORY_TABS: GuyiniEncounterTab[] = [
@@ -84,7 +85,7 @@ const SideNavButton = observer(({ tab, isActive, onClick }: { tab: GuyiniEncount
       }`}
     >
       <Icon className={`w-4 h-4 ${colorClass}`} />
-      {config.label}
+      <span className="flex-1">{config.label}</span>
     </button>
   );
 });
@@ -100,16 +101,28 @@ const LAYOUT2_TOP_TABS = [
 
 export const GyanyEncounterLayout2 = observer(() => {
   const store = useGuyiniEncounterStore();
+  const session = useSession();
   const navigate = useNavigate();
   const { patientId, encounterId, tab: urlTab } = useParams<{ patientId: string; encounterId: string; tab: string }>();
   const activeTab = store.activeTab;
 
-  // Sync tab from URL on mount or URL change
+  // Filter tabs based on persona - staff only sees Examinations
+  const visibleTopTabs = session.isDoctor 
+    ? LAYOUT2_TOP_TABS 
+    : LAYOUT2_TOP_TABS.filter(t => t.id === 'exams');
+
+  // Sync tab from URL on mount or URL change, redirect staff to Examinations
   useEffect(() => {
-    if (urlTab && Object.values(GuyiniEncounterTab).includes(urlTab as GuyiniEncounterTab)) {
+    const currentTab = urlTab as GuyiniEncounterTab || store.activeTab;
+    
+    // If staff is trying to access a non-allowed tab, redirect to Examinations
+    if (!session.isDoctor && currentTab !== GuyiniEncounterTab.EXAMINATIONS) {
+      navigate(`/patientv3/${patientId}/gynae/${encounterId}/${GuyiniEncounterTab.EXAMINATIONS}`, { replace: true });
+      store.setActiveTab(GuyiniEncounterTab.EXAMINATIONS);
+    } else if (urlTab && Object.values(GuyiniEncounterTab).includes(urlTab as GuyiniEncounterTab)) {
       store.setActiveTab(urlTab as GuyiniEncounterTab);
     }
-  }, [urlTab, store]);
+  }, [urlTab, store, session.isDoctor, navigate, patientId, encounterId, store.activeTab]);
 
   // Navigate to tab URL
   const navigateToTab = (tab: GuyiniEncounterTab) => {
@@ -136,10 +149,10 @@ export const GyanyEncounterLayout2 = observer(() => {
 
   return (
     <div className="flex flex-col h-full bg-white">
-      {/* Top Navigation Bar - Same style as Layout 1 */}
+      {/* Top Navigation Bar */}
       <nav className="gyany-encounter-tabs compact-scrollbar border-b border-zinc-200 bg-white">
         <div className="gyany-encounter-tabs__container flex overflow-x-auto">
-          {LAYOUT2_TOP_TABS.map((tabConfig) => {
+          {visibleTopTabs.map((tabConfig) => {
             const Icon = tabConfig.icon;
             const isActive = isTabActive(tabConfig);
             return (
@@ -159,8 +172,8 @@ export const GyanyEncounterLayout2 = observer(() => {
 
       {/* Content Area */}
       <div className="flex-1 overflow-hidden">
-        {isHistoryActive ? (
-          // Nested Layout for Medical History
+        {isHistoryActive && session.isDoctor ? (
+          // Nested Layout for Medical History (only for doctors)
           <div className="flex h-full">
             {/* Side Navigation */}
             <div className="w-56 bg-white border-r border-zinc-200 h-full overflow-y-auto py-4 px-2 flex flex-col gap-1">

@@ -58,7 +58,7 @@ export const VisitForm = observer(() => {
 
   // Obstetric History
   const [para, setPara] = useState('');
-  const [lmp, setLmp] = useState(getTodayDate);
+  const [lmp, setLmp] = useState('');
   const [contraception, setContraception] = useState('');
   const [previousSmear, setPreviousSmear] = useState('');
 
@@ -76,7 +76,7 @@ export const VisitForm = observer(() => {
 
   // Clinical Notes
   const [impression, setImpression] = useState('');
-  const [medications, setMedications] = useState('');
+
   const [advice, setAdvice] = useState('');
 
   return (
@@ -240,14 +240,7 @@ export const VisitForm = observer(() => {
             rows={2}
           />
         </FormField>
-        <FormField label="Medications">
-          <TextAreaInput
-            value={medications}
-            onChange={setMedications}
-            placeholder="Prescribe medications..."
-            rows={2}
-          />
-        </FormField>
+
         <FormField label="Advice">
           <TextAreaInput
             value={advice}

@@ -10,6 +10,7 @@ import {
   TestTube, 
   CreditCard,
   LayoutGrid,
+  Lock,
 } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -17,6 +18,7 @@ import { useEffect } from 'react';
 import { useGuyiniEncounterStore } from './context';
 import { GuyiniEncounterTab, GuyiniEncounterTabConfig, GuyiniEncounterTabList } from './store';
 import { TabContent } from './tabs/renderer';
+import { useSession, canEditTab } from '../../../session';
 
 /** Tab Icon Mapping */
 const getTabIcon = (tab: GuyiniEncounterTab) => {
@@ -53,34 +55,48 @@ const getTabColor = (tab: GuyiniEncounterTab) => {
   }
 };
 
-const TabButton = observer(({ tab, isActive, onClick }: { tab: GuyiniEncounterTab; isActive: boolean; onClick: (t: GuyiniEncounterTab) => void }) => {
+const TabButton = observer(({ tab, isActive, onClick, canEdit }: { tab: GuyiniEncounterTab; isActive: boolean; onClick: (t: GuyiniEncounterTab) => void; canEdit: boolean }) => {
   const config = GuyiniEncounterTabConfig[tab];
   const Icon = getTabIcon(tab);
   const colorClass = getTabColor(tab);
   
   return (
     <button
-      className={`gyany-encounter-tab-button cursor-pointer ${isActive ? 'gyany-encounter-tab-button--active' : ''}`}
+      className={`gyany-encounter-tab-button cursor-pointer ${isActive ? 'gyany-encounter-tab-button--active' : ''} ${!canEdit ? 'opacity-60' : ''}`}
       onClick={() => onClick(tab)}
       type="button"
+      title={!canEdit ? 'View only - Staff cannot edit this section' : undefined}
     >
       <Icon className={`w-4 h-4 ${colorClass}`} />
       {config.label}
+      {!canEdit && <Lock className="w-3 h-3 text-zinc-400 ml-1" />}
     </button>
   );
 });
 
 export const GyanyEncounterLayout1 = observer(() => {
   const store = useGuyiniEncounterStore();
+  const session = useSession();
   const navigate = useNavigate();
   const { patientId, encounterId, tab: urlTab } = useParams<{ patientId: string; encounterId: string; tab: string }>();
 
-  // Sync tab from URL on mount or URL change
+  // Filter tabs based on persona - staff only sees Examinations
+  const visibleTabs = session.isDoctor 
+    ? GuyiniEncounterTabList.filter(tab => tab !== GuyiniEncounterTab.MEDICAL_HISTORY_OVERVIEW)
+    : [GuyiniEncounterTab.EXAMINATIONS];
+
+  // Sync tab from URL on mount or URL change, redirect staff to Examinations
   useEffect(() => {
-    if (urlTab && Object.values(GuyiniEncounterTab).includes(urlTab as GuyiniEncounterTab)) {
+    const currentTab = urlTab as GuyiniEncounterTab || store.activeTab;
+    
+    // If staff is trying to access a non-allowed tab, redirect to Examinations
+    if (!session.isDoctor && currentTab !== GuyiniEncounterTab.EXAMINATIONS) {
+      navigate(`/patientv3/${patientId}/gynae/${encounterId}/${GuyiniEncounterTab.EXAMINATIONS}`, { replace: true });
+      store.setActiveTab(GuyiniEncounterTab.EXAMINATIONS);
+    } else if (urlTab && Object.values(GuyiniEncounterTab).includes(urlTab as GuyiniEncounterTab)) {
       store.setActiveTab(urlTab as GuyiniEncounterTab);
     }
-  }, [urlTab, store]);
+  }, [urlTab, store, session.isDoctor, navigate, patientId, encounterId, store.activeTab]);
 
   // Navigate to tab URL
   const navigateToTab = (tab: GuyiniEncounterTab) => {
@@ -90,18 +106,16 @@ export const GyanyEncounterLayout1 = observer(() => {
 
   return (
     <div className="gyany-encounter-layout h-full flex flex-col bg-white">
-      {/* Header handled by parent or here? Parent handles generic header, but here we do tab navigation */}
-       {/* Tab Navigation */}
+      {/* Tab Navigation */}
       <nav className="gyany-encounter-tabs compact-scrollbar border-b border-zinc-200 bg-white">
         <div className="gyany-encounter-tabs__container flex overflow-x-auto">
-          {GuyiniEncounterTabList
-            .filter(tab => tab !== GuyiniEncounterTab.MEDICAL_HISTORY_OVERVIEW)
-            .map((tab) => (
+          {visibleTabs.map((tab) => (
             <TabButton
               key={tab}
               tab={tab}
               isActive={store.activeTab === tab}
               onClick={(t) => navigateToTab(t)}
+              canEdit={canEditTab(session.persona, tab)}
             />
           ))}
         </div>
@@ -114,4 +128,5 @@ export const GyanyEncounterLayout1 = observer(() => {
     </div>
   );
 });
+
 
