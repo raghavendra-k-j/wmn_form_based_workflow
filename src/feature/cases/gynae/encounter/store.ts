@@ -51,7 +51,7 @@ export const GuyiniEncounterTabList: GuyiniEncounterTab[] = [
 /** Guyini Encounter Store - Manages Guyini layout state */
 export class GuyiniEncounterStore {
   /** Currently active tab */
-  activeTab: GuyiniEncounterTab = GuyiniEncounterTab.VISIT_FORM;
+  activeTab: GuyiniEncounterTab = GuyiniEncounterTab.EXAMINATIONS;
 
   constructor() {
     makeAutoObservable(this);

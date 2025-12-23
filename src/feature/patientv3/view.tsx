@@ -6,6 +6,23 @@ import { CaseListPage } from './cases/page';
 import { GyanyEncounterView, GuyiniEncounterProvider } from '../cases/gynae/encounter';
 import { AncEncounterView, AncEncounterProvider } from '../cases/anc/encounter';
 import { CurrentPregnancyPage } from '../current-pregnancy';
+import { Construction } from 'lucide-react';
+
+/** Placeholder Page for unimplemented routes */
+function PlaceholderPage({ title }: { title: string }) {
+  return (
+    <div className="h-full flex items-center justify-center bg-zinc-50">
+      <div className="text-center">
+        <div className="w-16 h-16 bg-amber-100 border border-amber-200 flex items-center justify-center mx-auto mb-4">
+          <Construction className="w-8 h-8 text-amber-500" />
+        </div>
+        <h2 className="text-lg font-bold text-zinc-800 mb-2">{title}</h2>
+        <p className="text-sm text-zinc-500">This page is under construction</p>
+        <p className="text-xs text-zinc-400 mt-1">Coming soon...</p>
+      </div>
+    </div>
+  );
+}
 
 /** Patient V3 Layout - Wrapper with sidebar and content area */
 function PatientV3Layout() {
@@ -61,6 +78,16 @@ function PatientV3Layout() {
               </GuyiniEncounterProvider>
             } 
           />
+          
+          {/* Placeholder routes for menu items */}
+          <Route path="pregnancy-complications" element={<PlaceholderPage title="Pregnancy Complications" />} />
+          <Route path="tt" element={<PlaceholderPage title="TT (Tetanus Toxoid)" />} />
+          <Route path="anti-d" element={<PlaceholderPage title="Anti-D" />} />
+          <Route path="tests-scans" element={<PlaceholderPage title="Tests & Scans" />} />
+          <Route path="hosp-adm" element={<PlaceholderPage title="Hospital Admission" />} />
+          <Route path="delivery-info" element={<PlaceholderPage title="Delivery Info" />} />
+          <Route path="deactivate" element={<PlaceholderPage title="Deactivate" />} />
+          <Route path="terminate-preg" element={<PlaceholderPage title="Terminate Pregnancy" />} />
           
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="profile" replace />} />

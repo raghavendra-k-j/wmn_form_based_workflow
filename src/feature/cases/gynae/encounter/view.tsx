@@ -13,9 +13,18 @@ export const GyanyEncounterView = observer(() => {
     navigate(-1);
   };
 
-  // Determine title based on encounterId
-  const isNewCase = encounterId === 'new';
-  const caseLabel = isNewCase ? 'New Case' : encounterId;
+  // Format encounter ID to "Visit X" format
+  const formatVisitLabel = (id: string | undefined) => {
+    if (!id || id === 'new') return 'New Visit';
+    // Extract any number from the ID (e.g., "CS-103" -> "3", "CS1" -> "1")
+    const match = id.match(/\d+$/);
+    if (match) {
+      return `Visit ${parseInt(match[0], 10)}`;
+    }
+    return `Visit`;
+  };
+  
+  const caseLabel = formatVisitLabel(encounterId);
 
   return (
     <div className="gyany-encounter-layout h-full flex flex-col overflow-hidden">

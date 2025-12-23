@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useParams } from 'react-router-dom';
 import {
   FormField,
   TextInput,
   TextAreaInput,
-  ReadOnlyField,
-  SectionDivider,
   SelectInput,
 } from '../../../../../../../components';
 
@@ -13,29 +12,28 @@ import {
  * OPTION LISTS
  * ============================================================================= */
 
-const EDEMA_OPTIONS = ['None', 'Mild (+)', 'Moderate (++)', 'Severe (+++)'];
-const PALLOR_OPTIONS = ['None', 'Mild', 'Moderate', 'Severe'];
-const ALBUMIN_OPTIONS = ['Nil', 'Trace', '+', '++', '+++'];
-const PP_OPTIONS = ['Cephalic', 'Breech', 'Transverse', 'Oblique', 'Not Engaged'];
+const SEEN_BY_OPTIONS = ['Dr. Smith', 'Dr. Johnson', 'Dr. Patel', 'Dr. Williams'];
+const BRANCH_OPTIONS = ['Main Branch', 'Downtown', 'Eastside Clinic', 'West Medical Center'];
 
 /* =============================================================================
  * VISIT INFO PAGE
  * ============================================================================= */
 
-/** Visit Info Page - Main visit information form */
+/** Visit Info Page - Visit details and clinical assessment */
 export const VisitInfoPage = observer(() => {
-  // Vitals/Examinations - Writable
-  const [weight, setWeight] = useState('');
-  const [bp, setBp] = useState('');
-  const [pulse, setPulse] = useState('');
-  const [sfh, setSfh] = useState('');
-  const [pp, setPp] = useState('');
-  const [fh, setFh] = useState('');
-  const [edema, setEdema] = useState('');
-  const [pallor, setPallor] = useState('');
-  const [albumin, setAlbumin] = useState('');
+  const { visitId } = useParams<{ encounterId: string; visitId?: string }>();
+  
+  // Visit Details - Format visit number
+  const visitNumber = visitId ? parseInt(visitId.replace(/\D/g, ''), 10) || 1 : 1;
+  const formattedVisitId = `V${String(visitNumber).padStart(3, '0')}`;
+  
+  // Visit Details - Editable fields
+  const [visitDate, setVisitDate] = useState(new Date().toISOString().split('T')[0]);
+  const [visitTime, setVisitTime] = useState('');
+  const [seenBy, setSeenBy] = useState('');
+  const [branch, setBranch] = useState('');
 
-  // Form Fields - Writable
+  // Clinical Assessment - Writable
   const [complaints, setComplaints] = useState('');
   const [symptoms, setSymptoms] = useState('');
   const [diagnosis, setDiagnosis] = useState('');
@@ -44,150 +42,58 @@ export const VisitInfoPage = observer(() => {
   const [doctorPrivateNotes, setDoctorPrivateNotes] = useState('');
   const [amountToCollect, setAmountToCollect] = useState('');
 
-  // Mock read-only data
-  const visitInfo = {
-    lmp: '2024-01-15',
-    edd: '2024-10-22',
-    scanEdd: '2024-10-20',
-    lastSeen: '2024-03-11',
-    visitNumber: 'ANC-2024-003',
-    visitDate: '2024-03-25',
-    gestAge: '20w 3d',
-    seenBy: 'Dr. Smith',
-    branch: 'Main Hospital',
-  };
-
   return (
     <div className="space-y-4">
       {/* =====================================================================
-       * SECTION 1: VISIT SECTION INFO (READ-ONLY)
-       * ===================================================================== */}
-      <div className="bg-white border border-zinc-200 p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-1 h-4 bg-pink-500 rounded-full"></div>
-          <h3 className="text-[12px] font-bold text-zinc-700 uppercase tracking-wide">Visit Section Info</h3>
-          <span className="text-[9px] bg-pink-100 text-pink-700 px-2 py-0.5 rounded font-medium">READ ONLY</span>
-        </div>
-        
-        <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
-          <FormField label="LMP">
-            <ReadOnlyField value={visitInfo.lmp} />
-          </FormField>
-          <FormField label="EDD">
-            <ReadOnlyField value={visitInfo.edd} />
-          </FormField>
-          <FormField label="Scan EDD">
-            <ReadOnlyField value={visitInfo.scanEdd} />
-          </FormField>
-          <FormField label="Last Seen">
-            <ReadOnlyField value={visitInfo.lastSeen} />
-          </FormField>
-          <FormField label="Visit #">
-            <ReadOnlyField value={visitInfo.visitNumber} />
-          </FormField>
-          <FormField label="Visit Date">
-            <ReadOnlyField value={visitInfo.visitDate} />
-          </FormField>
-          <FormField label="Gest Age">
-            <ReadOnlyField value={visitInfo.gestAge} className="font-semibold text-emerald-700" />
-          </FormField>
-          <FormField label="Seen By">
-            <ReadOnlyField value={visitInfo.seenBy} />
-          </FormField>
-          <FormField label="Branch">
-            <ReadOnlyField value={visitInfo.branch} />
-          </FormField>
-        </div>
-      </div>
-
-      {/* =====================================================================
-       * SECTION 2: VITALS/EXAMINATIONS (WRITABLE)
+       * SECTION 1: VISIT DETAILS (EDITABLE)
        * ===================================================================== */}
       <div className="bg-white border border-zinc-200 p-4">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-1 h-4 bg-sky-500 rounded-full"></div>
-          <h3 className="text-[12px] font-bold text-zinc-700 uppercase tracking-wide">Vitals / Examinations</h3>
+          <h3 className="text-[12px] font-bold text-zinc-700 uppercase tracking-wide">Visit Details</h3>
         </div>
         
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-          <FormField label="Weight (kg)">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <FormField label="Visit ID">
+            <div className="h-[32px] px-3 flex items-center bg-zinc-100 border border-zinc-200 text-[12px] font-bold text-zinc-600">
+              {formattedVisitId}
+            </div>
+          </FormField>
+          <FormField label="Visit Date">
             <TextInput
-              type="number"
-              value={weight}
-              onChange={setWeight}
-              placeholder="kg"
+              type="date"
+              value={visitDate}
+              onChange={setVisitDate}
             />
           </FormField>
-          <FormField label="BP (mmHg)">
+          <FormField label="Visit Time">
             <TextInput
-              value={bp}
-              onChange={setBp}
-              placeholder="120/80"
+              type="time"
+              value={visitTime}
+              onChange={setVisitTime}
             />
           </FormField>
-          <FormField label="Pulse (bpm)">
-            <TextInput
-              type="number"
-              value={pulse}
-              onChange={setPulse}
-              placeholder="bpm"
-            />
-          </FormField>
-          <FormField label="SFH (cm)">
-            <TextInput
-              type="number"
-              value={sfh}
-              onChange={setSfh}
-              placeholder="cm"
-            />
-          </FormField>
-          <FormField label="PP">
+          <FormField label="Seen By">
             <SelectInput
-              value={pp}
-              onChange={setPp}
-              options={PP_OPTIONS}
-              placeholder="Select..."
+              value={seenBy}
+              onChange={setSeenBy}
+              options={SEEN_BY_OPTIONS}
+              placeholder="Select Doctor"
             />
           </FormField>
-          <FormField label="FH">
-            <TextInput
-              value={fh}
-              onChange={setFh}
-              placeholder="Present/Absent"
-            />
-          </FormField>
-        </div>
-
-        <div className="grid grid-cols-3 gap-3 mt-3">
-          <FormField label="Edema">
+          <FormField label="Branch">
             <SelectInput
-              value={edema}
-              onChange={setEdema}
-              options={EDEMA_OPTIONS}
-              placeholder="Select..."
-            />
-          </FormField>
-          <FormField label="Pallor">
-            <SelectInput
-              value={pallor}
-              onChange={setPallor}
-              options={PALLOR_OPTIONS}
-              placeholder="Select..."
-            />
-          </FormField>
-          <FormField label="Albumin">
-            <SelectInput
-              value={albumin}
-              onChange={setAlbumin}
-              options={ALBUMIN_OPTIONS}
-              placeholder="Select..."
+              value={branch}
+              onChange={setBranch}
+              options={BRANCH_OPTIONS}
+              placeholder="Select Branch"
             />
           </FormField>
         </div>
       </div>
 
       {/* =====================================================================
-       * SECTION 3: CLINICAL ASSESSMENT (WRITABLE)
+       * SECTION 2: CLINICAL ASSESSMENT (WRITABLE)
        * ===================================================================== */}
       <div className="bg-white border border-zinc-200 p-4">
         <div className="flex items-center gap-2 mb-3">
@@ -229,9 +135,17 @@ export const VisitInfoPage = observer(() => {
             />
           </FormField>
         </div>
+      </div>
 
-        <SectionDivider />
-
+      {/* =====================================================================
+       * SECTION 3: PLAN OF MANAGEMENT (WRITABLE)
+       * ===================================================================== */}
+      <div className="bg-white border border-zinc-200 p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-1 h-4 bg-violet-500 rounded-full"></div>
+          <h3 className="text-[12px] font-bold text-zinc-700 uppercase tracking-wide">Plan of Management</h3>
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <FormField label="Plan of Management">
             <TextAreaInput
@@ -245,14 +159,24 @@ export const VisitInfoPage = observer(() => {
             <TextAreaInput
               value={doctorPrivateNotes}
               onChange={setDoctorPrivateNotes}
-              placeholder="Private notes (not visible to patient)..."
+              placeholder="Enter private notes..."
               rows={3}
             />
           </FormField>
         </div>
+      </div>
 
-        <div className="mt-3 max-w-xs">
-          <FormField label="Amount to be Collected">
+      {/* =====================================================================
+       * SECTION 4: BILLING (WRITABLE)
+       * ===================================================================== */}
+      <div className="bg-white border border-zinc-200 p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-1 h-4 bg-teal-500 rounded-full"></div>
+          <h3 className="text-[12px] font-bold text-zinc-700 uppercase tracking-wide">Billing</h3>
+        </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <FormField label="Amount to Collect">
             <TextInput
               type="number"
               value={amountToCollect}

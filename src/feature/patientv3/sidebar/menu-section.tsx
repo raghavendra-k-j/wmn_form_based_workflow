@@ -5,7 +5,15 @@ import {
   ChevronUp,
   FolderOpen,
   HeartPulse,
-  UserCircle, 
+  UserCircle,
+  AlertTriangle,
+  Syringe,
+  Droplets,
+  ScanLine,
+  Building2,
+  Baby,
+  XCircle,
+  Ban,
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePatientV3 } from '../context';
@@ -90,6 +98,86 @@ export function MenuSection() {
             })}
           </div>
         )}
+
+        {/* Pregnancy Complications */}
+        <MenuButton 
+          icon={AlertTriangle} 
+          label="Pregnancy Complications" 
+          bgColor="bg-orange-50"
+          textColor="text-orange-600"
+          onClick={() => goTo('pregnancy-complications')} 
+          active={location.pathname.includes('/pregnancy-complications')}
+        />
+
+        {/* TT */}
+        <MenuButton 
+          icon={Syringe} 
+          label="TT" 
+          bgColor="bg-cyan-50"
+          textColor="text-cyan-600"
+          onClick={() => goTo('tt')} 
+          active={location.pathname.includes('/tt')}
+        />
+
+        {/* Anti-D */}
+        <MenuButton 
+          icon={Droplets} 
+          label="Anti-D" 
+          bgColor="bg-red-50"
+          textColor="text-red-600"
+          onClick={() => goTo('anti-d')} 
+          active={location.pathname.includes('/anti-d')}
+        />
+
+        {/* Tests/Scans */}
+        <MenuButton 
+          icon={ScanLine} 
+          label="Tests/Scans" 
+          bgColor="bg-violet-50"
+          textColor="text-violet-600"
+          onClick={() => goTo('tests-scans')} 
+          active={location.pathname.includes('/tests-scans')}
+        />
+
+        {/* Hosp Adm */}
+        <MenuButton 
+          icon={Building2} 
+          label="Hosp Adm" 
+          bgColor="bg-slate-50"
+          textColor="text-slate-600"
+          onClick={() => goTo('hosp-adm')} 
+          active={location.pathname.includes('/hosp-adm')}
+        />
+
+        {/* Delivery Info */}
+        <MenuButton 
+          icon={Baby} 
+          label="Delivery Info" 
+          bgColor="bg-teal-50"
+          textColor="text-teal-600"
+          onClick={() => goTo('delivery-info')} 
+          active={location.pathname.includes('/delivery-info')}
+        />
+
+        {/* Deactivate */}
+        <MenuButton 
+          icon={XCircle} 
+          label="Deactivate" 
+          bgColor="bg-zinc-100"
+          textColor="text-zinc-600"
+          onClick={() => goTo('deactivate')} 
+          active={location.pathname.includes('/deactivate')}
+        />
+
+        {/* Terminate Preg */}
+        <MenuButton 
+          icon={Ban} 
+          label="Terminate Preg" 
+          bgColor="bg-rose-50"
+          textColor="text-rose-600"
+          onClick={() => goTo('terminate-preg')} 
+          active={location.pathname.includes('/terminate-preg')}
+        />
       </div>
     </nav>
   );

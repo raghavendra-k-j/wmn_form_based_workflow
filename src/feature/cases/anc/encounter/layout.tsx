@@ -17,6 +17,7 @@ import {
   User,
   ClipboardList,
   Pill,
+  Stethoscope,
 } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 import { useParams, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
@@ -37,6 +38,7 @@ import {
   MedicalHistorySubTabList,
 } from './store';
 import { VisitInfoPage } from './visits/form/visit-info/page';
+import { ExaminationsPage } from './visits/form/examinations/page';
 import { LabScansPage } from './visits/form/lab-scans/page';
 import { PrescriptionsPage } from './visits/form/prescriptions/page';
 import { NextFollowUpPage } from './visits/form/next-follow-up/page';
@@ -98,6 +100,7 @@ const getInvestigationSubTabIcon = (subTab: InvestigationSubTab) => {
 /** Get visit form sub-tab icon */
 const getVisitFormSubTabIcon = (subTab: VisitFormSubTab) => {
   switch (subTab) {
+    case VisitFormSubTab.EXAMINATIONS: return Stethoscope;
     case VisitFormSubTab.VISIT_INFO: return ClipboardList;
     case VisitFormSubTab.LAB_SCANS: return TestTube;
     case VisitFormSubTab.PRESCRIPTIONS: return Pill;
@@ -122,11 +125,11 @@ const VisitsList = observer(() => {
   ];
 
   const handleNewVisit = () => {
-    navigate(`/patientv3/${patientId}/anc/${encounterId}/new-visit/${VisitFormSubTab.VISIT_INFO}`);
+    navigate(`/patientv3/${patientId}/anc/${encounterId}/new-visit/${VisitFormSubTab.EXAMINATIONS}`);
   };
 
   const handleEditVisit = (visitId: string) => {
-    navigate(`/patientv3/${patientId}/anc/${encounterId}/visit/${visitId}/${VisitFormSubTab.VISIT_INFO}`);
+    navigate(`/patientv3/${patientId}/anc/${encounterId}/visit/${visitId}/${VisitFormSubTab.EXAMINATIONS}`);
   };
 
   return (
@@ -201,7 +204,7 @@ const VisitFormWrapper = observer(({ isNew }: { isNew: boolean }) => {
   // The subTab is captured in the wildcard '*' because we use "new-visit/*" and "visit/:visitId/*"
   const subTab = params['*'];
 
-  const activeSubTab = (subTab as VisitFormSubTab) || VisitFormSubTab.VISIT_INFO;
+  const activeSubTab = (subTab as VisitFormSubTab) || VisitFormSubTab.EXAMINATIONS;
 
   const handleBack = () => {
     navigate(`/patientv3/${patientId}/anc/${encounterId}/visits`);
@@ -262,11 +265,12 @@ const VisitFormWrapper = observer(({ isNew }: { isNew: boolean }) => {
       {/* Form Content - Routed */}
       <div className="flex-1 overflow-y-auto p-4 bg-slate-50">
         <Routes>
+          <Route path="examinations" element={<ExaminationsPage />} />
           <Route path="visit_info" element={<VisitInfoPage />} />
           <Route path="lab_scans" element={<LabScansPage />} />
           <Route path="prescriptions" element={<PrescriptionsPage />} />
           <Route path="next_follow_up" element={<NextFollowUpPage />} />
-          <Route index element={<Navigate to="visit_info" replace />} />
+          <Route index element={<Navigate to="examinations" replace />} />
         </Routes>
       </div>
     </div>

@@ -21,6 +21,7 @@ export type VisitsViewMode = typeof VisitsViewMode[keyof typeof VisitsViewMode];
 
 /** Visit Form Sub-tabs */
 export const VisitFormSubTab = {
+  EXAMINATIONS: 'examinations',
   VISIT_INFO: 'visit_info',
   LAB_SCANS: 'lab_scans',
   PRESCRIPTIONS: 'prescriptions',
@@ -65,6 +66,7 @@ export const AncEncounterTabConfig: Record<AncEncounterTab, { label: string; col
 
 /** Visit Form Sub-tab configuration */
 export const VisitFormSubTabConfig: Record<VisitFormSubTab, { label: string; color: string }> = {
+  [VisitFormSubTab.EXAMINATIONS]: { label: 'Examinations', color: 'text-emerald-600' },
   [VisitFormSubTab.VISIT_INFO]: { label: 'Visit Info', color: 'text-sky-600' },
   [VisitFormSubTab.LAB_SCANS]: { label: 'Lab/Scans', color: 'text-amber-600' },
   [VisitFormSubTab.PRESCRIPTIONS]: { label: 'Prescriptions', color: 'text-orange-600' },
@@ -103,6 +105,7 @@ export const AncEncounterTabList: AncEncounterTab[] = [
 
 /** List of visit form sub-tabs in display order */
 export const VisitFormSubTabList: VisitFormSubTab[] = [
+  VisitFormSubTab.EXAMINATIONS,
   VisitFormSubTab.VISIT_INFO,
   VisitFormSubTab.LAB_SCANS,
   VisitFormSubTab.PRESCRIPTIONS,
@@ -183,7 +186,7 @@ export class AncEncounterStore {
   setVisitsViewMode(mode: VisitsViewMode) {
     this.visitsViewMode = mode;
     if (mode === VisitsViewMode.FORM) {
-      this.activeVisitFormSubTab = VisitFormSubTab.VISIT_INFO;
+      this.activeVisitFormSubTab = VisitFormSubTab.EXAMINATIONS;
     }
   }
 
@@ -191,14 +194,14 @@ export class AncEncounterStore {
   openNewVisitForm() {
     this.editingVisitId = null;
     this.visitsViewMode = VisitsViewMode.FORM;
-    this.activeVisitFormSubTab = VisitFormSubTab.VISIT_INFO;
+    this.activeVisitFormSubTab = VisitFormSubTab.EXAMINATIONS;
   }
 
   /** Open visit form for editing existing visit */
   openEditVisitForm(visitId: string) {
     this.editingVisitId = visitId;
     this.visitsViewMode = VisitsViewMode.FORM;
-    this.activeVisitFormSubTab = VisitFormSubTab.VISIT_INFO;
+    this.activeVisitFormSubTab = VisitFormSubTab.EXAMINATIONS;
   }
 
   /** Close visit form and return to list */

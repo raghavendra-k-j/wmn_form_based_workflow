@@ -22,6 +22,10 @@ export interface Patient {
   emergencyContactName: string;
   emergencyRelationship: string;
   emergencyPhone: string;
+  // Husband Information
+  husbandName?: string;
+  husbandOccupation?: string;
+  husbandBloodGroup?: string;
 }
 
 /** Patient V3 Store - Manages patient details state */
@@ -48,7 +52,10 @@ export class PatientV3Store {
     pinCode: '560102',
     emergencyContactName: 'Robert Davis',
     emergencyRelationship: 'Spouse',
-    emergencyPhone: '+91 99887 76655'
+    emergencyPhone: '+91 99887 76655',
+    husbandName: 'Robert Davis',
+    husbandOccupation: 'Business Analyst',
+    husbandBloodGroup: 'A+',
   };
 
   private listeners: (() => void)[] = [];

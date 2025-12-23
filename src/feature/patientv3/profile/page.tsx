@@ -221,6 +221,39 @@ export function ProfilePage() {
 
           {/* Section 2: Support Information (3 Columns) */}
           <div className="col-span-3 flex flex-col gap-5">
+            {/* Husband Information */}
+            <ProfileCard title="Husband Information" icon={<User className="w-4 h-4" />} variant="zinc">
+              <div className="flex flex-col gap-5">
+                <DataField 
+                  label="Husband Name" 
+                  value={patient.husbandName || 'Not Provided'} 
+                  isEditing={isEditing} 
+                  editValue={editData.husbandName}
+                  onChange={v => handleChange('husbandName', v)}
+                  icon={<User className="w-3.5 h-3.5" />}
+                  fullWidth
+                />
+                <DataField 
+                  label="Occupation" 
+                  value={patient.husbandOccupation || 'Not Provided'} 
+                  isEditing={isEditing} 
+                  editValue={editData.husbandOccupation}
+                  onChange={v => handleChange('husbandOccupation', v)}
+                  icon={<Briefcase className="w-3.5 h-3.5" />}
+                  fullWidth
+                />
+                <DataField 
+                  label="Blood Group" 
+                  value={patient.husbandBloodGroup || 'Not Provided'} 
+                  isEditing={isEditing} 
+                  editValue={editData.husbandBloodGroup}
+                  onChange={v => handleChange('husbandBloodGroup', v)}
+                  icon={<Droplets className="w-3.5 h-3.5" />}
+                  fullWidth
+                />
+              </div>
+            </ProfileCard>
+
             {/* Emergency Contact */}
             <ProfileCard title="Emergency Contact" icon={<UserPlus className="w-4 h-4" />} variant="rose">
               <div className="flex flex-col gap-5">

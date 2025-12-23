@@ -92,9 +92,9 @@ const SideNavButton = observer(({ tab, isActive, onClick }: { tab: GuyiniEncount
 
 /** Top-level tabs config for Layout 2 */
 const LAYOUT2_TOP_TABS = [
+  { id: 'exams', label: 'Examinations', icon: Stethoscope, color: 'text-indigo-600', tab: GuyiniEncounterTab.EXAMINATIONS },
   { id: 'form', label: 'Visit Form', icon: ClipboardList, color: 'text-sky-600', tab: GuyiniEncounterTab.VISIT_FORM },
   { id: 'history', label: 'Medical History', icon: FileText, color: 'text-amber-600', tab: null }, // Group
-  { id: 'exams', label: 'Examinations', icon: Stethoscope, color: 'text-indigo-600', tab: GuyiniEncounterTab.EXAMINATIONS },
   { id: 'labs', label: 'Lab Tests & Scans', icon: TestTube, color: 'text-fuchsia-600', tab: GuyiniEncounterTab.LAB_TESTS_SCANS },
   { id: 'followup', label: 'Follow Up & Fee', icon: CreditCard, color: 'text-slate-600', tab: GuyiniEncounterTab.FOLLOW_UP_FEE },
 ];

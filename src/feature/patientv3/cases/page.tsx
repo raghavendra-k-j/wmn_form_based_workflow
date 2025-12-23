@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FolderOpen, Plus, ArrowRight, Stethoscope, MoreHorizontal } from 'lucide-react';
 import { usePatientV3 } from '../context';
+import { Button } from '../../../components/button';
 import { 
   CASE_TYPE_CONFIG, 
   type CaseType, 
@@ -56,35 +57,24 @@ const MOCK_CASES: Case[] = [
   },
 ];
 
-/** Month-based color palette for calendar avatars */
-const MONTH_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  'Jan': { bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-200' },
-  'Feb': { bg: 'bg-pink-50', text: 'text-pink-600', border: 'border-pink-200' },
-  'Mar': { bg: 'bg-green-50', text: 'text-green-600', border: 'border-green-200' },
-  'Apr': { bg: 'bg-purple-50', text: 'text-purple-600', border: 'border-purple-200' },
-  'May': { bg: 'bg-yellow-50', text: 'text-yellow-600', border: 'border-yellow-200' },
-  'Jun': { bg: 'bg-cyan-50', text: 'text-cyan-600', border: 'border-cyan-200' },
-  'Jul': { bg: 'bg-orange-50', text: 'text-orange-600', border: 'border-orange-200' },
-  'Aug': { bg: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-200' },
-  'Sep': { bg: 'bg-indigo-50', text: 'text-indigo-600', border: 'border-indigo-200' },
-  'Oct': { bg: 'bg-amber-50', text: 'text-amber-600', border: 'border-amber-200' },
-  'Nov': { bg: 'bg-teal-50', text: 'text-teal-600', border: 'border-teal-200' },
-  'Dec': { bg: 'bg-rose-50', text: 'text-rose-600', border: 'border-rose-200' },
-};
 
-
-/** Type Badge Component */
+/** Type Badge Component - Text-only square badges */
 function TypeBadge({ type }: { type: CaseType }) {
   const config = CASE_TYPE_CONFIG[type];
+  
+  // Darker color mappings for text-only badges
+  const badgeColors: Record<CaseType, { bg: string; text: string }> = {
+    anc: { bg: 'bg-emerald-100', text: 'text-emerald-700' },
+    pnc: { bg: 'bg-rose-100', text: 'text-rose-700' },
+    gynae: { bg: 'bg-amber-100', text: 'text-amber-700' },
+  };
+  
+  const colors = badgeColors[type];
+  
   return (
-    <div className="flex items-center gap-1.5">
-      <div className={`w-5 h-5 flex items-center justify-center ${config.bgColor} ${config.textColor}`}>
-        <config.icon className="w-3 h-3" />
-      </div>
-      <span className={`text-[11px] font-bold uppercase tracking-wide ${config.textColor}`}>
-        {config.label}
-      </span>
-    </div>
+    <span className={`inline-block px-2 py-1 ${colors.bg} ${colors.text} text-[10px] font-bold uppercase tracking-wider`}>
+      {config.label}
+    </span>
   );
 }
 
@@ -97,15 +87,15 @@ interface TableColumn {
 }
 
 const TABLE_COLUMNS: TableColumn[] = [
-  { key: 'type', label: 'Type', width: '100px' },
-  { key: 'visit', label: 'Visit', width: '130px' },
+  { key: 'visitDate', label: 'Visit Date', width: '100px' },
+  { key: 'visitType', label: 'Visit Type', width: '100px' },
   { key: 'complaints', label: 'Chief Complaints' },
   { key: 'followUpDate', label: 'Follow Up Date', width: '130px' },
   { key: 'actions', label: '', width: '80px', align: 'right' },
 ];
 
-/** Filtered Table Columns (when type is specified) */
-const FILTERED_TABLE_COLUMNS: TableColumn[] = TABLE_COLUMNS.filter(col => col.key !== 'type');
+/** Filtered Table Columns (when type is specified - hide Visit Type) */
+const FILTERED_TABLE_COLUMNS: TableColumn[] = TABLE_COLUMNS.filter(col => col.key !== 'visitType');
 
 /** Case List Page */
 export function CaseListPage() {
@@ -177,37 +167,70 @@ export function CaseListPage() {
           </div>
         </div>
 
-        {/* New Case Button */}
-        {typeConfig ? (
-          <button
+        {/* New Visit Button - Only for filtered views (ANC, PNC, Gynae) */}
+        {typeConfig && (
+          <Button
+            size="sm"
             onClick={() => handleStartCase(caseType as CaseType)}
-            className={`inline-flex items-center gap-2 px-4 py-2 text-[12px] font-bold uppercase tracking-wide transition-all
-              ${typeConfig.bgColor} ${typeConfig.textColor} border ${typeConfig.borderColor}
-              hover:shadow-sm active:scale-[0.98]`}
+            leftIcon={<Plus className="w-3.5 h-3.5" />}
+            className={
+              caseType === 'gynae' 
+                ? 'bg-amber-600 hover:bg-amber-700 border-amber-600' 
+                : caseType === 'anc'
+                  ? 'bg-emerald-600 hover:bg-emerald-700 border-emerald-600'
+                  : 'bg-rose-600 hover:bg-rose-700 border-rose-600'
+            }
           >
-            <Plus className="w-4 h-4" />
-            New {typeConfig.singularLabel}
-          </button>
-        ) : (
-          <div className="flex items-center gap-2">
-            {Object.entries(CASE_TYPE_CONFIG).map(([key, config]) => (
-              <button
-                key={key}
-                onClick={() => handleStartCase(key as CaseType)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide transition-all
-                  ${config.bgColor} ${config.textColor} border ${config.borderColor}
-                  hover:shadow-sm active:scale-[0.98]`}
-              >
-                <Plus className="w-3.5 h-3.5" />
-                {config.label}
-              </button>
-            ))}
-          </div>
+            New Visit
+          </Button>
         )}
       </div>
 
-      {/* Data Table */}
+      {/* Content Area */}
       <div className="flex-1 overflow-auto p-4">
+        {/* Start a New Case Section - Only for All Cases view */}
+        {!caseType && (
+          <div className="bg-white border border-dashed border-zinc-300 p-3 mb-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Plus className="w-4 h-4 text-zinc-500" />
+              <span className="text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+                Start a New Case
+              </span>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
+              {Object.entries(CASE_TYPE_CONFIG).map(([key, config]) => {
+                const Icon = config.icon;
+                
+                // Darker soft colors for each type
+                const cardColors: Record<string, { bg: string; hoverBg: string; border: string; text: string }> = {
+                  anc: { bg: 'bg-emerald-100', hoverBg: 'hover:bg-emerald-200', border: 'border-emerald-300', text: 'text-emerald-700' },
+                  pnc: { bg: 'bg-rose-100', hoverBg: 'hover:bg-rose-200', border: 'border-rose-300', text: 'text-rose-700' },
+                  gynae: { bg: 'bg-amber-100', hoverBg: 'hover:bg-amber-200', border: 'border-amber-300', text: 'text-amber-700' },
+                };
+                
+                const colors = cardColors[key];
+                
+                return (
+                  <button
+                    key={key}
+                    onClick={() => handleStartCase(key as CaseType)}
+                    className={`flex items-center justify-center gap-2 py-3 px-3 border transition-all cursor-pointer hover:shadow-sm
+                      ${colors.bg} ${colors.hoverBg} ${colors.border}`}
+                  >
+                    <Icon className={`w-5 h-5 ${colors.text}`} />
+                    <span className={`text-[11px] font-bold uppercase tracking-wide ${colors.text}`}>
+                      {config.fullLabel.replace(' Visits', '')}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+
+        {/* Data Table */}
         <div className="bg-white border border-zinc-200 overflow-hidden">
           <table className="w-full text-left">
             {/* Table Header */}
@@ -216,7 +239,7 @@ export function CaseListPage() {
                 {columns.map((col) => (
                   <th
                     key={col.key}
-                    className={`px-4 py-3 text-[10px] font-bold text-zinc-500 uppercase tracking-wider
+                    className={`px-3 py-2 text-[10px] font-bold text-zinc-500 uppercase tracking-wider
                       ${col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left'}`}
                     style={{ width: col.width }}
                   >
@@ -242,51 +265,49 @@ export function CaseListPage() {
                 </tr>
               ) : (
                 filteredCases.map((caseItem) => {
-                  const config = CASE_TYPE_CONFIG[caseItem.type];
                   return (
                     <tr
                       key={caseItem.id}
                       onClick={() => handleCaseClick(caseItem)}
                       className="group hover:bg-zinc-50/60 cursor-pointer transition-colors"
                     >
-                      {/* Type (only if no filter) */}
-                      {!caseType && (
-                        <td className="px-4 py-3">
-                          <TypeBadge type={caseItem.type} />
-                        </td>
-                      )}
-
-                      {/* Visit - Calendar Style */}
-                      <td className="px-4 py-2">
+                      {/* Visit Date - Calendar Avatar */}
+                      <td className="px-3 py-2">
                         {(() => {
                           const [day, month, year] = caseItem.startDate.split(' ');
-                          const monthColor = MONTH_COLORS[month] || { bg: 'bg-zinc-50', text: 'text-zinc-600', border: 'border-zinc-200' };
                           return (
-                            <div className={`w-10 h-11 flex flex-col items-center justify-center ${monthColor.bg} ${monthColor.text} border ${monthColor.border}`}>
-                              <span className="text-[8px] font-bold uppercase tracking-wider leading-none opacity-80">{month}</span>
-                              <span className="text-[14px] font-black leading-none">{day}</span>
-                              <span className="text-[7px] font-medium leading-none opacity-60 mt-0.5">{year}</span>
+                            <div className="w-10 h-12 flex flex-col items-center justify-center bg-zinc-50 border border-zinc-200">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-rose-500 leading-none">{month}</span>
+                              <span className="text-[15px] font-black text-zinc-800 leading-none my-0.5">{day}</span>
+                              <span className="text-[9px] font-medium text-zinc-400 leading-none">{year}</span>
                             </div>
                           );
                         })()}
                       </td>
 
+                      {/* Visit Type (only if no filter) */}
+                      {!caseType && (
+                        <td className="px-3 py-2">
+                          <TypeBadge type={caseItem.type} />
+                        </td>
+                      )}
+
                       {/* Chief Complaints */}
-                      <td className="px-4 py-3">
-                        <p className="text-[12px] text-zinc-700 line-clamp-1" title={caseItem.complaints}>
+                      <td className="px-3 py-2">
+                        <p className="text-[12px] font-semibold text-zinc-700 line-clamp-1" title={caseItem.complaints}>
                           {caseItem.complaints || '—'}
                         </p>
                       </td>
 
                       {/* Follow Up Date */}
-                      <td className="px-4 py-3">
+                      <td className="px-3 py-2">
                         <span className="text-[11px] text-zinc-600">
                           {caseItem.nextFollowUp}
                         </span>
                       </td>
 
                       {/* Actions */}
-                      <td className="px-4 py-3 text-right">
+                      <td className="px-3 py-2 text-right">
                         <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={(e) => {
@@ -297,17 +318,34 @@ export function CaseListPage() {
                           >
                             <MoreHorizontal className="w-4 h-4" />
                           </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleCaseClick(caseItem);
-                            }}
-                            className={`inline-flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wide transition-all
-                              ${config.bgColor} ${config.textColor} hover:shadow-sm`}
-                          >
-                            Open
-                            <ArrowRight className="w-3 h-3" />
-                          </button>
+                          {caseItem.type === 'gynae' ? (
+                            <Button
+                              size="xs"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCaseClick(caseItem);
+                              }}
+                              className="bg-amber-600 text-white hover:bg-amber-700 border-amber-600"
+                              rightIcon={<ArrowRight className="w-3 h-3" />}
+                            >
+                              Open
+                            </Button>
+                          ) : (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCaseClick(caseItem);
+                              }}
+                              className={`inline-flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wide transition-all
+                                ${caseItem.type === 'anc' 
+                                  ? 'bg-emerald-100 text-emerald-700 border border-emerald-300 hover:bg-emerald-200' 
+                                  : 'bg-rose-100 text-rose-700 border border-rose-300 hover:bg-rose-200'
+                                } hover:shadow-sm`}
+                            >
+                              Open
+                              <ArrowRight className="w-3 h-3" />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
