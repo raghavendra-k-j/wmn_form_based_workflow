@@ -3,14 +3,13 @@ import {
   type CurrentPregnancyState,
   type CurrentPregnancyRecord,
   type OutcomeType,
+  type EDDSource,
   currentPregnancyReducer,
   initialCurrentPregnancyState,
-  calculateGA,
-  calculateGAFromEDD,
-  calculateEDD,
-  getTrimester,
-  getDaysUntilEDD,
-  getDaysUntilScanEDD,
+  getEstimatedEDD,
+  getEstimatedEDDSource,
+  getFinalEDD,
+  getFinalEDDSource,
 } from './store';
 
 /** Context Value Interface */
@@ -18,22 +17,25 @@ interface CurrentPregnancyContextValue {
   state: CurrentPregnancyState;
   pregnancy: CurrentPregnancyRecord | null;
   hasActivePregnancy: boolean;
-  // LMP-based calculations
-  ga: { weeks: number; days: number } | null;
-  edd: string | null;
-  trimester: { trimester: 1 | 2 | 3; label: string } | null;
-  daysUntilEDD: number | null;
-  // Scan-based calculations (if scan EDD exists)
-  scanGA: { weeks: number; days: number } | null;
-  scanDaysUntilEDD: number | null;
+  
+  // Calculated values
+  estimatedEDD: string | null;       // EDD from Scan or LMP
+  estimatedEDDSource: 'lmp' | 'scan' | null;  // Source of estimated EDD
+  finalEDD: string | null;           // Final EDD (corrected if present, else estimated)
+  finalEDDSource: EDDSource | null;  // Source of final EDD
   
   // Actions
   setPregnancy: (pregnancy: CurrentPregnancyRecord | null) => void;
   updatePregnancy: (data: Partial<CurrentPregnancyRecord>) => void;
-  updateScanEDD: (scanDate: string, scanEDD: string, updatedBy: string) => void;
   setEditing: (isEditing: boolean) => void;
   completePregnancy: (outcome: OutcomeType, details: Partial<CurrentPregnancyRecord>) => void;
-  addNewPregnancy: (lmpDate: string, createdBy?: string) => void;
+  addNewPregnancy: (data: {
+    lmpDate: string;
+    scanEDD?: string;
+    hasCorrectedEDD?: boolean;
+    correctedEDD?: string;
+    createdBy?: string;
+  }) => void;
   reset: () => void;
 }
 
@@ -56,15 +58,11 @@ export function CurrentPregnancyProvider({ children, initialPregnancy = null }: 
   const { pregnancy } = state;
   const hasActivePregnancy = pregnancy !== null && pregnancy.outcome === 'Ongoing';
   
-  // LMP-based calculations
-  const ga = pregnancy?.lmpDate ? calculateGA(pregnancy.lmpDate) : null;
-  const edd = pregnancy?.lmpDate ? calculateEDD(pregnancy.lmpDate) : null;
-  const trimester = ga ? getTrimester(ga.weeks) : null;
-  const daysUntilEDD = pregnancy?.lmpDate ? getDaysUntilEDD(pregnancy.lmpDate) : null;
-
-  // Scan-based calculations
-  const scanGA = pregnancy?.scanEDD ? calculateGAFromEDD(pregnancy.scanEDD) : null;
-  const scanDaysUntilEDD = pregnancy?.scanEDD ? getDaysUntilScanEDD(pregnancy.scanEDD) : null;
+  // Calculated values
+  const estimatedEDD = pregnancy ? getEstimatedEDD(pregnancy) : null;
+  const estimatedEDDSource = pregnancy ? getEstimatedEDDSource(pregnancy) : null;
+  const finalEDD = pregnancy ? getFinalEDD(pregnancy) : null;
+  const finalEDDSource = pregnancy ? getFinalEDDSource(pregnancy) : null;
 
   // Actions
   const setPregnancy = (pregnancy: CurrentPregnancyRecord | null) => {
@@ -75,10 +73,6 @@ export function CurrentPregnancyProvider({ children, initialPregnancy = null }: 
     dispatch({ type: 'UPDATE_PREGNANCY', payload: data });
   };
 
-  const updateScanEDD = (scanDate: string, scanEDD: string, updatedBy: string) => {
-    dispatch({ type: 'UPDATE_SCAN_EDD', payload: { scanDate, scanEDD, updatedBy } });
-  };
-
   const setEditing = (isEditing: boolean) => {
     dispatch({ type: 'SET_EDITING', payload: isEditing });
   };
@@ -87,21 +81,28 @@ export function CurrentPregnancyProvider({ children, initialPregnancy = null }: 
     dispatch({ type: 'COMPLETE_PREGNANCY', payload: { outcome, details } });
   };
 
-  const addNewPregnancy = (lmpDate: string, createdBy?: string) => {
+  const addNewPregnancy = (data: {
+    lmpDate: string;
+    scanEDD?: string;
+    hasCorrectedEDD?: boolean;
+    correctedEDD?: string;
+    createdBy?: string;
+  }) => {
     const newPregnancy: CurrentPregnancyRecord = {
       id: `preg-${Date.now()}`,
       outcome: 'Ongoing',
-      lmpDate,
-      eddDate: calculateEDD(lmpDate),
+      lmpDate: data.lmpDate,
+      scanEDD: data.scanEDD,
+      hasCorrectedEDD: data.hasCorrectedEDD || false,
+      correctedEDD: data.correctedEDD,
       deliveryMode: 'NA',
       gender: 'NA',
       babyStatus: 'NA',
-      complications: [],
       remarks: '',
       createdAt: new Date().toISOString(),
-      createdBy: createdBy || 'System',
+      createdBy: data.createdBy || 'System',
       updatedAt: new Date().toISOString(),
-      updatedBy: createdBy || 'System',
+      updatedBy: data.createdBy || 'System',
     };
     dispatch({ type: 'SET_PREGNANCY', payload: newPregnancy });
   };
@@ -114,15 +115,12 @@ export function CurrentPregnancyProvider({ children, initialPregnancy = null }: 
     state,
     pregnancy,
     hasActivePregnancy,
-    ga,
-    edd,
-    trimester,
-    daysUntilEDD,
-    scanGA,
-    scanDaysUntilEDD,
+    estimatedEDD,
+    estimatedEDDSource,
+    finalEDD,
+    finalEDDSource,
     setPregnancy,
     updatePregnancy,
-    updateScanEDD,
     setEditing,
     completePregnancy,
     addNewPregnancy,

@@ -1,30 +1,24 @@
 import { makeAutoObservable } from 'mobx';
 
-/** Fetus Type Options */
-export type FetusType = 'single' | 'twins' | 'triplets';
+/** Fetal Heart Status */
+export type FetalHeartStatus = '' | 'present' | 'absent';
 
-/** USG Dating Record */
-export interface USGDatingRecord {
-  usgDate: string;
-  fetusType: FetusType;
-  fetusCount: number;
-  result: string;
-  comments: string;
-  scanReport: File | null;
-  scanTechName: string;
-  doctorName: string;
+/** Per-Fetus Data */
+export interface FetusData {
+  fetusNumber: number;
+  crl: string;  // Crown-Rump Length in mm
+  fh: FetalHeartStatus;  // Fetal Heart
 }
 
 /** USG Dating Store */
 export class USGDatingStore {
   usgDate: string = '';
-  fetusType: FetusType = 'single';
-  fetusCount: number = 1;
-  result: string = '';
-  comments: string = '';
-  scanReport: File | null = null;
-  scanTechName: string = '';
-  doctorName: string = '';
+  scanEDD: string = '';
+  
+  // Per-fetus data (CRL and FH for each fetus)
+  fetusData: FetusData[] = [
+    { fetusNumber: 1, crl: '', fh: '' }
+  ];
 
   constructor() {
     makeAutoObservable(this);
@@ -34,54 +28,33 @@ export class USGDatingStore {
     this.usgDate = date;
   }
 
-  setFetusType(type: FetusType) {
-    this.fetusType = type;
-    // Auto-set fetus count based on type
-    switch (type) {
-      case 'single': this.fetusCount = 1; break;
-      case 'twins': this.fetusCount = 2; break;
-      case 'triplets': this.fetusCount = 3; break;
+  setScanEDD(edd: string) {
+    this.scanEDD = edd;
+  }
+
+  /** Sync fetus data array to match the shared fetus count */
+  syncFetusCount(count: number) {
+    const currentCount = this.fetusData.length;
+    
+    if (count > currentCount) {
+      // Add more rows
+      for (let i = currentCount; i < count; i++) {
+        this.fetusData.push({ fetusNumber: i + 1, crl: '', fh: '' });
+      }
+    } else if (count < currentCount) {
+      // Remove extra rows
+      this.fetusData = this.fetusData.slice(0, count);
     }
   }
 
-  setFetusCount(count: number) {
-    this.fetusCount = count;
-    // Auto-set type based on count
-    if (count === 1) this.fetusType = 'single';
-    else if (count === 2) this.fetusType = 'twins';
-    else if (count >= 3) this.fetusType = 'triplets';
-  }
-
-  setResult(result: string) {
-    this.result = result;
-  }
-
-  setComments(comments: string) {
-    this.comments = comments;
-  }
-
-  setScanReport(file: File | null) {
-    this.scanReport = file;
-  }
-
-  setScanTechName(name: string) {
-    this.scanTechName = name;
-  }
-
-  setDoctorName(name: string) {
-    this.doctorName = name;
-  }
-
-  getData(): USGDatingRecord {
-    return {
-      usgDate: this.usgDate,
-      fetusType: this.fetusType,
-      fetusCount: this.fetusCount,
-      result: this.result,
-      comments: this.comments,
-      scanReport: this.scanReport,
-      scanTechName: this.scanTechName,
-      doctorName: this.doctorName,
-    };
+  updateFetusData(fetusNumber: number, field: 'crl' | 'fh', value: string) {
+    const fetus = this.fetusData.find(f => f.fetusNumber === fetusNumber);
+    if (fetus) {
+      if (field === 'crl') {
+        fetus.crl = value;
+      } else if (field === 'fh') {
+        fetus.fh = value as FetalHeartStatus;
+      }
+    }
   }
 }

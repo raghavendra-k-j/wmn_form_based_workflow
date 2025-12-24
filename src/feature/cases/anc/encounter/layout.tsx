@@ -37,8 +37,7 @@ import {
   MedicalHistorySubTabConfig,
   MedicalHistorySubTabList,
 } from './store';
-import { VisitInfoPage } from './visits/form/visit-info/page';
-import { ExaminationsPage } from './visits/form/examinations/page';
+import { VisitDetails } from './visits/form/visit-form/visit-details';
 import { LabScansPage } from './visits/form/lab-scans/page';
 import { PrescriptionsPage } from './visits/form/prescriptions/page';
 import { NextFollowUpPage } from './visits/form/next-follow-up/page';
@@ -48,6 +47,7 @@ import { USGDatingPage } from './investigations/usg-dating/page';
 import { USG1113WeeksPage } from './investigations/usg-11-13-weeks/page';
 import { GrowthScanPage } from './investigations/growth-scan/page';
 import { AnomalyScanPage } from './investigations/anomaly-scan/page';
+import { FetusProvider } from './investigations/fetus-context';
 import {
   MedicalHistoryOverviewContent,
   PastHistoryContent,
@@ -100,8 +100,7 @@ const getInvestigationSubTabIcon = (subTab: InvestigationSubTab) => {
 /** Get visit form sub-tab icon */
 const getVisitFormSubTabIcon = (subTab: VisitFormSubTab) => {
   switch (subTab) {
-    case VisitFormSubTab.EXAMINATIONS: return Stethoscope;
-    case VisitFormSubTab.VISIT_INFO: return ClipboardList;
+    case VisitFormSubTab.VISIT_DETAILS: return Stethoscope;
     case VisitFormSubTab.LAB_SCANS: return TestTube;
     case VisitFormSubTab.PRESCRIPTIONS: return Pill;
     case VisitFormSubTab.NEXT_FOLLOW_UP: return CalendarPlus;
@@ -125,11 +124,11 @@ const VisitsList = observer(() => {
   ];
 
   const handleNewVisit = () => {
-    navigate(`/patientv3/${patientId}/anc/${encounterId}/new-visit/${VisitFormSubTab.EXAMINATIONS}`);
+    navigate(`/patientv3/${patientId}/anc/${encounterId}/new-visit/${VisitFormSubTab.VISIT_DETAILS}`);
   };
 
   const handleEditVisit = (visitId: string) => {
-    navigate(`/patientv3/${patientId}/anc/${encounterId}/visit/${visitId}/${VisitFormSubTab.EXAMINATIONS}`);
+    navigate(`/patientv3/${patientId}/anc/${encounterId}/visit/${visitId}/${VisitFormSubTab.VISIT_DETAILS}`);
   };
 
   return (
@@ -204,7 +203,7 @@ const VisitFormWrapper = observer(({ isNew }: { isNew: boolean }) => {
   // The subTab is captured in the wildcard '*' because we use "new-visit/*" and "visit/:visitId/*"
   const subTab = params['*'];
 
-  const activeSubTab = (subTab as VisitFormSubTab) || VisitFormSubTab.EXAMINATIONS;
+  const activeSubTab = (subTab as VisitFormSubTab) || VisitFormSubTab.VISIT_DETAILS;
 
   const handleBack = () => {
     navigate(`/patientv3/${patientId}/anc/${encounterId}/visits`);
@@ -265,12 +264,11 @@ const VisitFormWrapper = observer(({ isNew }: { isNew: boolean }) => {
       {/* Form Content - Routed */}
       <div className="flex-1 overflow-y-auto p-4 bg-slate-50">
         <Routes>
-          <Route path="examinations" element={<ExaminationsPage />} />
-          <Route path="visit_info" element={<VisitInfoPage />} />
+          <Route path="visit_details" element={<VisitDetails />} />
           <Route path="lab_scans" element={<LabScansPage />} />
           <Route path="prescriptions" element={<PrescriptionsPage />} />
           <Route path="next_follow_up" element={<NextFollowUpPage />} />
-          <Route index element={<Navigate to="examinations" replace />} />
+          <Route index element={<Navigate to="visit_details" replace />} />
         </Routes>
       </div>
     </div>
@@ -439,23 +437,25 @@ const InvestigationsLayout = observer(() => {
   };
 
   return (
-    <div className="flex h-full">
-      {/* Side Navigation */}
-      <div className="w-52 bg-white border-r border-zinc-200 h-full overflow-y-auto py-3 px-2 flex flex-col gap-0.5">
-        {InvestigationSubTabList.map(tab => (
-          <SideNavButton
-            key={tab}
-            subTab={tab}
-            isActive={activeSubTab === tab}
-            onClick={() => navigateToSubTab(tab)}
-          />
-        ))}
+    <FetusProvider>
+      <div className="flex h-full">
+        {/* Side Navigation */}
+        <div className="w-52 bg-white border-r border-zinc-200 h-full overflow-y-auto py-3 px-2 flex flex-col gap-0.5">
+          {InvestigationSubTabList.map(tab => (
+            <SideNavButton
+              key={tab}
+              subTab={tab}
+              isActive={activeSubTab === tab}
+              onClick={() => navigateToSubTab(tab)}
+            />
+          ))}
+        </div>
+        {/* Main Content */}
+        <div className="flex-1 overflow-y-auto p-4 bg-slate-50">
+          <InvestigationSubTabContent subTab={activeSubTab} />
+        </div>
       </div>
-      {/* Main Content */}
-      <div className="flex-1 overflow-y-auto p-4 bg-slate-50">
-        <InvestigationSubTabContent subTab={activeSubTab} />
-      </div>
-    </div>
+    </FetusProvider>
   );
 });
 

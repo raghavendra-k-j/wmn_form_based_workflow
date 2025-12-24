@@ -8,8 +8,12 @@ import {
 
 /** Surgical History Tab Content */
 export const SurgicalHistoryContent = observer(() => {
-  // Create store instance - starts empty
-  const store = useMemo(() => new SurgicalHistoryStore(), []);
+  // Create store instance with initialization
+  const store = useMemo(() => {
+    const s = new SurgicalHistoryStore();
+    s.initialize();
+    return s;
+  }, []);
 
   return (
     <SurgicalHistoryProvider store={store}>

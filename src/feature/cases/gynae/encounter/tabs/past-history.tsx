@@ -8,10 +8,10 @@ import {
 
 /** Past History Tab Content */
 export const PastHistoryContent = observer(() => {
-  // Create store instance with default conditions pre-populated
+  // Create store instance with initialization
   const store = useMemo(() => {
     const s = new PastHistoryStore();
-    s.loadDefaultConditions();
+    s.initialize();
     return s;
   }, []);
 

@@ -212,7 +212,7 @@ function MenuButton({
   return (
     <button
       onClick={onClick}
-      className={`relative w-full flex items-center gap-3 py-2.5 text-left transition-all duration-150 group border-b border-zinc-100 cursor-pointer ${
+      className={`relative w-full flex items-center gap-2 py-2 text-left transition-all duration-150 group border-b border-zinc-100 cursor-pointer ${
         indent ? 'pl-8 pr-4' : 'px-4'
       } ${
         active 
@@ -223,12 +223,12 @@ function MenuButton({
       {/* Active Indicator - White line for solid background */}
       {active && <div className="absolute left-0 top-0 bottom-0 w-1 bg-white/30" />}
       
-      <div className={`w-7 h-7 rounded-none flex items-center justify-center shrink-0 border border-current/20 ${active ? 'bg-white/20 text-white' : `${bgColor} ${textColor}`} transition-all`}>
-        <Icon className="w-4 h-4" />
+      <div className={`w-6 h-6 rounded-sm flex items-center justify-center shrink-0 border border-current/20 ${active ? 'bg-white/20 text-white' : `${bgColor} ${textColor}`} transition-all`}>
+        <Icon className="w-3.5 h-3.5" />
       </div>
       
       <div className="flex-1 min-w-0">
-        <div className={`text-[13px] tracking-tight truncate ${active ? 'font-bold' : 'font-medium'}`}>
+        <div className={`text-[12px] tracking-tight truncate ${active ? 'font-bold' : 'font-medium'}`}>
           {label}
         </div>
       </div>

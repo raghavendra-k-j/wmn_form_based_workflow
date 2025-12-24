@@ -157,8 +157,13 @@ export function AutocompleteInput({
       case 'Enter':
         e.preventDefault();
         if (highlightedIndex >= 0 && highlightedIndex < filteredSuggestions.length) {
+          // User explicitly selected an item with arrow keys
           handleSelect(filteredSuggestions[highlightedIndex]);
+        } else if (filteredSuggestions.length > 0) {
+          // Auto-select first matching suggestion
+          handleSelect(filteredSuggestions[0]);
         } else if (isAddButtonEnabled) {
+          // No matches, add custom value if allowed
           handleAddCustom();
         }
         break;
@@ -185,22 +190,36 @@ export function AutocompleteInput({
           />
 
           {/* Dropdown - opens upward */}
-          {isOpen && filteredSuggestions.length > 0 && (
-            <div className="absolute z-50 left-0 right-0 bottom-full mb-1 max-h-48 overflow-y-auto bg-white border border-zinc-200 shadow-lg">
-              {filteredSuggestions.map((suggestion, index) => (
-                <button
-                  key={suggestion}
-                  type="button"
-                  onClick={() => handleSelect(suggestion)}
-                  className={`w-full text-left px-3 py-1.5 text-[12px] transition-colors cursor-pointer ${
-                    index === highlightedIndex
-                      ? 'bg-zinc-100 text-zinc-900'
-                      : 'hover:bg-zinc-50 text-zinc-700'
-                  }`}
-                >
-                  <HighlightedText text={suggestion} query={inputValue} />
-                </button>
-              ))}
+          {isOpen && inputValue.trim().length > 0 && (
+            <div className="absolute z-50 left-0 right-0 bottom-full mb-1 max-h-52 overflow-y-auto bg-white border border-zinc-200 rounded-lg shadow-xl ring-1 ring-black/5">
+              {filteredSuggestions.length > 0 ? (
+                <div className="py-1">
+                  {filteredSuggestions.map((suggestion, index) => (
+                    <button
+                      key={suggestion}
+                      type="button"
+                      onClick={() => handleSelect(suggestion)}
+                      className={`w-full text-left px-3 py-2 text-[12px] transition-all duration-100 cursor-pointer flex items-center gap-2 ${
+                        index === highlightedIndex
+                          ? 'bg-teal-50 text-teal-800 border-l-2 border-teal-500'
+                          : 'hover:bg-zinc-50 text-zinc-700 border-l-2 border-transparent'
+                      }`}
+                    >
+                      <span className="flex-1">
+                        <HighlightedText text={suggestion} query={inputValue} />
+                      </span>
+                      {index === highlightedIndex && (
+                        <span className="text-[10px] text-teal-500 font-medium">↵ Enter</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="px-4 py-3 text-center">
+                  <div className="text-zinc-400 text-[11px] font-medium">No results found</div>
+                  <div className="text-zinc-300 text-[10px] mt-0.5">Try a different search term</div>
+                </div>
+              )}
             </div>
           )}
         </div>

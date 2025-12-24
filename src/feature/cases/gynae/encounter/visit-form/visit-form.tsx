@@ -4,7 +4,6 @@ import {
   FormField,
   TextInput,
   SelectInput,
-  DatalistInput,
   TextAreaInput,
   ReadOnlyField,
   SectionDivider,
@@ -17,10 +16,10 @@ import {
 
 const CONTRACEPTION_OPTIONS = [
   'Barrier',
-  'Copper T',
+  'Cu-T',
   'Implant',
   'Injectables',
-  'Mirena (IUD)',
+  'IUD (Mirena)',
   'Natural',
   'None',
   'OCP',
@@ -32,6 +31,22 @@ const MENSTRUAL_PATTERN_OPTIONS = ['Regular', 'Irregular'];
 const FLOW_OPTIONS = ['Light', 'Moderate', 'Heavy'];
 
 const YES_NO_OPTIONS = ['Yes', 'No'];
+
+const PAP_SMEAR_RESULT_OPTIONS = [
+  'Normal',
+  'Abnormal',
+  'ASCUS',
+  'LSIL',
+  'HSIL',
+  'Inadequate Sample',
+];
+
+const HPV_RESULT_OPTIONS = [
+  'Negative',
+  'Positive (Low Risk)',
+  'Positive (High Risk)',
+  'Unknown',
+];
 
 const MICTURITION_OPTIONS = ['Normal', 'Burning', 'Frequency', 'Urgency', 'Incontinence', 'Dysuria', 'Nocturia'];
 
@@ -71,7 +86,16 @@ export const VisitForm = observer(() => {
   const [para, setPara] = useState('');
   const [lmp, setLmp] = useState('');
   const [contraception, setContraception] = useState('');
-  const [previousSmear, setPreviousSmear] = useState('');
+
+  // Cervical Cancer Screening - Pap Smear
+  const [papSmearDone, setPapSmearDone] = useState('');
+  const [lastPapSmearDate, setLastPapSmearDate] = useState('');
+  const [papSmearResult, setPapSmearResult] = useState('');
+
+  // Cervical Cancer Screening - HPV
+  const [hpvTestDone, setHpvTestDone] = useState('');
+  const [lastHpvTestDate, setLastHpvTestDate] = useState('');
+  const [hpvResult, setHpvResult] = useState('');
 
   // Menstrual History
   const [menstrualPattern, setMenstrualPattern] = useState('');
@@ -84,12 +108,9 @@ export const VisitForm = observer(() => {
 
   // Systems Review
   const [micturition, setMicturition] = useState('');
+  const [micturitionComments, setMicturitionComments] = useState('');
   const [bowels, setBowels] = useState('');
-
-  // Clinical Notes
-  const [impression, setImpression] = useState('');
-
-  const [advice, setAdvice] = useState('');
+  const [bowelsComments, setBowelsComments] = useState('');
 
   return (
     <div className="bg-white p-4 border border-zinc-200 shadow-sm">
@@ -131,7 +152,7 @@ export const VisitForm = observer(() => {
       <SectionDivider />
 
       {/* Section 2: Gynae History */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <FormField label="LMP">
           <TextInput
             type="date"
@@ -154,17 +175,92 @@ export const VisitForm = observer(() => {
             placeholder="Select..."
           />
         </FormField>
-        <FormField label="Previous Smear">
-          <TextInput
-            value={previousSmear}
-            onChange={setPreviousSmear}
-          />
-        </FormField>
       </div>
 
       <SectionDivider />
 
-      {/* Section 3: Menstrual History */}
+      {/* Section 3: Cervical Cancer Screening */}
+      <div className="space-y-4">
+        <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Cervical Cancer Screening</h4>
+        
+        {/* Pap Smear Row */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <FormField label="Pap Smear Done">
+            <SelectInput
+              value={papSmearDone}
+              onChange={(val) => {
+                setPapSmearDone(val);
+                if (val !== 'Yes') {
+                  setLastPapSmearDate('');
+                  setPapSmearResult('');
+                }
+              }}
+              options={YES_NO_OPTIONS}
+              placeholder="Select..."
+            />
+          </FormField>
+          {papSmearDone === 'Yes' && (
+            <>
+              <FormField label="Last Pap Smear Date">
+                <TextInput
+                  type="date"
+                  value={lastPapSmearDate}
+                  onChange={setLastPapSmearDate}
+                />
+              </FormField>
+              <FormField label="Pap Smear Result">
+                <SelectInput
+                  value={papSmearResult}
+                  onChange={setPapSmearResult}
+                  options={PAP_SMEAR_RESULT_OPTIONS}
+                  placeholder="Select result..."
+                />
+              </FormField>
+            </>
+          )}
+        </div>
+
+        {/* HPV Row */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <FormField label="HPV Test Done">
+            <SelectInput
+              value={hpvTestDone}
+              onChange={(val) => {
+                setHpvTestDone(val);
+                if (val !== 'Yes') {
+                  setLastHpvTestDate('');
+                  setHpvResult('');
+                }
+              }}
+              options={YES_NO_OPTIONS}
+              placeholder="Select..."
+            />
+          </FormField>
+          {hpvTestDone === 'Yes' && (
+            <>
+              <FormField label="Last HPV Test Date">
+                <TextInput
+                  type="date"
+                  value={lastHpvTestDate}
+                  onChange={setLastHpvTestDate}
+                />
+              </FormField>
+              <FormField label="HPV Result">
+                <SelectInput
+                  value={hpvResult}
+                  onChange={setHpvResult}
+                  options={HPV_RESULT_OPTIONS}
+                  placeholder="Select result..."
+                />
+              </FormField>
+            </>
+          )}
+        </div>
+      </div>
+
+      <SectionDivider />
+
+      {/* Section 4: Menstrual History */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <FormField label="Menstrual Pattern">
           <SelectInput
@@ -225,50 +321,47 @@ export const VisitForm = observer(() => {
 
       <SectionDivider />
 
-      {/* Section 4: Systems Review */}
+      {/* Section 5: Systems Review */}
       <div className="grid grid-cols-2 gap-4">
-        <FormField label="Micturition">
-          <DatalistInput
-            id="micturition-list"
-            value={micturition}
-            onChange={setMicturition}
-            options={MICTURITION_OPTIONS}
-            placeholder="Select or type..."
-          />
-        </FormField>
-        <FormField label="Bowels">
-          <DatalistInput
-            id="bowels-list"
-            value={bowels}
-            onChange={setBowels}
-            options={BOWELS_OPTIONS}
-            placeholder="Select or type..."
-          />
-        </FormField>
-      </div>
-
-      <SectionDivider />
-
-      {/* Section 5: Clinical Notes */}
-      <div className="space-y-4">
-        <FormField label="Impression">
-          <TextAreaInput
-            value={impression}
-            onChange={setImpression}
-            placeholder="Type diagnosis or impression..."
-            rows={2}
-          />
-        </FormField>
-
-        <FormField label="Advice">
-          <TextAreaInput
-            value={advice}
-            onChange={setAdvice}
-            placeholder="Investigations, Treatment plan, Follow-up..."
-            rows={2}
-          />
-        </FormField>
+        <div className="space-y-3">
+          <FormField label="Micturition">
+            <SelectInput
+              value={micturition}
+              onChange={setMicturition}
+              options={MICTURITION_OPTIONS}
+              placeholder="Select..."
+            />
+          </FormField>
+          <FormField label="Micturition Comments">
+            <TextAreaInput
+              value={micturitionComments}
+              onChange={setMicturitionComments}
+              placeholder="Additional comments..."
+              rows={2}
+            />
+          </FormField>
+        </div>
+        <div className="space-y-3">
+          <FormField label="Bowels">
+            <SelectInput
+              value={bowels}
+              onChange={setBowels}
+              options={BOWELS_OPTIONS}
+              placeholder="Select..."
+            />
+          </FormField>
+          <FormField label="Bowels Comments">
+            <TextAreaInput
+              value={bowelsComments}
+              onChange={setBowelsComments}
+              placeholder="Additional comments..."
+              rows={2}
+            />
+          </FormField>
+        </div>
       </div>
     </div>
   );
 });
+
+

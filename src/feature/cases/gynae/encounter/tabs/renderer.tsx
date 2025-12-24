@@ -9,8 +9,7 @@ import {
   CurrentMedicationsContent,
   AllergiesContent,
   ExaminationsContent,
-  LabTestsScansContent,
-  FollowUpContent,
+  ManagementContent,
   MedicalHistoryOverviewContent,
 } from './index';
 
@@ -38,11 +37,10 @@ export const TabContent = observer(({ tab }: TabContentProps) => {
       return <AllergiesContent />;
     case GuyiniEncounterTab.EXAMINATIONS:
       return <ExaminationsContent />;
-    case GuyiniEncounterTab.LAB_TESTS_SCANS:
-      return <LabTestsScansContent />;
-    case GuyiniEncounterTab.FOLLOW_UP_FEE:
-      return <FollowUpContent />;
+    case GuyiniEncounterTab.MANAGEMENT:
+      return <ManagementContent />;
     default:
       return null;
   }
 });
+

@@ -9,6 +9,8 @@ export { CheckboxGroup } from './checkbox-group';
 export { ReadOnlyField } from './read-only-field';
 export { SectionHeader } from './section-header';
 export { MultiSelectDropdown } from './multi-select-dropdown';
+export { SmartTextArea } from './smart-textarea';
+export type { SmartTextAreaOption } from './smart-textarea';
 
 // Button Components
 export { Button, IconButton } from './button';

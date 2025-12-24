@@ -2,13 +2,14 @@ import { makeAutoObservable } from 'mobx';
 import type { PastHistoryCondition } from './types';
 import { DEFAULT_CONDITION_NAMES } from './types';
 
+/** Simulation mode for testing */
+export type VisitSimulationMode = 'first_visit' | 'has_previous_visit';
+
 /** Mock previous visit data for simulation */
 const MOCK_PREVIOUS_VISIT: PastHistoryCondition[] = [
   { id: 'prev-1', name: 'Diabetes', since: '2018', status: 'active', notes: 'Type 2, on Metformin 500mg BD' },
   { id: 'prev-2', name: 'Hypertension', since: '2020', status: 'active', notes: 'On Amlodipine 5mg OD' },
   { id: 'prev-3', name: 'Asthma', since: '2015', status: 'active', notes: 'Mild, uses inhaler PRN' },
-  { id: 'prev-4', name: 'Thyroid Dysfunction', since: '', status: 'inactive', notes: '' },
-  { id: 'prev-5', name: 'Surgery', since: '2019', status: 'active', notes: 'Appendectomy' },
 ];
 
 const MOCK_PREVIOUS_VISIT_DATE = '2024-12-15';
@@ -28,11 +29,36 @@ export class PastHistoryStore {
   isExpanded = true;
 
   /** Previous visit data (for simulation) */
-  previousVisitData: PastHistoryCondition[] = MOCK_PREVIOUS_VISIT;
+  previousVisitData: PastHistoryCondition[] = [];
   previousVisitDate: string = MOCK_PREVIOUS_VISIT_DATE;
+
+  /** Current simulation mode */
+  simulationMode: VisitSimulationMode = 'first_visit';
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  /** Initialize the store based on simulation mode */
+  initialize(): void {
+    this.applySimulationMode(this.simulationMode);
+  }
+
+  /** Set simulation mode and refresh data */
+  setSimulationMode(mode: VisitSimulationMode): void {
+    this.simulationMode = mode;
+    this.applySimulationMode(mode);
+  }
+
+  /** Apply simulation mode */
+  private applySimulationMode(mode: VisitSimulationMode): void {
+    if (mode === 'first_visit') {
+      this.previousVisitData = [];
+      this.loadDefaultConditions();
+    } else {
+      this.previousVisitData = [...MOCK_PREVIOUS_VISIT];
+      this.conditions = [];
+    }
   }
 
   /* ===========================================================================
@@ -146,9 +172,10 @@ export class PastHistoryStore {
     this.ignorePreviousVisit(); // Clear to hide banner
   }
 
-  /** Ignore/Dismiss previous visit suggestion */
+  /** Ignore/Dismiss previous visit suggestion and load defaults */
   ignorePreviousVisit(): void {
     this.previousVisitData = [];
+    this.loadDefaultConditions();
   }
 
   /* ===========================================================================

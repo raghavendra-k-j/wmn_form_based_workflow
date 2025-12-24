@@ -1,7 +1,8 @@
-import { ProfileInfo } from './profile-info';
-import { ObstetricSummary } from './obstetric-summary';
-import { RisksSummary } from './risks-summary';
+import { AllergiesSummary } from './allergies-summary';
 import { MenuSection } from './menu-section';
+import { ObstetricSummary } from './obstetric-summary';
+import { ProfileInfo } from './profile-info';
+import { RisksSummary } from './risks-summary';
 
 /** Patient V3 Sidebar - Carbon Design Theme */
 export function PatientSidebar() {
@@ -9,6 +10,7 @@ export function PatientSidebar() {
     <div className="w-full h-full border-r border-zinc-100 bg-white flex flex-col shrink-0 overflow-y-auto overflow-x-hidden transition-all duration-200">
       <ProfileInfo />
       <ObstetricSummary />
+      <AllergiesSummary />
       <RisksSummary />
       
       {/* Menu Section - Navigation */}
