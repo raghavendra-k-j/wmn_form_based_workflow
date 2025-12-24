@@ -44,75 +44,82 @@ export const DeliveryInfoContent = observer(() => {
   const showCSIndication = modeOfDelivery === 'CS';
 
   return (
-    <div className="bg-white p-4 border border-zinc-200 shadow-sm">
-      {/* Section 1: Basic Delivery Info */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <FormField label="Date of Delivery">
-          <TextInput
-            type="date"
-            value={dateOfDelivery}
-            onChange={setDateOfDelivery}
-          />
-        </FormField>
-        <FormField label="Mode of Delivery">
-          <SelectInput
-            value={modeOfDelivery}
-            onChange={setModeOfDelivery}
-            options={MODE_OF_DELIVERY_OPTIONS}
-            placeholder="Select..."
-          />
-        </FormField>
-        <FormField label="Sex">
-          <SelectInput
-            value={sex}
-            onChange={setSex}
-            options={SEX_OPTIONS}
-            placeholder="Select..."
-          />
-        </FormField>
-        <FormField label="Birth Weight (kg)">
-          <TextInput
-            value={birthWeight}
-            onChange={setBirthWeight}
-            placeholder="e.g. 3.2"
-          />
-        </FormField>
+    <div className="bg-white border border-zinc-200 shadow-sm">
+      {/* Form Header */}
+      <div className="bg-zinc-100 px-4 py-2 border-b border-zinc-200">
+        <h3 className="text-sm font-semibold text-pink-600">Delivery Details</h3>
       </div>
 
-      <SectionDivider />
-
-      {/* Section 2: CS & Perineal Info */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <FormField label="Perineal Tear">
-          <SelectInput
-            value={perinealTear}
-            onChange={setPerinealTear}
-            options={PERINEAL_TEAR_OPTIONS}
-            placeholder="Select..."
-          />
-        </FormField>
-        {showCSIndication && (
-          <FormField label="Indication for CS" className="md:col-span-2">
+      <div className="px-4 pb-4 pt-3">
+        {/* Section 1: Basic Delivery Info */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <FormField label="Date of Delivery">
             <TextInput
-              value={indicationForCS}
-              onChange={setIndicationForCS}
-              placeholder="e.g. Failure to progress, Fetal distress..."
+              type="date"
+              value={dateOfDelivery}
+              onChange={setDateOfDelivery}
             />
           </FormField>
-        )}
+          <FormField label="Mode of Delivery">
+            <SelectInput
+              value={modeOfDelivery}
+              onChange={setModeOfDelivery}
+              options={MODE_OF_DELIVERY_OPTIONS}
+              placeholder="Select..."
+            />
+          </FormField>
+          <FormField label="Sex">
+            <SelectInput
+              value={sex}
+              onChange={setSex}
+              options={SEX_OPTIONS}
+              placeholder="Select..."
+            />
+          </FormField>
+          <FormField label="Birth Weight (kg)">
+            <TextInput
+              value={birthWeight}
+              onChange={setBirthWeight}
+              placeholder="e.g. 3.2"
+            />
+          </FormField>
+        </div>
+
+        <SectionDivider />
+
+        {/* Section 2: CS & Perineal Info */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <FormField label="Perineal Tear">
+            <SelectInput
+              value={perinealTear}
+              onChange={setPerinealTear}
+              options={PERINEAL_TEAR_OPTIONS}
+              placeholder="Select..."
+            />
+          </FormField>
+          {showCSIndication && (
+            <FormField label="Indication for CS" className="md:col-span-2">
+              <TextInput
+                value={indicationForCS}
+                onChange={setIndicationForCS}
+                placeholder="e.g. Failure to progress, Fetal distress..."
+              />
+            </FormField>
+          )}
+        </div>
+
+        <SectionDivider />
+
+        {/* Section 3: Other Concerns */}
+        <FormField label="Other Intrapartum/Postpartum Concerns">
+          <TextAreaInput
+            value={otherConcerns}
+            onChange={setOtherConcerns}
+            placeholder="PPH, Shoulder Dystocia, etc..."
+            rows={2}
+          />
+        </FormField>
       </div>
-
-      <SectionDivider />
-
-      {/* Section 3: Other Concerns */}
-      <FormField label="Other Intrapartum/Postpartum Concerns">
-        <TextAreaInput
-          value={otherConcerns}
-          onChange={setOtherConcerns}
-          placeholder="PPH, Shoulder Dystocia, etc..."
-          rows={2}
-        />
-      </FormField>
     </div>
   );
 });

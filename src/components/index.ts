@@ -5,7 +5,10 @@ export { SelectInput } from './select-input';
 export { DatalistInput } from './datalist-input';
 export { TextAreaInput } from './textarea-input';
 export { RadioGroup } from './radio-group';
+export { CheckboxGroup } from './checkbox-group';
 export { ReadOnlyField } from './read-only-field';
+export { SectionHeader } from './section-header';
+export { MultiSelectDropdown } from './multi-select-dropdown';
 
 // Button Components
 export { Button, IconButton } from './button';

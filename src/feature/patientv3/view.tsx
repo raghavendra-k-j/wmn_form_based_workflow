@@ -7,6 +7,7 @@ import { GyanyEncounterView, GuyiniEncounterProvider } from '../cases/gynae/enco
 import { PncEncounterView, PncEncounterProvider } from '../cases/pnc/encounter';
 import { AncEncounterView, AncEncounterProvider } from '../cases/anc/encounter';
 import { CurrentPregnancyPage } from '../current-pregnancy';
+import { DeliveryInfo } from '../Delivery-details/deliveryinfo';
 import { Construction } from 'lucide-react';
 
 /** Placeholder Page for unimplemented routes */
@@ -39,75 +40,75 @@ function PatientV3Layout() {
         <Routes>
           {/* Default: Redirect to profile */}
           <Route index element={<Navigate to="profile" replace />} />
-          
+
           {/* Profile Page */}
           <Route path="profile" element={<ProfilePage />} />
-          
+
           {/* Current Pregnancy */}
           <Route path="current-pregnancy" element={<CurrentPregnancyPage />} />
-          
+
           {/* Case List - All Cases */}
           <Route path="cases" element={<CaseListPage />} />
-          
+
           {/* Case List - Filtered by type */}
           <Route path="cases/:caseType" element={<CaseListPage />} />
-          
+
           {/* ANC Encounter - With nested routes */}
-          <Route 
-            path="anc/:encounterId/*" 
+          <Route
+            path="anc/:encounterId/*"
             element={
               <AncEncounterProvider>
                 <AncEncounterView />
               </AncEncounterProvider>
-            } 
+            }
           />
-          
+
           {/* Gynae Encounter - Nested within patient layout */}
-          <Route 
-            path="gynae/:encounterId" 
+          <Route
+            path="gynae/:encounterId"
             element={
               <GuyiniEncounterProvider>
                 <GyanyEncounterView />
               </GuyiniEncounterProvider>
-            } 
+            }
           />
-          <Route 
-            path="gynae/:encounterId/:tab" 
+          <Route
+            path="gynae/:encounterId/:tab"
             element={
               <GuyiniEncounterProvider>
                 <GyanyEncounterView />
               </GuyiniEncounterProvider>
-            } 
+            }
           />
-          
+
           {/* PNC Encounter - Nested within patient layout */}
-          <Route 
-            path="pnc/:encounterId" 
+          <Route
+            path="pnc/:encounterId"
             element={
               <PncEncounterProvider>
                 <PncEncounterView />
               </PncEncounterProvider>
-            } 
+            }
           />
-          <Route 
-            path="pnc/:encounterId/:tab" 
+          <Route
+            path="pnc/:encounterId/:tab"
             element={
               <PncEncounterProvider>
                 <PncEncounterView />
               </PncEncounterProvider>
-            } 
+            }
           />
-          
+
           {/* Placeholder routes for menu items */}
           <Route path="pregnancy-complications" element={<PlaceholderPage title="Pregnancy Complications" />} />
           <Route path="tt" element={<PlaceholderPage title="TT (Tetanus Toxoid)" />} />
           <Route path="anti-d" element={<PlaceholderPage title="Anti-D" />} />
           <Route path="tests-scans" element={<PlaceholderPage title="Tests & Scans" />} />
           <Route path="hosp-adm" element={<PlaceholderPage title="Hospital Admission" />} />
-          <Route path="delivery-info" element={<PlaceholderPage title="Delivery Info" />} />
+          <Route path="delivery-info" element={<DeliveryInfo />} />
           <Route path="deactivate" element={<PlaceholderPage title="Deactivate" />} />
           <Route path="terminate-preg" element={<PlaceholderPage title="Terminate Pregnancy" />} />
-          
+
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="profile" replace />} />
         </Routes>
