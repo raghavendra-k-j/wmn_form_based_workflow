@@ -15,7 +15,6 @@ interface SmartTextAreaProps {
   selections?: SmartTextAreaOption[];
   onJsChange?: (selections: SmartTextAreaOption[]) => void;
   placeholder?: string;
-  rows?: number;
   className?: string;
   triggerChar?: string;
   minChars?: number;
@@ -46,7 +45,6 @@ export function SmartTextArea({
   selections = [],
   onJsChange,
   placeholder, 
-  rows = 3,
   className = '',
   triggerChar = '',
   minChars = 1

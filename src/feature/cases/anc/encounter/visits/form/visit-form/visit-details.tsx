@@ -170,7 +170,6 @@ export const VisitDetails = observer(() => {
               onJsChange={setSelectedDiagnoses}
               triggerChar="@"
               placeholder="Type '@' to search ICD codes..."
-              rows={2}
             />
           </FormField>
           <FormField label="Plan of Management">
