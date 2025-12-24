@@ -4,6 +4,7 @@ import { PatientSidebar } from './sidebar/sidebar';
 import { ProfilePage } from './profile/page';
 import { CaseListPage } from './cases/page';
 import { GyanyEncounterView, GuyiniEncounterProvider } from '../cases/gynae/encounter';
+import { PncEncounterView, PncEncounterProvider } from '../cases/pnc/encounter';
 import { AncEncounterView, AncEncounterProvider } from '../cases/anc/encounter';
 import { CurrentPregnancyPage } from '../current-pregnancy';
 import { Construction } from 'lucide-react';
@@ -76,6 +77,24 @@ function PatientV3Layout() {
               <GuyiniEncounterProvider>
                 <GyanyEncounterView />
               </GuyiniEncounterProvider>
+            } 
+          />
+          
+          {/* PNC Encounter - Nested within patient layout */}
+          <Route 
+            path="pnc/:encounterId" 
+            element={
+              <PncEncounterProvider>
+                <PncEncounterView />
+              </PncEncounterProvider>
+            } 
+          />
+          <Route 
+            path="pnc/:encounterId/:tab" 
+            element={
+              <PncEncounterProvider>
+                <PncEncounterView />
+              </PncEncounterProvider>
             } 
           />
           

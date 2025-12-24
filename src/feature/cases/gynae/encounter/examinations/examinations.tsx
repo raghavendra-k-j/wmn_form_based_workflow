@@ -29,7 +29,7 @@ function calculateBMI(height: string, weight: string): string {
 /** Examinations Tab Content */
 export const ExaminationsContent = observer(() => {
   // Vitals
-  const [height, setHeight] = useState('');
+  const [height, setHeight] = useState('165'); // Pre-filled from previous visit
   const [weight, setWeight] = useState('');
   const [pulse, setPulse] = useState('');
   const [bp, setBp] = useState('');

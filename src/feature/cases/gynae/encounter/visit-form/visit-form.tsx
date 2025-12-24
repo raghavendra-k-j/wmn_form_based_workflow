@@ -8,19 +8,30 @@ import {
   TextAreaInput,
   ReadOnlyField,
   SectionDivider,
+  RadioGroup,
 } from '../../../../../components';
 
 /* =============================================================================
  * OPTION LISTS
  * ============================================================================= */
 
-const CONTRACEPTION_OPTIONS = ['None', 'OCP', 'IUD/Cu-T', 'Barrier', 'Injectables', 'Implant', 'Natural', 'Sterilization'];
+const CONTRACEPTION_OPTIONS = [
+  'Barrier',
+  'Copper T',
+  'Implant',
+  'Injectables',
+  'Mirena (IUD)',
+  'Natural',
+  'None',
+  'OCP',
+  'Sterilization',
+].sort();
 
 const MENSTRUAL_PATTERN_OPTIONS = ['Regular', 'Irregular'];
 
 const FLOW_OPTIONS = ['Light', 'Moderate', 'Heavy'];
 
-const DYSMENORRHEA_OPTIONS = ['Yes', 'No'];
+const YES_NO_OPTIONS = ['Yes', 'No'];
 
 const MICTURITION_OPTIONS = ['Normal', 'Burning', 'Frequency', 'Urgency', 'Incontinence', 'Dysuria', 'Nocturia'];
 
@@ -64,11 +75,12 @@ export const VisitForm = observer(() => {
 
   // Menstrual History
   const [menstrualPattern, setMenstrualPattern] = useState('');
-  const [menarche, setMenarche] = useState('');
+  const [menarche, setMenarche] = useState('13'); // Pre-filled from previous visit
   const [flow, setFlow] = useState('');
   const [cycleLength, setCycleLength] = useState('');
   const [bleedingDuration, setBleedingDuration] = useState('');
   const [dysmenorrhea, setDysmenorrhea] = useState('');
+  const [interMenstrualBleeding, setInterMenstrualBleeding] = useState('');
 
   // Systems Review
   const [micturition, setMicturition] = useState('');
@@ -198,8 +210,15 @@ export const VisitForm = observer(() => {
           <SelectInput
             value={dysmenorrhea}
             onChange={setDysmenorrhea}
-            options={DYSMENORRHEA_OPTIONS}
+            options={YES_NO_OPTIONS}
             placeholder="Select..."
+          />
+        </FormField>
+        <FormField label="Inter-menstrual spotting/bleeding">
+          <RadioGroup
+            value={interMenstrualBleeding}
+            onChange={setInterMenstrualBleeding}
+            options={YES_NO_OPTIONS}
           />
         </FormField>
       </div>

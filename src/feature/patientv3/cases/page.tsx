@@ -308,44 +308,27 @@ export function CaseListPage() {
 
                       {/* Actions */}
                       <td className="px-3 py-2 text-right">
-                        <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               // More options menu (placeholder)
                             }}
-                            className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 transition-colors"
+                            className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 transition-colors rounded-md"
                           >
                             <MoreHorizontal className="w-4 h-4" />
                           </button>
-                          {caseItem.type === 'gynae' ? (
-                            <Button
-                              size="xs"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCaseClick(caseItem);
-                              }}
-                              className="bg-amber-600 text-white hover:bg-amber-700 border-amber-600"
-                              rightIcon={<ArrowRight className="w-3 h-3" />}
-                            >
-                              Open
-                            </Button>
-                          ) : (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCaseClick(caseItem);
-                              }}
-                              className={`inline-flex items-center gap-1 px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wide transition-all
-                                ${caseItem.type === 'anc' 
-                                  ? 'bg-emerald-100 text-emerald-700 border border-emerald-300 hover:bg-emerald-200' 
-                                  : 'bg-rose-100 text-rose-700 border border-rose-300 hover:bg-rose-200'
-                                } hover:shadow-sm`}
-                            >
-                              Open
-                              <ArrowRight className="w-3 h-3" />
-                            </button>
-                          )}
+                          <Button
+                            size="xs"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCaseClick(caseItem);
+                            }}
+                            className="bg-zinc-900 text-white hover:bg-zinc-800 border-zinc-900 shadow-sm"
+                            rightIcon={<ArrowRight className="w-3 h-3" />}
+                          >
+                            Open
+                          </Button>
                         </div>
                       </td>
                     </tr>

@@ -4,6 +4,7 @@ export { TextInput } from './text-input';
 export { SelectInput } from './select-input';
 export { DatalistInput } from './datalist-input';
 export { TextAreaInput } from './textarea-input';
+export { RadioGroup } from './radio-group';
 export { ReadOnlyField } from './read-only-field';
 
 // Button Components
