@@ -1,6 +1,9 @@
 // ANC Investigations Module
 // This folder contains sub-components for each investigation type
 
+// Shared Fetus Context
+export { FetusProvider, useFetusStore } from './fetus-context';
+
 export { LabTestsPage } from './lab-tests/page';
 export { USGDatingPage } from './usg-dating/page';
 export { USG1113WeeksPage } from './usg-11-13-weeks/page';

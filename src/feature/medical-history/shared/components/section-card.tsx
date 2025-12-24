@@ -11,6 +11,8 @@ interface SectionCardProps {
   iconBg: string;
   iconColor: string;
   badge?: ReactNode;
+  /** Extra content to show in header (before chevron) */
+  headerExtra?: ReactNode;
   isExpanded: boolean;
   onToggle: () => void;
   children: ReactNode;
@@ -22,6 +24,7 @@ export function SectionCard({
   iconBg,
   iconColor,
   badge,
+  headerExtra,
   isExpanded,
   onToggle,
   children,
@@ -29,11 +32,11 @@ export function SectionCard({
   return (
     <div className="bg-white border border-zinc-200 overflow-hidden mb-2 transition-all duration-200">
       {/* Header - Carbon Compact Style */}
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center justify-between px-3 py-2 bg-zinc-50/80 hover:bg-zinc-100/80 border-b border-zinc-100 transition-colors group"
-      >
-        <div className="flex items-center gap-2.5">
+      <div className="flex items-center justify-between px-3 py-2 bg-zinc-50/80 border-b border-zinc-100">
+        <button
+          onClick={onToggle}
+          className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
+        >
           <div className={`w-6 h-6 rounded-sm flex items-center justify-center shrink-0 ${iconBg} ${iconColor} border border-current/10`}>
             {icon}
           </div>
@@ -41,11 +44,14 @@ export function SectionCard({
             {title}
           </span>
           {badge}
+        </button>
+        <div className="flex items-center gap-2">
+          {headerExtra}
+          <button onClick={onToggle} className="text-zinc-400 hover:text-zinc-600 transition-colors p-1">
+            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
         </div>
-        <div className="text-zinc-400 group-hover:text-zinc-600 transition-colors">
-          {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-        </div>
-      </button>
+      </div>
 
       {/* Content */}
       {isExpanded && (

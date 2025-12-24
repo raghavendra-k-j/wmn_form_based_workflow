@@ -11,8 +11,7 @@ export const GuyiniEncounterTab = {
   CURRENT_MEDICATIONS: 'current_medications',
   ALLERGIES: 'allergies',
   EXAMINATIONS: 'examinations',
-  LAB_TESTS_SCANS: 'lab_tests_scans',
-  FOLLOW_UP_FEE: 'follow_up_fee',
+  MANAGEMENT: 'management',
 } as const;
 
 /** Type for GuyiniEncounterTab values */
@@ -20,17 +19,16 @@ export type GuyiniEncounterTab = typeof GuyiniEncounterTab[keyof typeof GuyiniEn
 
 /** Tab configuration with display labels */
 export const GuyiniEncounterTabConfig: Record<GuyiniEncounterTab, { label: string; icon?: string }> = {
-  [GuyiniEncounterTab.VISIT_FORM]: { label: 'Visit Form' },
+  [GuyiniEncounterTab.VISIT_FORM]: { label: 'HOPI' },
   [GuyiniEncounterTab.MEDICAL_HISTORY_OVERVIEW]: { label: 'Overview' },
   [GuyiniEncounterTab.PAST_HISTORY]: { label: 'Past History' },
   [GuyiniEncounterTab.SURGICAL_HISTORY]: { label: 'Surgical History' },
   [GuyiniEncounterTab.FAMILY_HISTORY]: { label: 'Family History' },
   [GuyiniEncounterTab.PERSONAL_HISTORY]: { label: 'Personal History' },
   [GuyiniEncounterTab.CURRENT_MEDICATIONS]: { label: 'Current Medications' },
-  [GuyiniEncounterTab.ALLERGIES]: { label: 'Allergies' },
+  [GuyiniEncounterTab.ALLERGIES]: { label: 'Drug Allergies' },
   [GuyiniEncounterTab.EXAMINATIONS]: { label: 'Examinations' },
-  [GuyiniEncounterTab.LAB_TESTS_SCANS]: { label: 'Lab Tests & Scans' },
-  [GuyiniEncounterTab.FOLLOW_UP_FEE]: { label: 'Follow Up & Fee' },
+  [GuyiniEncounterTab.MANAGEMENT]: { label: 'Management' },
 };
 
 /** List of all tabs in display order */
@@ -44,14 +42,13 @@ export const GuyiniEncounterTabList: GuyiniEncounterTab[] = [
   GuyiniEncounterTab.CURRENT_MEDICATIONS,
   GuyiniEncounterTab.ALLERGIES,
   GuyiniEncounterTab.EXAMINATIONS,
-  GuyiniEncounterTab.LAB_TESTS_SCANS,
-  GuyiniEncounterTab.FOLLOW_UP_FEE,
+  GuyiniEncounterTab.MANAGEMENT,
 ];
 
 /** Guyini Encounter Store - Manages Guyini layout state */
 export class GuyiniEncounterStore {
-  /** Currently active tab */
-  activeTab: GuyiniEncounterTab = GuyiniEncounterTab.EXAMINATIONS;
+  /** Currently active tab - defaults to HOPI (Visit Form) */
+  activeTab: GuyiniEncounterTab = GuyiniEncounterTab.VISIT_FORM;
 
   constructor() {
     makeAutoObservable(this);

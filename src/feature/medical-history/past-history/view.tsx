@@ -14,6 +14,39 @@ interface PastHistoryViewProps {
   isEditMode?: boolean;
 }
 
+/** Simulation Mode Selector - Tiny inline version for header */
+const SimulationSelector = observer(() => {
+  const store = usePastHistoryStore();
+
+  return (
+    <div className="flex items-center gap-1">
+      <span className="text-[9px] text-zinc-400 uppercase">Sim:</span>
+      <button
+        type="button"
+        onClick={(e) => { e.stopPropagation(); store.setSimulationMode('first_visit'); }}
+        className={`px-1.5 py-0.5 text-[9px] font-medium rounded transition-colors cursor-pointer ${
+          store.simulationMode === 'first_visit'
+            ? 'bg-zinc-700 text-white'
+            : 'text-zinc-400 hover:text-zinc-600'
+        }`}
+      >
+        1st
+      </button>
+      <button
+        type="button"
+        onClick={(e) => { e.stopPropagation(); store.setSimulationMode('has_previous_visit'); }}
+        className={`px-1.5 py-0.5 text-[9px] font-medium rounded transition-colors cursor-pointer ${
+          store.simulationMode === 'has_previous_visit'
+            ? 'bg-zinc-700 text-white'
+            : 'text-zinc-400 hover:text-zinc-600'
+        }`}
+      >
+        Prev
+      </button>
+    </div>
+  );
+});
+
 /**
  * Past History View Component (with section header)
  * Full component with collapsible section card
@@ -29,6 +62,7 @@ export const PastHistoryView = observer(({ isEditMode = false }: PastHistoryView
       iconBg="bg-amber-50"
       iconColor="text-amber-600"
       badge={<SectionBadge count={store.activeCount} label="active" variant="amber" />}
+      headerExtra={isEditMode ? <SimulationSelector /> : undefined}
       isExpanded={store.isExpanded}
       onToggle={() => store.toggleExpanded()}
     >

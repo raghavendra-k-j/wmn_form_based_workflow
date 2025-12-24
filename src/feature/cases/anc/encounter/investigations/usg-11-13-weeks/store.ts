@@ -23,8 +23,6 @@ export class USG1113WeeksStore {
   // Header fields
   usgDate: string = '';
   scanEDD: string = '';
-  scanTechName: string = '';
-  doctorName: string = '';
   scanReport: File | null = null;
 
   // Fetus records
@@ -44,16 +42,31 @@ export class USG1113WeeksStore {
     this.scanEDD = edd;
   }
 
-  setScanTechName(name: string) {
-    this.scanTechName = name;
-  }
-
-  setDoctorName(name: string) {
-    this.doctorName = name;
-  }
-
   setScanReport(file: File | null) {
     this.scanReport = file;
+  }
+
+  /** Sync fetus records to match the shared fetus count */
+  syncFetusCount(count: number) {
+    const currentCount = this.fetusRecords.length;
+    
+    if (count > currentCount) {
+      // Add more rows
+      for (let i = currentCount; i < count; i++) {
+        this.fetusRecords.push({
+          id: generateFetusId(),
+          fetusNumber: i + 1,
+          nt: '',
+          nb: '',
+          biochem: '',
+          uad: '',
+          comments: '',
+        });
+      }
+    } else if (count < currentCount) {
+      // Remove extra rows
+      this.fetusRecords = this.fetusRecords.slice(0, count);
+    }
   }
 
   updateFetusRecord(id: string, field: keyof FetusRecord, value: string | number) {
@@ -61,26 +74,5 @@ export class USG1113WeeksStore {
     if (record) {
       (record as any)[field] = value;
     }
-  }
-
-  addFetusRecord() {
-    const nextNumber = this.fetusRecords.length + 1;
-    this.fetusRecords.push({
-      id: generateFetusId(),
-      fetusNumber: nextNumber,
-      nt: '',
-      nb: '',
-      biochem: '',
-      uad: '',
-      comments: '',
-    });
-  }
-
-  removeFetusRecord(id: string) {
-    this.fetusRecords = this.fetusRecords.filter(r => r.id !== id);
-    // Renumber remaining
-    this.fetusRecords.forEach((r, i) => {
-      r.fetusNumber = i + 1;
-    });
   }
 }

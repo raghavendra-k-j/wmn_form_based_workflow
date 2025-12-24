@@ -14,6 +14,39 @@ interface FamilyHistoryViewProps {
   isEditMode?: boolean;
 }
 
+/** Simulation Mode Selector - Tiny inline version for header */
+const SimulationSelector = observer(() => {
+  const store = useFamilyHistoryStore();
+
+  return (
+    <div className="flex items-center gap-1">
+      <span className="text-[9px] text-zinc-400 uppercase">Sim:</span>
+      <button
+        type="button"
+        onClick={(e) => { e.stopPropagation(); store.setSimulationMode('first_visit'); }}
+        className={`px-1.5 py-0.5 text-[9px] font-medium rounded transition-colors cursor-pointer ${
+          store.simulationMode === 'first_visit'
+            ? 'bg-zinc-700 text-white'
+            : 'text-zinc-400 hover:text-zinc-600'
+        }`}
+      >
+        1st
+      </button>
+      <button
+        type="button"
+        onClick={(e) => { e.stopPropagation(); store.setSimulationMode('has_previous_visit'); }}
+        className={`px-1.5 py-0.5 text-[9px] font-medium rounded transition-colors cursor-pointer ${
+          store.simulationMode === 'has_previous_visit'
+            ? 'bg-zinc-700 text-white'
+            : 'text-zinc-400 hover:text-zinc-600'
+        }`}
+      >
+        Prev
+      </button>
+    </div>
+  );
+});
+
 /**
  * Family History View Component
  */
@@ -28,6 +61,7 @@ export const FamilyHistoryView = observer(({ isEditMode = false }: FamilyHistory
       iconBg="bg-emerald-50"
       iconColor="text-emerald-600"
       badge={<SectionBadge count={store.activeCount} label="active" variant="green" />}
+      headerExtra={isEditMode ? <SimulationSelector /> : undefined}
       isExpanded={store.isExpanded}
       onToggle={() => store.toggleExpanded()}
     >

@@ -4,20 +4,12 @@ export interface SurgicalHistoryItem {
   procedure: string;
   date: string;
   notes: string;
+  /** Status: 'yes' means surgery was done, 'no' means not done */
+  status: 'yes' | 'no';
 }
 
-/** Default suggestion names for Surgical History */
-export const DEFAULT_SURGERY_NAMES = [
-  'CS (Cesarean Section)',
-  'Appendectomy',
-  'Cholecystectomy',
-  'Hysterectomy',
-  'Laparoscopy',
-  'D&C',
-  'Tubectomy',
-  'Myomectomy',
-  'Ovarian Cystectomy',
-  'Ectopic Pregnancy Surgery',
-  'Hernia Repair',
-  'Thyroidectomy',
-] as const;
+/** Status options for UI */
+export const SURGERY_STATUS_OPTIONS = [
+  { value: 'yes' as const, label: 'Yes', className: 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100' },
+  { value: 'no' as const, label: 'No', className: 'bg-zinc-50 text-zinc-500 border-zinc-200 hover:bg-zinc-100' },
+];

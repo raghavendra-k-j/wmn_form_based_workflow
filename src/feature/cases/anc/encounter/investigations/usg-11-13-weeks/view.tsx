@@ -1,7 +1,8 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Upload, FileText, X, Plus, Trash2 } from 'lucide-react';
+import { Upload, FileText, X } from 'lucide-react';
 import { useUSG1113WeeksStore } from './context';
+import { useFetusStore } from '../fetus-context';
 import type { FetusRecord, NormalAbnormal, PosNeg } from './store';
 
 /** Fetus Row Component */
@@ -78,15 +79,6 @@ const FetusRow = observer(({ record }: { record: FetusRecord }) => {
           className="w-full px-2 py-1.5 text-[11px] border border-zinc-200 bg-white focus:outline-none focus:border-blue-400"
         />
       </td>
-      <td className="px-3 py-2 w-12">
-        <button
-          onClick={() => store.removeFetusRecord(record.id)}
-          className="p-1 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded"
-          title="Remove"
-        >
-          <Trash2 className="w-3.5 h-3.5" />
-        </button>
-      </td>
     </tr>
   );
 });
@@ -94,7 +86,13 @@ const FetusRow = observer(({ record }: { record: FetusRecord }) => {
 /** USG 11-13 Weeks View */
 export const USG1113WeeksView = observer(() => {
   const store = useUSG1113WeeksStore();
+  const fetusStore = useFetusStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync fetus records when shared fetus count changes
+  useEffect(() => {
+    store.syncFetusCount(fetusStore.fetusCount);
+  }, [fetusStore.fetusCount, store]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -109,7 +107,7 @@ export const USG1113WeeksView = observer(() => {
       <div className="bg-white border border-zinc-200 p-4">
         <h2 className="text-[14px] font-bold text-zinc-800 mb-4">USG 11-13 Weeks</h2>
         
-        <div className="grid grid-cols-5 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {/* USG Date */}
           <div>
             <label className="block text-[11px] font-bold text-zinc-500 uppercase mb-1">USG Date</label>
@@ -128,30 +126,6 @@ export const USG1113WeeksView = observer(() => {
               type="date"
               value={store.scanEDD}
               onChange={(e) => store.setScanEDD(e.target.value)}
-              className="w-full px-2 py-1.5 text-[11px] border border-zinc-200 bg-white focus:outline-none focus:border-blue-400"
-            />
-          </div>
-
-          {/* Scan Tech */}
-          <div>
-            <label className="block text-[11px] font-bold text-zinc-500 uppercase mb-1">Scan Tech</label>
-            <input
-              type="text"
-              value={store.scanTechName}
-              onChange={(e) => store.setScanTechName(e.target.value)}
-              placeholder="Tech name"
-              className="w-full px-2 py-1.5 text-[11px] border border-zinc-200 bg-white focus:outline-none focus:border-blue-400"
-            />
-          </div>
-
-          {/* Doctor */}
-          <div>
-            <label className="block text-[11px] font-bold text-zinc-500 uppercase mb-1">Doctor</label>
-            <input
-              type="text"
-              value={store.doctorName}
-              onChange={(e) => store.setDoctorName(e.target.value)}
-              placeholder="Doctor name"
               className="w-full px-2 py-1.5 text-[11px] border border-zinc-200 bg-white focus:outline-none focus:border-blue-400"
             />
           </div>
@@ -185,6 +159,12 @@ export const USG1113WeeksView = observer(() => {
             )}
           </div>
         </div>
+
+        {/* Fetus count info */}
+        <div className="mt-3 text-[11px] text-zinc-500">
+          Showing data for <span className="font-bold text-zinc-700">{fetusStore.fetusCount}</span> fetus(es) 
+          <span className="text-zinc-400 ml-1">(set in USG Dating)</span>
+        </div>
       </div>
 
       {/* Fetus Table */}
@@ -198,7 +178,6 @@ export const USG1113WeeksView = observer(() => {
               <th className="px-3 py-2 text-left text-[10px] font-bold text-zinc-600 uppercase">Biochem</th>
               <th className="px-3 py-2 text-left text-[10px] font-bold text-zinc-600 uppercase">UAD</th>
               <th className="px-3 py-2 text-left text-[10px] font-bold text-zinc-600 uppercase">Comments</th>
-              <th className="px-3 py-2 text-left text-[10px] font-bold text-zinc-600 uppercase"></th>
             </tr>
           </thead>
           <tbody>
@@ -207,17 +186,6 @@ export const USG1113WeeksView = observer(() => {
             ))}
           </tbody>
         </table>
-
-        {/* Add Fetus Button */}
-        <div className="p-2 border-t border-zinc-100">
-          <button
-            onClick={() => store.addFetusRecord()}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-blue-600 hover:bg-blue-50 rounded transition-colors"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            Add Fetus
-          </button>
-        </div>
       </div>
     </div>
   );

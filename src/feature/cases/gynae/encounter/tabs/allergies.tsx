@@ -1,23 +1,24 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import {
-  AllergiesStore,
-  AllergiesProvider,
-  AllergiesView,
-} from '../../../../medical-history/allergies';
+  DrugAllergiesStore,
+  DrugAllergiesProvider,
+  DrugAllergiesView,
+} from '../../../../medical-history/drug-allergies';
 
-/** Allergies Tab Content */
+/** Drug Allergies Tab Content */
 export const AllergiesContent = observer(() => {
-  // Create store instance with default allergies pre-populated
-  const store = useMemo(() => {
-    const s = new AllergiesStore();
-    s.loadDefaultItems();
-    return s;
-  }, []);
+  // Create store instance
+  const store = useMemo(() => new DrugAllergiesStore(), []);
+
+  // Initialize on mount
+  useEffect(() => {
+    store.initialize();
+  }, [store]);
 
   return (
-    <AllergiesProvider store={store}>
-      <AllergiesView isEditMode={true} />
-    </AllergiesProvider>
+    <DrugAllergiesProvider store={store}>
+      <DrugAllergiesView isEditMode={true} />
+    </DrugAllergiesProvider>
   );
 });

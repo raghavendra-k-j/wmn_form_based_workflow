@@ -2,10 +2,13 @@ import { makeAutoObservable } from 'mobx';
 import type { PersonalHistoryItem } from './types';
 import { DEFAULT_PERSONAL_HABITS } from './types';
 
+/** Simulation mode for testing */
+export type VisitSimulationMode = 'first_visit' | 'has_previous_visit';
+
 /** Mock previous visit data for simulation */
 const MOCK_PREVIOUS_PERSONAL_HISTORY: PersonalHistoryItem[] = [
   { id: 'prev-ph-1', habit: 'Smoking', status: 'quit', notes: 'Quit 5 years ago', duration: '10 years' },
-  { id: 'prev-ph-2', habit: 'Alcohol', status: 'active', notes: 'Social drinker', duration: '' },
+  { id: 'prev-ph-2', habit: 'Alcohol', status: 'occasional', notes: 'Social drinker', duration: '' },
 ];
 const MOCK_PREVIOUS_VISIT_DATE = '2024-12-15';
 
@@ -23,11 +26,36 @@ export class PersonalHistoryStore {
   isExpanded = true;
 
   /** Previous visit data */
-  previousVisitData: PersonalHistoryItem[] = MOCK_PREVIOUS_PERSONAL_HISTORY;
+  previousVisitData: PersonalHistoryItem[] = [];
   previousVisitDate: string = MOCK_PREVIOUS_VISIT_DATE;
+
+  /** Current simulation mode */
+  simulationMode: VisitSimulationMode = 'first_visit';
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  /** Initialize the store based on simulation mode */
+  initialize(): void {
+    this.applySimulationMode(this.simulationMode);
+  }
+
+  /** Set simulation mode and refresh data */
+  setSimulationMode(mode: VisitSimulationMode): void {
+    this.simulationMode = mode;
+    this.applySimulationMode(mode);
+  }
+
+  /** Apply simulation mode */
+  private applySimulationMode(mode: VisitSimulationMode): void {
+    if (mode === 'first_visit') {
+      this.previousVisitData = [];
+      this.loadDefaultItems();
+    } else {
+      this.previousVisitData = [...MOCK_PREVIOUS_PERSONAL_HISTORY];
+      this.items = [];
+    }
   }
 
   /* ===========================================================================
@@ -36,12 +64,12 @@ export class PersonalHistoryStore {
 
   /** Count of active items */
   get activeCount(): number {
-    return this.items.filter((i) => i.status === 'active').length;
+    return this.items.filter((i) => i.status !== 'inactive').length;
   }
 
   /** Check if has any active data */
   get hasData(): boolean {
-    return this.items.some((i) => i.status === 'active');
+    return this.items.some((i) => i.status !== 'inactive');
   }
 
   /** Check if previous visit data is available */
@@ -70,7 +98,7 @@ export class PersonalHistoryStore {
     const newItem: PersonalHistoryItem = {
       id: `ph-${Date.now()}`,
       habit,
-      status: 'active', // Default to active
+      status: 'active',
       notes: '',
       duration: '',
     };
@@ -99,18 +127,35 @@ export class PersonalHistoryStore {
     this.isExpanded = !this.isExpanded;
   }
 
-  /** Copy data from previous visit */
+  /** Copy data from previous visit + merge with defaults */
   copyFromPreviousVisit(): void {
-    this.items = this.previousVisitData.map((item, index) => ({
+    const copied = this.previousVisitData.map((item, index) => ({
       ...item,
       id: `ph-${Date.now()}-${index}`,
     }));
-    this.ignorePreviousVisit(); // Clear to hide banner
+
+    // Add defaults not in copied
+    const copiedHabits = new Set(copied.map(i => i.habit.toLowerCase()));
+    DEFAULT_PERSONAL_HABITS.forEach((habit, index) => {
+      if (!copiedHabits.has(habit.toLowerCase())) {
+        copied.push({
+          id: `ph-def-${Date.now()}-${index}`,
+          habit,
+          status: 'inactive',
+          notes: '',
+          duration: '',
+        });
+      }
+    });
+
+    this.items = copied;
+    this.previousVisitData = [];
   }
 
-  /** Ignore/Dismiss previous visit suggestion */
+  /** Ignore/Dismiss previous visit suggestion and load defaults */
   ignorePreviousVisit(): void {
     this.previousVisitData = [];
+    this.loadDefaultItems();
   }
 
   /* ===========================================================================

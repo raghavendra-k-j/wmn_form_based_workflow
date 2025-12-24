@@ -8,10 +8,10 @@ import {
 
 /** Family History Tab Content */
 export const FamilyHistoryContent = observer(() => {
-  // Create store instance with default conditions pre-populated
+  // Create store instance with initialization
   const store = useMemo(() => {
     const s = new FamilyHistoryStore();
-    s.loadDefaultItems();
+    s.initialize();
     return s;
   }, []);
 

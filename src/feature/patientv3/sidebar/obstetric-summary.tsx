@@ -1,4 +1,4 @@
-import { Baby } from 'lucide-react';
+
 
 /** Mock obstetric history data - GPLA format */
 const OBSTETRIC_DATA = {
@@ -13,18 +13,12 @@ export function ObstetricSummary() {
   const { gravida, para, living, abortion } = OBSTETRIC_DATA;
   
   return (
-    <div className="bg-white border-b border-zinc-200 px-4 py-2">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
-          <Baby className="w-3.5 h-3.5 text-pink-500" />
-          <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wide">GPLA</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <GPLABadge label="G" value={gravida} color="text-emerald-600" bgColor="bg-emerald-50" />
-          <GPLABadge label="P" value={para} color="text-blue-600" bgColor="bg-blue-50" />
-          <GPLABadge label="L" value={living} color="text-teal-600" bgColor="bg-teal-50" />
-          <GPLABadge label="A" value={abortion} color="text-rose-600" bgColor="bg-rose-50" />
-        </div>
+    <div className="bg-white border-b border-zinc-200 px-4 py-3">
+      <div className="grid grid-cols-4 gap-2">
+        <GPLABadge label="G" value={gravida} color="text-emerald-700" bgColor="bg-emerald-50/50 border-emerald-100" />
+        <GPLABadge label="P" value={para} color="text-blue-700" bgColor="bg-blue-50/50 border-blue-100" />
+        <GPLABadge label="L" value={living} color="text-teal-700" bgColor="bg-teal-50/50 border-teal-100" />
+        <GPLABadge label="A" value={abortion} color="text-rose-700" bgColor="bg-rose-50/50 border-rose-100" />
       </div>
     </div>
   );
@@ -43,9 +37,10 @@ function GPLABadge({
   bgColor: string;
 }) {
   return (
-    <div className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 ${bgColor} border border-current/10`}>
-      <span className={`text-[10px] font-bold ${color}`}>{label}</span>
-      <span className={`text-[11px] font-black ${color}`}>{value}</span>
+    <div className={`flex items-center justify-center gap-1 px-1 py-1 rounded-sm ${bgColor} border ${color}`}>
+      <span className="text-[11px] font-bold tracking-tight">
+        {label}{value}
+      </span>
     </div>
   );
 }

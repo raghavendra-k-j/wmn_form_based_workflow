@@ -1,11 +1,13 @@
 import { makeAutoObservable } from 'mobx';
 import type { MedicationItem } from './types';
-import { DEFAULT_MEDICATIONS } from './types';
+
+/** Simulation mode for testing */
+export type VisitSimulationMode = 'first_visit' | 'has_previous_visit';
 
 /** Mock previous visit data */
 const MOCK_PREVIOUS_MEDICATIONS: MedicationItem[] = [
   { id: 'prev-med-1', name: 'Folic Acid', dose: '5mg', frequency: 'OD', reason: 'Pre-conception', status: 'active' },
-  { id: 'prev-med-2', name: 'Paracetamol', dose: '1g', frequency: 'PRN', reason: 'Headaches', status: 'active' },
+  { id: 'prev-med-2', name: 'Metformin', dose: '500mg', frequency: 'BD', reason: 'Diabetes', status: 'active' },
 ];
 const MOCK_PREVIOUS_VISIT_DATE = '2024-12-15';
 
@@ -23,11 +25,36 @@ export class CurrentMedicationStore {
   isExpanded = true;
 
   /** Previous visit data */
-  previousVisitData: MedicationItem[] = MOCK_PREVIOUS_MEDICATIONS;
+  previousVisitData: MedicationItem[] = [];
   previousVisitDate: string = MOCK_PREVIOUS_VISIT_DATE;
+
+  /** Current simulation mode */
+  simulationMode: VisitSimulationMode = 'first_visit';
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  /** Initialize the store based on simulation mode */
+  initialize(): void {
+    this.applySimulationMode(this.simulationMode);
+  }
+
+  /** Set simulation mode and refresh data */
+  setSimulationMode(mode: VisitSimulationMode): void {
+    this.simulationMode = mode;
+    this.applySimulationMode(mode);
+  }
+
+  /** Apply simulation mode */
+  private applySimulationMode(mode: VisitSimulationMode): void {
+    if (mode === 'first_visit') {
+      this.previousVisitData = [];
+      this.items = []; // No default medications - each patient is unique
+    } else {
+      this.previousVisitData = [...MOCK_PREVIOUS_MEDICATIONS];
+      this.items = [];
+    }
   }
 
   /* ===========================================================================
@@ -103,24 +130,12 @@ export class CurrentMedicationStore {
       ...item,
       id: `med-${Date.now()}-${index}`,
     }));
-    this.ignorePreviousVisit();
+    this.previousVisitData = [];
   }
 
   /** Ignore previous visit */
   ignorePreviousVisit(): void {
     this.previousVisitData = [];
-  }
-
-  /** Load default medications (all inactive) */
-  loadDefaultItems(): void {
-    this.items = DEFAULT_MEDICATIONS.map((name, index) => ({
-      id: `med-def-${index}`,
-      name,
-      dose: '',
-      frequency: '',
-      reason: '',
-      status: 'inactive',
-    }));
   }
 
   /** Clear all */

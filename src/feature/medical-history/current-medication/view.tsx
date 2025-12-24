@@ -14,6 +14,39 @@ interface CurrentMedicationViewProps {
   isEditMode?: boolean;
 }
 
+/** Simulation Mode Selector - Tiny inline version for header */
+const SimulationSelector = observer(() => {
+  const store = useCurrentMedicationStore();
+
+  return (
+    <div className="flex items-center gap-1">
+      <span className="text-[9px] text-zinc-400 uppercase">Sim:</span>
+      <button
+        type="button"
+        onClick={(e) => { e.stopPropagation(); store.setSimulationMode('first_visit'); }}
+        className={`px-1.5 py-0.5 text-[9px] font-medium rounded transition-colors cursor-pointer ${
+          store.simulationMode === 'first_visit'
+            ? 'bg-zinc-700 text-white'
+            : 'text-zinc-400 hover:text-zinc-600'
+        }`}
+      >
+        1st
+      </button>
+      <button
+        type="button"
+        onClick={(e) => { e.stopPropagation(); store.setSimulationMode('has_previous_visit'); }}
+        className={`px-1.5 py-0.5 text-[9px] font-medium rounded transition-colors cursor-pointer ${
+          store.simulationMode === 'has_previous_visit'
+            ? 'bg-zinc-700 text-white'
+            : 'text-zinc-400 hover:text-zinc-600'
+        }`}
+      >
+        Prev
+      </button>
+    </div>
+  );
+});
+
 /**
  * Current Medication View Component
  */
@@ -27,6 +60,7 @@ export const CurrentMedicationView = observer(({ isEditMode = false }: CurrentMe
       iconBg="bg-teal-50"
       iconColor="text-teal-600"
       badge={<SectionBadge count={store.items.length} label="meds" variant="teal" />}
+      headerExtra={isEditMode ? <SimulationSelector /> : undefined}
       isExpanded={store.isExpanded}
       onToggle={() => store.toggleExpanded()}
     >

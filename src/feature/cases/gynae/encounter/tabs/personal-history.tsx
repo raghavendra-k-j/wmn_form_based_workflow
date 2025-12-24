@@ -8,10 +8,10 @@ import {
 
 /** Personal History Tab Content */
 export const PersonalHistoryContent = observer(() => {
-  // Create store instance with default habits pre-populated
+  // Create store instance with initialization
   const store = useMemo(() => {
     const s = new PersonalHistoryStore();
-    s.loadDefaultItems();
+    s.initialize();
     return s;
   }, []);
 

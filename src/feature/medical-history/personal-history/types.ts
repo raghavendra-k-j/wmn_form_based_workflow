@@ -13,6 +13,7 @@ export const DEFAULT_PERSONAL_HABITS = [
   'Drinking',
   'Alcohol',
   'Psych. Stress',
+  'Substance Abuse',
 ] as const;
 
 /** Status options for UI */

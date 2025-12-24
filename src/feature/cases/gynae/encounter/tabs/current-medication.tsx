@@ -8,10 +8,10 @@ import {
 
 /** Current Medication Tab Content */
 export const CurrentMedicationContent = observer(() => {
-  // Create store instance with default medications pre-populated
+  // Create store instance with initialization
   const store = useMemo(() => {
     const s = new CurrentMedicationStore();
-    s.loadDefaultItems();
+    s.initialize();
     return s;
   }, []);
 

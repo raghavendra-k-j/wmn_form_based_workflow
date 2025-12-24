@@ -21,8 +21,7 @@ export type VisitsViewMode = typeof VisitsViewMode[keyof typeof VisitsViewMode];
 
 /** Visit Form Sub-tabs */
 export const VisitFormSubTab = {
-  EXAMINATIONS: 'examinations',
-  VISIT_INFO: 'visit_info',
+  VISIT_DETAILS: 'visit_details',
   LAB_SCANS: 'lab_scans',
   PRESCRIPTIONS: 'prescriptions',
   NEXT_FOLLOW_UP: 'next_follow_up',
@@ -66,8 +65,7 @@ export const AncEncounterTabConfig: Record<AncEncounterTab, { label: string; col
 
 /** Visit Form Sub-tab configuration */
 export const VisitFormSubTabConfig: Record<VisitFormSubTab, { label: string; color: string }> = {
-  [VisitFormSubTab.EXAMINATIONS]: { label: 'Examinations', color: 'text-emerald-600' },
-  [VisitFormSubTab.VISIT_INFO]: { label: 'Visit Info', color: 'text-sky-600' },
+  [VisitFormSubTab.VISIT_DETAILS]: { label: 'Visit Details', color: 'text-emerald-600' },
   [VisitFormSubTab.LAB_SCANS]: { label: 'Lab/Scans', color: 'text-amber-600' },
   [VisitFormSubTab.PRESCRIPTIONS]: { label: 'Prescriptions', color: 'text-orange-600' },
   [VisitFormSubTab.NEXT_FOLLOW_UP]: { label: 'Next Follow up', color: 'text-rose-600' },
@@ -81,7 +79,7 @@ export const MedicalHistorySubTabConfig: Record<MedicalHistorySubTab, { label: s
   [MedicalHistorySubTab.FAMILY_HISTORY]: { label: 'Family History', color: 'text-emerald-600' },
   [MedicalHistorySubTab.PERSONAL_HISTORY]: { label: 'Personal History', color: 'text-violet-600' },
   [MedicalHistorySubTab.CURRENT_MEDICATIONS]: { label: 'Current Medications', color: 'text-teal-600' },
-  [MedicalHistorySubTab.ALLERGIES]: { label: 'Allergies', color: 'text-red-600' },
+  [MedicalHistorySubTab.ALLERGIES]: { label: 'Drug Allergies', color: 'text-red-600' },
 };
 
 /** Investigation Sub-tab configuration */
@@ -105,8 +103,7 @@ export const AncEncounterTabList: AncEncounterTab[] = [
 
 /** List of visit form sub-tabs in display order */
 export const VisitFormSubTabList: VisitFormSubTab[] = [
-  VisitFormSubTab.EXAMINATIONS,
-  VisitFormSubTab.VISIT_INFO,
+  VisitFormSubTab.VISIT_DETAILS,
   VisitFormSubTab.LAB_SCANS,
   VisitFormSubTab.PRESCRIPTIONS,
   VisitFormSubTab.NEXT_FOLLOW_UP,
@@ -143,7 +140,7 @@ export class AncEncounterStore {
   visitsViewMode: VisitsViewMode = VisitsViewMode.LIST;
 
   /** Currently active visit form sub-tab */
-  activeVisitFormSubTab: VisitFormSubTab = VisitFormSubTab.VISIT_INFO;
+  activeVisitFormSubTab: VisitFormSubTab = VisitFormSubTab.VISIT_DETAILS;
 
   /** Currently editing visit ID (null for new visit) */
   editingVisitId: string | null = null;
@@ -186,7 +183,7 @@ export class AncEncounterStore {
   setVisitsViewMode(mode: VisitsViewMode) {
     this.visitsViewMode = mode;
     if (mode === VisitsViewMode.FORM) {
-      this.activeVisitFormSubTab = VisitFormSubTab.EXAMINATIONS;
+      this.activeVisitFormSubTab = VisitFormSubTab.VISIT_DETAILS;
     }
   }
 
@@ -194,14 +191,14 @@ export class AncEncounterStore {
   openNewVisitForm() {
     this.editingVisitId = null;
     this.visitsViewMode = VisitsViewMode.FORM;
-    this.activeVisitFormSubTab = VisitFormSubTab.EXAMINATIONS;
+    this.activeVisitFormSubTab = VisitFormSubTab.VISIT_DETAILS;
   }
 
   /** Open visit form for editing existing visit */
   openEditVisitForm(visitId: string) {
     this.editingVisitId = visitId;
     this.visitsViewMode = VisitsViewMode.FORM;
-    this.activeVisitFormSubTab = VisitFormSubTab.EXAMINATIONS;
+    this.activeVisitFormSubTab = VisitFormSubTab.VISIT_DETAILS;
   }
 
   /** Close visit form and return to list */

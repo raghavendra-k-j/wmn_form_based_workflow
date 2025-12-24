@@ -2,6 +2,9 @@ import { makeAutoObservable } from 'mobx';
 import type { FamilyHistoryItem } from './types';
 import { DEFAULT_FAMILY_CONDITIONS } from './types';
 
+/** Simulation mode for testing */
+export type VisitSimulationMode = 'first_visit' | 'has_previous_visit';
+
 /** Mock previous visit data for simulation */
 const MOCK_PREVIOUS_FAMILY_HISTORY: FamilyHistoryItem[] = [
   { id: 'prev-fh-1', condition: 'Diabetes', relation: 'Mother', status: 'active', notes: 'Type 2' },
@@ -23,11 +26,36 @@ export class FamilyHistoryStore {
   isExpanded = true;
 
   /** Previous visit data */
-  previousVisitData: FamilyHistoryItem[] = MOCK_PREVIOUS_FAMILY_HISTORY;
+  previousVisitData: FamilyHistoryItem[] = [];
   previousVisitDate: string = MOCK_PREVIOUS_VISIT_DATE;
+
+  /** Current simulation mode */
+  simulationMode: VisitSimulationMode = 'first_visit';
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  /** Initialize the store based on simulation mode */
+  initialize(): void {
+    this.applySimulationMode(this.simulationMode);
+  }
+
+  /** Set simulation mode and refresh data */
+  setSimulationMode(mode: VisitSimulationMode): void {
+    this.simulationMode = mode;
+    this.applySimulationMode(mode);
+  }
+
+  /** Apply simulation mode */
+  private applySimulationMode(mode: VisitSimulationMode): void {
+    if (mode === 'first_visit') {
+      this.previousVisitData = [];
+      this.loadDefaultItems();
+    } else {
+      this.previousVisitData = [...MOCK_PREVIOUS_FAMILY_HISTORY];
+      this.items = [];
+    }
   }
 
   /* ===========================================================================
@@ -71,7 +99,7 @@ export class FamilyHistoryStore {
       id: `fh-${Date.now()}`,
       condition,
       relation: '',
-      status: 'active', // Default to active when explicitly added
+      status: 'active',
       notes: '',
     };
     this.items.push(newItem);
@@ -101,16 +129,34 @@ export class FamilyHistoryStore {
 
   /** Copy data from previous visit */
   copyFromPreviousVisit(): void {
-    this.items = this.previousVisitData.map((item, index) => ({
+    // Copy previous data
+    const copied = this.previousVisitData.map((item, index) => ({
       ...item,
       id: `fh-${Date.now()}-${index}`,
     }));
-    this.ignorePreviousVisit(); // Clear to hide banner
+    
+    // Add defaults that are not in copied
+    const copiedConditions = new Set(copied.map(i => i.condition.toLowerCase()));
+    DEFAULT_FAMILY_CONDITIONS.forEach((condition, index) => {
+      if (!copiedConditions.has(condition.toLowerCase())) {
+        copied.push({
+          id: `fh-def-${Date.now()}-${index}`,
+          condition,
+          relation: '',
+          status: 'inactive',
+          notes: '',
+        });
+      }
+    });
+
+    this.items = copied;
+    this.previousVisitData = [];
   }
 
-  /** Ignore/Dismiss previous visit suggestion */
+  /** Ignore/Dismiss previous visit suggestion and load defaults */
   ignorePreviousVisit(): void {
     this.previousVisitData = [];
+    this.loadDefaultItems();
   }
 
   /* ===========================================================================
