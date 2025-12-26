@@ -33,6 +33,7 @@ export type VisitFormSubTab = typeof VisitFormSubTab[keyof typeof VisitFormSubTa
 export const MedicalHistorySubTab = {
   OVERVIEW: 'overview',
   PAST_HISTORY: 'past_history',
+  PAST_HISTORY_2: 'past_history_2',
   SURGICAL_HISTORY: 'surgical_history',
   FAMILY_HISTORY: 'family_history',
   PERSONAL_HISTORY: 'personal_history',
@@ -75,6 +76,7 @@ export const VisitFormSubTabConfig: Record<VisitFormSubTab, { label: string; col
 export const MedicalHistorySubTabConfig: Record<MedicalHistorySubTab, { label: string; color: string }> = {
   [MedicalHistorySubTab.OVERVIEW]: { label: 'Overview', color: 'text-orange-600' },
   [MedicalHistorySubTab.PAST_HISTORY]: { label: 'Past History', color: 'text-amber-600' },
+  [MedicalHistorySubTab.PAST_HISTORY_2]: { label: 'Past History 2', color: 'text-amber-500' },
   [MedicalHistorySubTab.SURGICAL_HISTORY]: { label: 'Surgical History', color: 'text-blue-600' },
   [MedicalHistorySubTab.FAMILY_HISTORY]: { label: 'Family History', color: 'text-emerald-600' },
   [MedicalHistorySubTab.PERSONAL_HISTORY]: { label: 'Personal History', color: 'text-violet-600' },
@@ -113,6 +115,7 @@ export const VisitFormSubTabList: VisitFormSubTab[] = [
 export const MedicalHistorySubTabList: MedicalHistorySubTab[] = [
   MedicalHistorySubTab.OVERVIEW,
   MedicalHistorySubTab.PAST_HISTORY,
+  MedicalHistorySubTab.PAST_HISTORY_2,
   MedicalHistorySubTab.SURGICAL_HISTORY,
   MedicalHistorySubTab.FAMILY_HISTORY,
   MedicalHistorySubTab.PERSONAL_HISTORY,

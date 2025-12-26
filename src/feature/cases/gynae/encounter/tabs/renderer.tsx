@@ -3,6 +3,7 @@ import { GuyiniEncounterTab } from '../store';
 import {
   VisitFormContent,
   PastHistoryContent,
+  PastHistory2Content,
   SurgicalHistoryContent,
   FamilyHistoryContent,
   PersonalHistoryContent,
@@ -25,6 +26,8 @@ export const TabContent = observer(({ tab }: TabContentProps) => {
       return <MedicalHistoryOverviewContent />;
     case GuyiniEncounterTab.PAST_HISTORY:
       return <PastHistoryContent />;
+    case GuyiniEncounterTab.PAST_HISTORY_2:
+      return <PastHistory2Content />;
     case GuyiniEncounterTab.SURGICAL_HISTORY:
       return <SurgicalHistoryContent />;
     case GuyiniEncounterTab.FAMILY_HISTORY:

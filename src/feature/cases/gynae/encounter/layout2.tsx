@@ -23,6 +23,7 @@ import { useSession } from '../../../session';
 const MEDICAL_HISTORY_TABS: GuyiniEncounterTab[] = [
   GuyiniEncounterTab.MEDICAL_HISTORY_OVERVIEW,
   GuyiniEncounterTab.PAST_HISTORY,
+  GuyiniEncounterTab.PAST_HISTORY_2,
   GuyiniEncounterTab.SURGICAL_HISTORY,
   GuyiniEncounterTab.FAMILY_HISTORY,
   GuyiniEncounterTab.PERSONAL_HISTORY,
@@ -38,6 +39,7 @@ const getTabIcon = (tab: GuyiniEncounterTab) => {
     case GuyiniEncounterTab.VISIT_FORM: return ClipboardList;
     case GuyiniEncounterTab.MEDICAL_HISTORY_OVERVIEW: return LayoutGrid;
     case GuyiniEncounterTab.PAST_HISTORY: return History;
+    case GuyiniEncounterTab.PAST_HISTORY_2: return History;
     case GuyiniEncounterTab.SURGICAL_HISTORY: return Activity;
     case GuyiniEncounterTab.FAMILY_HISTORY: return Users;
     case GuyiniEncounterTab.PERSONAL_HISTORY: return User;
@@ -55,6 +57,7 @@ const getTabColor = (tab: GuyiniEncounterTab) => {
     case GuyiniEncounterTab.VISIT_FORM: return 'text-sky-600';
     case GuyiniEncounterTab.MEDICAL_HISTORY_OVERVIEW: return 'text-orange-600';
     case GuyiniEncounterTab.PAST_HISTORY: return 'text-amber-600';
+    case GuyiniEncounterTab.PAST_HISTORY_2: return 'text-amber-500';
     case GuyiniEncounterTab.SURGICAL_HISTORY: return 'text-blue-600';
     case GuyiniEncounterTab.FAMILY_HISTORY: return 'text-emerald-600';
     case GuyiniEncounterTab.PERSONAL_HISTORY: return 'text-violet-600';

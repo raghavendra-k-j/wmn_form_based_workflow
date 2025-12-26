@@ -51,6 +51,7 @@ import { FetusProvider } from './investigations/fetus-context';
 import {
   MedicalHistoryOverviewContent,
   PastHistoryContent,
+  PastHistory2Content,
   SurgicalHistoryContent,
   FamilyHistoryContent,
   PersonalHistoryContent,
@@ -74,6 +75,7 @@ const getMedicalHistorySubTabIcon = (subTab: MedicalHistorySubTab) => {
   switch (subTab) {
     case MedicalHistorySubTab.OVERVIEW: return LayoutGrid;
     case MedicalHistorySubTab.PAST_HISTORY: return History;
+    case MedicalHistorySubTab.PAST_HISTORY_2: return History;
     case MedicalHistorySubTab.SURGICAL_HISTORY: return Activity;
     case MedicalHistorySubTab.FAMILY_HISTORY: return Users;
     case MedicalHistorySubTab.PERSONAL_HISTORY: return User;
@@ -283,6 +285,7 @@ const MedicalHistorySubTabContent = observer(({ subTab }: { subTab: MedicalHisto
   switch (subTab) {
     case MedicalHistorySubTab.OVERVIEW: return <MedicalHistoryOverviewContent />;
     case MedicalHistorySubTab.PAST_HISTORY: return <PastHistoryContent />;
+    case MedicalHistorySubTab.PAST_HISTORY_2: return <PastHistory2Content />;
     case MedicalHistorySubTab.SURGICAL_HISTORY: return <SurgicalHistoryContent />;
     case MedicalHistorySubTab.FAMILY_HISTORY: return <FamilyHistoryContent />;
     case MedicalHistorySubTab.PERSONAL_HISTORY: return <PersonalHistoryContent />;

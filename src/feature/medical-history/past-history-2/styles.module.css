@@ -1,0 +1,756 @@
+/* ============================================================================
+ * Past History 2 - Tab-based Medical History Entry
+ * ============================================================================ */
+
+.container {
+  background: white;
+  border: 1px solid #e4e4e7;
+  overflow: hidden;
+}
+
+/* ============================================================================
+ * Simulation Banner
+ * ============================================================================ */
+
+.simulationBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: linear-gradient(to right, #f3e8ff, #ede9fe);
+  border-bottom: 2px solid #a78bfa;
+}
+
+.simulationBannerContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #7c3aed;
+}
+
+.simulationBannerLabel {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #7c3aed;
+}
+
+.simulationBannerDivider {
+  color: #c4b5fd;
+}
+
+.simulationBannerMode {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5b21b6;
+  background: white;
+  padding: 2px 10px;
+  border: 1px solid #a78bfa;
+  border-radius: 2px;
+}
+
+.simulationBannerButtons {
+  display: flex;
+  gap: 6px;
+}
+
+.simulationBtn {
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  background: white;
+  border: 1px solid #c4b5fd;
+  color: #7c3aed;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.simulationBtn:hover {
+  background: #ede9fe;
+  border-color: #a78bfa;
+}
+
+.simulationBtnActive {
+  background: #7c3aed;
+  border-color: #7c3aed;
+  color: white;
+}
+
+.simulationBtnActive:hover {
+  background: #6d28d9;
+  border-color: #6d28d9;
+}
+
+/* ============================================================================
+ * Tabs
+ * ============================================================================ */
+
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #e4e4e7;
+}
+
+.tab {
+  padding: 8px 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.tab:hover {
+  background: #f4f4f5;
+}
+
+.tabActive {
+  color: #0d9488;
+}
+
+.tabActive::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #14b8a6, #0d9488);
+}
+
+.tabInactive {
+  color: #71717a;
+}
+
+/* ============================================================================
+ * Header Controls
+ * ============================================================================ */
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: linear-gradient(to bottom, #fafafa, #f4f4f5);
+  border-bottom: 1px solid #e4e4e7;
+}
+
+.pastHistoryQuestion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.questionLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #3f3f46;
+}
+
+.optionButtons {
+  display: flex;
+  gap: 4px;
+}
+
+.optionBtn {
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid #d4d4d8;
+  background: white;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.optionBtn:hover {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.optionBtnYes {
+  color: #52525b;
+  border-color: #d4d4d8;
+  background: white;
+}
+
+.optionBtnYes:hover {
+  background: #f4f4f5;
+  border-color: #a1a1aa;
+}
+
+.optionBtnYesActive {
+  background: #22c55e;
+  border-color: #16a34a;
+  color: white;
+}
+
+.optionBtnNo {
+  color: #52525b;
+  border-color: #d4d4d8;
+  background: white;
+}
+
+.optionBtnNo:hover {
+  background: #f4f4f5;
+  border-color: #a1a1aa;
+}
+
+.optionBtnNoActive {
+  background: #ef4444;
+  border-color: #dc2626;
+  color: white;
+}
+
+/* ============================================================================
+ * Previous Visit Info
+ * ============================================================================ */
+
+.previousVisitInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: linear-gradient(to right, #fef3c7, #fef9c3);
+  border: 1px solid #fcd34d;
+  margin: 0 16px 12px 16px;
+  margin-top: 12px;
+}
+
+.previousVisitLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: #92400e;
+  text-transform: uppercase;
+}
+
+.previousVisitDate {
+  font-size: 12px;
+  font-weight: 600;
+  color: #78350f;
+  background: #fef08a;
+  padding: 2px 8px;
+  border: 1px solid #fcd34d;
+}
+
+.previousVisitConditions {
+  font-size: 11px;
+  color: #92400e;
+  font-weight: 500;
+}
+
+.copyCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  padding: 4px 10px;
+  background: white;
+  border: 1px solid #d4d4d8;
+  font-size: 11px;
+  font-weight: 600;
+  color: #0d9488;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copyCheckbox:hover {
+  background: #f0fdfa;
+  border-color: #14b8a6;
+}
+
+.copyCheckbox input {
+  accent-color: #0d9488;
+}
+
+/* ============================================================================
+ * Data Table
+ * ============================================================================ */
+
+.tableContainer {
+  padding: 0 16px 16px 16px;
+}
+
+.tableCard {
+  background: white;
+  border: 1px solid #e4e4e7;
+  overflow: hidden;
+}
+
+.tableHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: linear-gradient(to bottom, #fafafa, #f4f4f5);
+  border-bottom: 1px solid #e4e4e7;
+}
+
+.tableTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tableIcon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  color: #d97706;
+}
+
+.tableTitleText {
+  font-size: 12px;
+  font-weight: 700;
+  color: #3f3f46;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.activeCountBadge {
+  font-size: 10px;
+  font-weight: 600;
+  color: #15803d;
+  background: #dcfce7;
+  padding: 2px 8px;
+  border: 1px solid #86efac;
+}
+
+/* Save Button */
+.saveBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: linear-gradient(to bottom, #14b8a6, #0d9488);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #0d9488, #0f766e);
+}
+
+.saveBtn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.saveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.saveBtnSuccess {
+  background: linear-gradient(to bottom, #22c55e, #16a34a);
+}
+
+.saveBtnSuccess:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #16a34a, #15803d);
+}
+
+/* ============================================================================
+ * Table
+ * ============================================================================ */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableHead {
+  background: #f4f4f5;
+}
+
+.tableHeadCell {
+  padding: 8px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #52525b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+  border-bottom: 1px solid #e4e4e7;
+}
+
+.tableRow {
+  border-bottom: 1px solid #f4f4f5;
+  transition: background 0.1s ease;
+}
+
+.tableRow:hover {
+  background: #fafafa;
+}
+
+.tableCell {
+  padding: 6px 12px;
+  vertical-align: middle;
+}
+
+.diseaseName {
+  font-size: 12px;
+  font-weight: 600;
+  color: #27272a;
+}
+
+.statusBtn {
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  border: 1px solid;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-width: 45px;
+  text-align: center;
+}
+
+.statusNo {
+  background: #f4f4f5;
+  color: #71717a;
+  border-color: #d4d4d8;
+}
+
+.statusNo:hover {
+  background: #e4e4e7;
+}
+
+.statusYes {
+  background: #dcfce7;
+  color: #15803d;
+  border-color: #86efac;
+}
+
+.statusYes:hover {
+  background: #bbf7d0;
+}
+
+.inputField {
+  width: 100%;
+  padding: 4px 8px;
+  font-size: 11px;
+  border: none;
+  background: transparent;
+  color: #52525b;
+}
+
+.inputField::placeholder {
+  color: #a1a1aa;
+  font-style: italic;
+}
+
+.inputField:focus {
+  outline: none;
+  background: #f4f4f5;
+}
+
+.notesInput {
+  color: #71717a;
+}
+
+/* ============================================================================
+ * No History Message
+ * ============================================================================ */
+
+.noHistoryMessage {
+  padding: 32px 16px;
+  text-align: center;
+  background: #f9fafb;
+}
+
+.noHistoryText {
+  font-size: 14px;
+  font-weight: 600;
+  color: #52525b;
+  margin-bottom: 4px;
+}
+
+.noHistorySubtext {
+  font-size: 11px;
+  color: #a1a1aa;
+}
+
+/* ============================================================================
+ * New Entry Button
+ * ============================================================================ */
+
+.newEntryContainer {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  border-top: 1px dashed #e4e4e7;
+  margin: 0 16px;
+}
+
+.newEntryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0d9488;
+  background: #f0fdfa;
+  border: 1px dashed #14b8a6;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.newEntryBtn:hover {
+  background: #ccfbf1;
+  border-style: solid;
+}
+
+/* ============================================================================
+ * Timeline (List Tab)
+ * ============================================================================ */
+
+.timelineContainer {
+  padding: 16px;
+}
+
+.timelineCard {
+  background: white;
+  border: 1px solid #e4e4e7;
+  overflow: hidden;
+}
+
+.timelineHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: linear-gradient(to bottom, #fff7ed, #ffedd5);
+  border-bottom: 1px solid #fed7aa;
+}
+
+.timelineIcon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ea580c;
+}
+
+.timelineTitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9a3412;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.timelineCount {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 600;
+  color: #c2410c;
+  background: #ffedd5;
+  padding: 2px 8px;
+  border: 1px solid #fed7aa;
+}
+
+.timelineTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.timelineHeadCell {
+  padding: 8px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #52525b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+  background: #f4f4f5;
+  border-bottom: 1px solid #e4e4e7;
+}
+
+.timelineRow {
+  border-bottom: 1px solid #f4f4f5;
+}
+
+.timelineRow:hover {
+  background: #fffbeb;
+}
+
+.timelineCell {
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #3f3f46;
+}
+
+.timelineDate {
+  font-weight: 600;
+  color: #27272a;
+}
+
+.timelineConditions {
+  color: #52525b;
+}
+
+.viewLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #0d9488;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.viewLink:hover {
+  color: #0f766e;
+  text-decoration: underline;
+}
+
+/* ============================================================================
+ * Empty State
+ * ============================================================================ */
+
+.emptyState {
+  padding: 48px 16px;
+  text-align: center;
+  background: #fafafa;
+}
+
+.emptyText {
+  font-size: 14px;
+  font-weight: 500;
+  color: #71717a;
+  margin-bottom: 4px;
+}
+
+.emptySubtext {
+  font-size: 11px;
+  color: #a1a1aa;
+}
+
+/* ============================================================================
+ * Add Condition Row
+ * ============================================================================ */
+
+.addRow {
+  padding: 8px 12px;
+  border-top: 1px solid #e4e4e7;
+  background: #fafafa;
+}
+
+/* ============================================================================
+ * View Visit Modal
+ * ============================================================================ */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modalContent {
+  background: white;
+  border: 1px solid #e4e4e7;
+  width: 90%;
+  max-width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.2s ease;
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: linear-gradient(to bottom, #fafafa, #f4f4f5);
+  border-bottom: 1px solid #e4e4e7;
+  position: sticky;
+  top: 0;
+}
+
+.modalTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #27272a;
+}
+
+.modalCloseBtn {
+  padding: 4px;
+  background: none;
+  border: none;
+  color: #71717a;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.modalCloseBtn:hover {
+  color: #27272a;
+}
+
+.modalBody {
+  padding: 16px;
+}
+
+.modalEmptyState {
+  padding: 32px 16px;
+  text-align: center;
+  color: #71717a;
+  font-style: italic;
+}
+
+.modalSummary {
+  margin-top: 16px;
+  padding: 12px;
+  background: linear-gradient(to right, #ecfdf5, #d1fae5);
+  border: 1px solid #6ee7b7;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.modalSummaryLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: #047857;
+  text-transform: uppercase;
+}
+
+.modalSummaryValue {
+  font-size: 12px;
+  font-weight: 500;
+  color: #065f46;
+}

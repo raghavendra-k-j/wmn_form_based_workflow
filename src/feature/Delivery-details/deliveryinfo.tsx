@@ -10,7 +10,7 @@ import {
     Button,
     MultiSelectDropdown,
 } from '../../components';
-import { DeliveryList, SAMPLE_DELIVERIES } from '../cases/pnc/encounter/delivery-info/delivery-lists';
+import { DeliveryList } from '../cases/pnc/encounter/delivery-info/delivery-lists';
 import { DeliveryEdit } from '../cases/pnc/encounter/delivery-info/delivery-edit';
 import { type DeliveryData } from '../cases/pnc/encounter/delivery-info/delivery-data';
 
