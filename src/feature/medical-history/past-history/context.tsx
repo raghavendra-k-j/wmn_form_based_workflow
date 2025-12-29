@@ -1,35 +1,35 @@
 import { createContext, useContext, type ReactNode } from 'react';
-import { PastHistoryStore } from './store';
+import { PastHistory2Store } from './store';
 
-/** Context for Past History Store */
-const PastHistoryContext = createContext<PastHistoryStore | null>(null);
+/** Context for Past History 2 Store */
+const PastHistory2Context = createContext<PastHistory2Store | null>(null);
 
 /** Provider Props */
-interface PastHistoryProviderProps {
-  store: PastHistoryStore;
+interface PastHistory2ProviderProps {
+  store: PastHistory2Store;
   children: ReactNode;
 }
 
 /**
- * Provider for Past History Store
+ * Provider for Past History 2 Store
  * Allows embedding the component anywhere with its own store instance
  */
-export function PastHistoryProvider({ store, children }: PastHistoryProviderProps) {
+export function PastHistory2Provider({ store, children }: PastHistory2ProviderProps) {
   return (
-    <PastHistoryContext.Provider value={store}>
+    <PastHistory2Context.Provider value={store}>
       {children}
-    </PastHistoryContext.Provider>
+    </PastHistory2Context.Provider>
   );
 }
 
 /**
- * Hook to access the Past History Store
- * Must be used within PastHistoryProvider
+ * Hook to access the Past History 2 Store
+ * Must be used within PastHistory2Provider
  */
-export function usePastHistoryStore(): PastHistoryStore {
-  const store = useContext(PastHistoryContext);
+export function usePastHistory2Store(): PastHistory2Store {
+  const store = useContext(PastHistory2Context);
   if (!store) {
-    throw new Error('usePastHistoryStore must be used within PastHistoryProvider');
+    throw new Error('usePastHistory2Store must be used within PastHistory2Provider');
   }
   return store;
 }
