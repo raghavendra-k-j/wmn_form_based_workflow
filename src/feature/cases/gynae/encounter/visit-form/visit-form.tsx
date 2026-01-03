@@ -36,6 +36,8 @@ const CERVICAL_CANCER_SCREENING_TYPE_OPTIONS = ['Pap smear', 'HPV'];
 
 const SCREENING_RESULT_OPTIONS = ['Normal', 'Abnormal'];
 
+const PAIN_DURATION_OPTIONS = ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'];
+
 const MICTURITION_OPTIONS = ['Normal', 'Burning', 'Frequency', 'Urgency', 'Incontinence', 'Dysuria', 'Nocturia'];
 
 const BOWELS_OPTIONS = ['Regular', 'Constipation', 'Diarrhea', 'Irregular'];
@@ -88,6 +90,7 @@ export const VisitForm = observer(() => {
   const [cycleLength, setCycleLength] = useState('');
   const [bleedingDuration, setBleedingDuration] = useState('');
   const [dysmenorrhea, setDysmenorrhea] = useState('');
+  const [painDuration, setPainDuration] = useState('');
   const [interMenstrualBleeding, setInterMenstrualBleeding] = useState('');
 
   // Systems Review
@@ -271,11 +274,26 @@ export const VisitForm = observer(() => {
         <FormField label="Pain with periods">
           <SelectInput
             value={dysmenorrhea}
-            onChange={setDysmenorrhea}
+            onChange={(val) => {
+              setDysmenorrhea(val);
+              if (val !== 'Yes') {
+                setPainDuration('');
+              }
+            }}
             options={YES_NO_OPTIONS}
             placeholder="Select..."
           />
         </FormField>
+        {dysmenorrhea === 'Yes' && (
+          <FormField label="Duration of Pain">
+            <SelectInput
+              value={painDuration}
+              onChange={setPainDuration}
+              options={PAIN_DURATION_OPTIONS}
+              placeholder="Select day..."
+            />
+          </FormField>
+        )}
         <FormField label="Inter-menstrual spotting/bleeding">
           <RadioGroup
             value={interMenstrualBleeding}
