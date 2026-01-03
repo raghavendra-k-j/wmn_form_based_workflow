@@ -1,7 +1,7 @@
 import localforage from "localforage";
 import { api } from "./sample-data-api";
 import type { PastHistoryMaster } from "../models/past-history-master";
-import type { PatientPastHistory } from "../models/patient-past-history";
+
 import type { PastHistoryRecord } from "../models/past-history-record";
 
 const STORAGE_KEYS = {

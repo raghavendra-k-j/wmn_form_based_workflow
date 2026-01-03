@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, runInAction, toJS } from 'mobx';
 import { diagnosisService } from './services/diagnosis-service';
 import type {
   ICDCode,
@@ -139,13 +139,14 @@ export class DiagnosisStore {
       icdCode: icdCode.code,
       icdName: icdCode.name,
       status: 'active',
-      category: '',
+      category: icdCode.category || '',
       severity: 'NA',
       pattern: 'NA',
       laterality: 'NA',
       treatmentStatus: false,
       notes: '',
       capturedDate: new Date().toISOString(),
+      modifiers: icdCode.modifiers,
     };
 
     this.currentDiagnoses.push(newDiagnosis);
@@ -191,7 +192,16 @@ export class DiagnosisStore {
 
   // Save
   async saveRecord(): Promise<void> {
-    if (this.currentDiagnoses.length === 0) return;
+    if (this.currentDiagnoses.length === 0) {
+      console.warn('DiagnosisStore: saveRecord called but no diagnoses to save');
+      return;
+    }
+
+    console.log('DiagnosisStore: Starting save...', {
+      patientId: this.patientId,
+      encounterId: this.encounterId,
+      diagnosesCount: this.currentDiagnoses.length
+    });
 
     this.saveState = 'saving';
     this.saveError = null;
@@ -201,14 +211,18 @@ export class DiagnosisStore {
         id: `record-${Date.now()}`,
         patientId: this.patientId,
         encounterId: this.encounterId,
-        diagnoses: this.currentDiagnoses.map(d => ({ ...d })),
+        diagnoses: toJS(this.currentDiagnoses),
         capturedDate: new Date().toISOString(),
       };
+      
+      console.log('DiagnosisStore: Prepared record for saving:', record);
 
       await diagnosisService.saveRecord(this.patientId, record);
+      console.log('DiagnosisStore: Service saveRecord completed successfully');
       
       // Reload previous diagnoses to reflect changes immediately
       await this.loadPreviousDiagnoses();
+      console.log('DiagnosisStore: Previous diagnoses reloaded');
 
       runInAction(() => {
         this.isSaved = true;
@@ -221,9 +235,13 @@ export class DiagnosisStore {
         }, 2000);
       });
     } catch (error) {
+      console.error('DiagnosisStore: Save failed with error:', error);
+      
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred during save';
+
       runInAction(() => {
         this.saveState = 'error';
-        this.saveError = error instanceof Error ? error.message : 'Failed to save';
+        this.saveError = errorMessage;
       });
     }
   }

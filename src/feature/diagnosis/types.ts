@@ -6,9 +6,17 @@ export type SaveState = 'idle' | 'saving' | 'saved' | 'error';
 export type LoadingState = 'idle' | 'loading' | 'loaded' | 'error';
 export type TabType = 'add' | 'history';
 
+export interface DiagnosisModifiers {
+  hasSeverity: boolean;
+  hasPattern: boolean;
+  hasLaterality: boolean;
+}
+
 export interface ICDCode {
   code: string;
   name: string;
+  category?: string;
+  modifiers?: DiagnosisModifiers;
 }
 
 export interface DiagnosisCategory {
@@ -29,6 +37,8 @@ export interface PatientDiagnosis {
   notes: string;
   capturedDate: string;
   encounterId?: string;
+  // Modifier config from ICD master
+  modifiers?: DiagnosisModifiers;
 }
 
 export interface DiagnosisRecord {

@@ -80,6 +80,8 @@ export const diagnosisService = {
 
   async saveRecord(patientId: string, record: DiagnosisRecord): Promise<void> {
     try {
+      console.log('DiagnosisService: Saving record to localforage...', { patientId, recordId: record.id });
+      
       const allRecords = await localforage.getItem<Record<string, DiagnosisRecord[]>>(
         STORAGE_KEYS.DIAGNOSIS_RECORDS
       );
@@ -88,8 +90,10 @@ export const diagnosisService = {
       const existingIndex = patientRecords.findIndex(r => r.encounterId === record.encounterId);
       
       if (existingIndex >= 0) {
+        console.log('DiagnosisService: Updating existing record for encounter');
         patientRecords[existingIndex] = record;
       } else {
+        console.log('DiagnosisService: Adding new record for encounter');
         patientRecords.push(record);
       }
       
@@ -99,8 +103,9 @@ export const diagnosisService = {
       };
 
       await localforage.setItem(STORAGE_KEYS.DIAGNOSIS_RECORDS, updatedRecords);
+      console.log('DiagnosisService: Save to localforage successful');
     } catch (error) {
-      console.error("Failed to save diagnosis record:", error);
+      console.error("DiagnosisService: Failed to save diagnosis record:", error);
       throw error;
     }
   },

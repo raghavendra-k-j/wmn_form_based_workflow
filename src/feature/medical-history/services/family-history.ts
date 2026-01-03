@@ -1,6 +1,6 @@
 import localforage from "localforage";
 import { api } from "./sample-data-api";
-import type { FamilyHistoryMaster, PatientFamilyHistory, FamilyHistoryRecord } from "../family-history2/types";
+import type { FamilyHistoryMaster, FamilyHistoryRecord } from "../family-history2/types";
 
 const STORAGE_KEYS = {
   FAMILY_HISTORY_RECORDS: "family_history_records",

@@ -51,14 +51,11 @@ export const DiagnosisForm = observer(() => {
           <table className="w-full">
             <thead>
               <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
-                <th className="px-3 py-2.5 text-[11px] font-semibold text-gray-700 text-left uppercase tracking-wide" style={{ width: '18%' }}>
+                <th className="px-3 py-2.5 text-[11px] font-semibold text-gray-700 text-left uppercase tracking-wide" style={{ width: '24%' }}>
                   Diagnosis
                 </th>
-                <th className="px-3 py-2.5 text-[11px] font-semibold text-gray-700 text-left uppercase tracking-wide" style={{ width: '10%' }}>
-                  Status
-                </th>
                 <th className="px-3 py-2.5 text-[11px] font-semibold text-gray-700 text-left uppercase tracking-wide" style={{ width: '12%' }}>
-                  Category
+                  Status
                 </th>
                 <th className="px-3 py-2.5 text-[11px] font-semibold text-gray-700 text-left uppercase tracking-wide" style={{ width: '10%' }}>
                   Severity
@@ -69,10 +66,10 @@ export const DiagnosisForm = observer(() => {
                 <th className="px-3 py-2.5 text-[11px] font-semibold text-gray-700 text-left uppercase tracking-wide" style={{ width: '10%' }}>
                   Laterality
                 </th>
-                <th className="px-3 py-2.5 text-[11px] font-semibold text-gray-700 text-center uppercase tracking-wide" style={{ width: '8%' }}>
+                <th className="px-3 py-2.5 text-[11px] font-semibold text-gray-700 text-center uppercase tracking-wide" style={{ width: '10%' }}>
                   Treatment
                 </th>
-                <th className="px-3 py-2.5 text-[11px] font-semibold text-gray-700 text-left uppercase tracking-wide" style={{ width: '18%' }}>
+                <th className="px-3 py-2.5 text-[11px] font-semibold text-gray-700 text-left uppercase tracking-wide" style={{ width: '20%' }}>
                   Notes
                 </th>
                 <th className="px-3 py-2.5" style={{ width: '4%' }}></th>

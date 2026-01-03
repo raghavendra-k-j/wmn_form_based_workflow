@@ -17,10 +17,10 @@ export const DiagnosisHistoryRow = observer(({ diagnosis }: DiagnosisHistoryRowP
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-700';
-      case 'resolved': return 'bg-gray-100 text-gray-700';
-      case 'ruled-out': return 'bg-orange-100 text-orange-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case 'active': return 'bg-green-50 text-green-700 border border-green-200 rounded';
+      case 'resolved': return 'bg-gray-50 text-gray-700 border border-gray-200 rounded';
+      case 'ruled-out': return 'bg-orange-50 text-orange-700 border border-orange-200 rounded';
+      default: return 'bg-gray-50 text-gray-700 border border-gray-200 rounded';
     }
   };
 

@@ -1,6 +1,6 @@
 import localforage from "localforage";
 import { api } from "./sample-data-api";
-import type { SurgicalHistoryMaster, PatientSurgicalHistory, SurgicalHistoryRecord } from "../surgical-history2/types";
+import type { SurgicalHistoryMaster, SurgicalHistoryRecord } from "../surgical-history2/types";
 
 const STORAGE_KEYS = {
   SURGICAL_HISTORY_RECORDS: "surgical_history_records",
