@@ -32,21 +32,9 @@ const FLOW_OPTIONS = ['Light', 'Moderate', 'Heavy'];
 
 const YES_NO_OPTIONS = ['Yes', 'No'];
 
-const PAP_SMEAR_RESULT_OPTIONS = [
-  'Normal',
-  'Abnormal',
-  'ASCUS',
-  'LSIL',
-  'HSIL',
-  'Inadequate Sample',
-];
+const CERVICAL_CANCER_SCREENING_TYPE_OPTIONS = ['Pap smear', 'HPV'];
 
-const HPV_RESULT_OPTIONS = [
-  'Negative',
-  'Positive (Low Risk)',
-  'Positive (High Risk)',
-  'Unknown',
-];
+const SCREENING_RESULT_OPTIONS = ['Normal', 'Abnormal'];
 
 const MICTURITION_OPTIONS = ['Normal', 'Burning', 'Frequency', 'Urgency', 'Incontinence', 'Dysuria', 'Nocturia'];
 
@@ -87,15 +75,11 @@ export const VisitForm = observer(() => {
   const [lmp, setLmp] = useState('');
   const [contraception, setContraception] = useState('');
 
-  // Cervical Cancer Screening - Pap Smear
-  const [papSmearDone, setPapSmearDone] = useState('');
-  const [lastPapSmearDate, setLastPapSmearDate] = useState('');
-  const [papSmearResult, setPapSmearResult] = useState('');
-
-  // Cervical Cancer Screening - HPV
-  const [hpvTestDone, setHpvTestDone] = useState('');
-  const [lastHpvTestDate, setLastHpvTestDate] = useState('');
-  const [hpvResult, setHpvResult] = useState('');
+  // Cervical Cancer Screening
+  const [cervicalScreeningDone, setCervicalScreeningDone] = useState('');
+  const [cervicalScreeningType, setCervicalScreeningType] = useState('');
+  const [lastScreeningDate, setLastScreeningDate] = useState('');
+  const [screeningResult, setScreeningResult] = useState('');
 
   // Menstrual History
   const [menstrualPattern, setMenstrualPattern] = useState('');
@@ -183,76 +167,58 @@ export const VisitForm = observer(() => {
       <div className="space-y-4">
         <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Cervical Cancer Screening</h4>
         
-        {/* Pap Smear Row */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <FormField label="Pap Smear Done">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <FormField label="Screening Done">
             <SelectInput
-              value={papSmearDone}
+              value={cervicalScreeningDone}
               onChange={(val) => {
-                setPapSmearDone(val);
+                setCervicalScreeningDone(val);
                 if (val !== 'Yes') {
-                  setLastPapSmearDate('');
-                  setPapSmearResult('');
+                  setCervicalScreeningType('');
+                  setLastScreeningDate('');
+                  setScreeningResult('');
                 }
               }}
               options={YES_NO_OPTIONS}
               placeholder="Select..."
             />
           </FormField>
-          {papSmearDone === 'Yes' && (
+          
+          {cervicalScreeningDone === 'Yes' && (
             <>
-              <FormField label="Last Pap Smear Date">
-                <TextInput
-                  type="date"
-                  value={lastPapSmearDate}
-                  onChange={setLastPapSmearDate}
-                />
-              </FormField>
-              <FormField label="Pap Smear Result">
+              <FormField label="Type">
                 <SelectInput
-                  value={papSmearResult}
-                  onChange={setPapSmearResult}
-                  options={PAP_SMEAR_RESULT_OPTIONS}
-                  placeholder="Select result..."
+                  value={cervicalScreeningType}
+                  onChange={(val) => {
+                    setCervicalScreeningType(val);
+                    // Reset result when type changes
+                    setScreeningResult('');
+                  }}
+                  options={CERVICAL_CANCER_SCREENING_TYPE_OPTIONS}
+                  placeholder="Select type..."
                 />
               </FormField>
-            </>
-          )}
-        </div>
-
-        {/* HPV Row */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <FormField label="HPV Test Done">
-            <SelectInput
-              value={hpvTestDone}
-              onChange={(val) => {
-                setHpvTestDone(val);
-                if (val !== 'Yes') {
-                  setLastHpvTestDate('');
-                  setHpvResult('');
-                }
-              }}
-              options={YES_NO_OPTIONS}
-              placeholder="Select..."
-            />
-          </FormField>
-          {hpvTestDone === 'Yes' && (
-            <>
-              <FormField label="Last HPV Test Date">
-                <TextInput
-                  type="date"
-                  value={lastHpvTestDate}
-                  onChange={setLastHpvTestDate}
-                />
-              </FormField>
-              <FormField label="HPV Result">
-                <SelectInput
-                  value={hpvResult}
-                  onChange={setHpvResult}
-                  options={HPV_RESULT_OPTIONS}
-                  placeholder="Select result..."
-                />
-              </FormField>
+              
+              {cervicalScreeningType && (
+                <>
+                  <FormField label="Last Test Date">
+                    <TextInput
+                      type="date"
+                      value={lastScreeningDate}
+                      onChange={setLastScreeningDate}
+                    />
+                  </FormField>
+                  
+                  <FormField label="Result">
+                    <SelectInput
+                      value={screeningResult}
+                      onChange={setScreeningResult}
+                      options={SCREENING_RESULT_OPTIONS}
+                      placeholder="Select result..."
+                    />
+                  </FormField>
+                </>
+              )}
             </>
           )}
         </div>
