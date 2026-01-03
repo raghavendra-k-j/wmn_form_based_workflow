@@ -26,7 +26,7 @@
   {
     "id": "ph-asthma",
     "name": "Asthma",
-    "options": ["No", "Seasonal", "Perennial", "On Medication"],
+    "options": ["No", "Well Ctlred", "Partially", "Un controlled"],
     "selectionType": "single",
     "displayOrder": 4,
     "isDefault": true
@@ -109,7 +109,7 @@
     "options": ["Pos", "Neg"],
     "selectionType": "single",
     "displayOrder": 14,
-    "isDefault": false
+    "isDefault": true
   },
   {
     "id": "ph-renal",
@@ -117,7 +117,7 @@
     "options": ["No", "Yes"],
     "selectionType": "single",
     "displayOrder": 15,
-    "isDefault": false
+    "isDefault": true
   },
   {
     "id": "ph-autoimmune",
@@ -125,7 +125,7 @@
     "options": ["No", "Yes"],
     "selectionType": "single",
     "displayOrder": 16,
-    "isDefault": false
+    "isDefault": true
   },
   {
     "id": "ph-haematological",
@@ -133,14 +133,6 @@
     "options": ["No", "Yes"],
     "selectionType": "single",
     "displayOrder": 17,
-    "isDefault": false
-  },
-  {
-    "id": "ph-others",
-    "name": "Others",
-    "options": [],
-    "selectionType": "single",
-    "displayOrder": 18,
-    "isDefault": false
+    "isDefault": true
   }
 ]

@@ -1,24 +1,25 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useParams } from 'react-router-dom';
 import {
-  DrugAllergiesStore,
-  DrugAllergiesProvider,
-  DrugAllergiesView,
-} from '../../../../medical-history/drug-allergies';
+  DrugAllergies2Store,
+  DrugAllergies2Provider,
+  DrugAllergies2View,
+} from '../../../../medical-history/drug-allergies2';
 
 /** Drug Allergies Tab Content */
 export const AllergiesContent = observer(() => {
-  // Create store instance
-  const store = useMemo(() => new DrugAllergiesStore(), []);
+  const { patientId } = useParams<{ patientId: string }>();
 
-  // Initialize on mount
-  useEffect(() => {
-    store.initialize();
-  }, [store]);
+  const store = useMemo(() => {
+    const newStore = new DrugAllergies2Store(patientId || 'unknown-patient');
+    newStore.initialize();
+    return newStore;
+  }, [patientId]);
 
   return (
-    <DrugAllergiesProvider store={store}>
-      <DrugAllergiesView isEditMode={true} />
-    </DrugAllergiesProvider>
+    <DrugAllergies2Provider value={store}>
+      <DrugAllergies2View />
+    </DrugAllergies2Provider>
   );
 });

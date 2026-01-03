@@ -109,14 +109,6 @@
     "options": ["No", "Yes"],
     "selectionType": "single",
     "displayOrder": 14,
-    "isDefault": false
-  },
-  {
-    "id": "fh-others",
-    "name": "Others",
-    "options": [],
-    "selectionType": "single",
-    "displayOrder": 15,
-    "isDefault": false
+    "isDefault": true
   }
 ]

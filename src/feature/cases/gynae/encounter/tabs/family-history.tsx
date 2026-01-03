@@ -1,23 +1,26 @@
 import { useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useParams } from 'react-router-dom';
 import {
-  FamilyHistoryStore,
-  FamilyHistoryProvider,
-  FamilyHistoryView,
-} from '../../../../medical-history/family-history';
+  FamilyHistory2Store,
+  FamilyHistory2Provider,
+  FamilyHistory2View,
+} from '../../../../medical-history/family-history2';
 
 /** Family History Tab Content */
 export const FamilyHistoryContent = observer(() => {
-  // Create store instance with initialization
+  const { patientId } = useParams<{ patientId: string }>();
+
+  // Create store instance with patient ID (memoized to maintain state)
   const store = useMemo(() => {
-    const s = new FamilyHistoryStore();
-    s.initialize();
-    return s;
-  }, []);
+    const newStore = new FamilyHistory2Store(patientId || 'unknown-patient');
+    newStore.initialize();
+    return newStore;
+  }, [patientId]);
 
   return (
-    <FamilyHistoryProvider store={store}>
-      <FamilyHistoryView isEditMode={true} />
-    </FamilyHistoryProvider>
+    <FamilyHistory2Provider value={store}>
+      <FamilyHistory2View />
+    </FamilyHistory2Provider>
   );
 });

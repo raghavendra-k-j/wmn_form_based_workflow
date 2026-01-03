@@ -1,23 +1,26 @@
 import { useMemo } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useParams } from 'react-router-dom';
 import {
-  SurgicalHistoryStore,
-  SurgicalHistoryProvider,
-  SurgicalHistoryView,
-} from '../../../../medical-history/surgical-history';
+  SurgicalHistory2Store,
+  SurgicalHistory2Provider,
+  SurgicalHistory2View,
+} from '../../../../medical-history/surgical-history2';
 
 /** Surgical History Tab Content */
 export const SurgicalHistoryContent = observer(() => {
-  // Create store instance with initialization
+  const { patientId } = useParams<{ patientId: string }>();
+
+  // Create store instance with patient ID (memoized to maintain state)
   const store = useMemo(() => {
-    const s = new SurgicalHistoryStore();
-    s.initialize();
-    return s;
-  }, []);
+    const newStore = new SurgicalHistory2Store(patientId || 'unknown-patient');
+    newStore.initialize();
+    return newStore;
+  }, [patientId]);
 
   return (
-    <SurgicalHistoryProvider store={store}>
-      <SurgicalHistoryView isEditMode={true} />
-    </SurgicalHistoryProvider>
+    <SurgicalHistory2Provider value={store}>
+      <SurgicalHistory2View />
+    </SurgicalHistory2Provider>
   );
 });
