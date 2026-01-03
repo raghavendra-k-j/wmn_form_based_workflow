@@ -1,0 +1,122 @@
+[
+  {
+    "id": "sh-cs",
+    "name": "CS (Cesarean Section)",
+    "options": ["No", "Prev 1 CS", "Prev 2 CS", "Others"],
+    "selectionType": "single",
+    "displayOrder": 1,
+    "isDefault": true
+  },
+  {
+    "id": "sh-dc",
+    "name": "D&C (Dilation & Curettage)",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 2,
+    "isDefault": true
+  },
+  {
+    "id": "sh-myomectomy",
+    "name": "Myomectomy",
+    "options": ["No", "Abdominal", "Laparoscopic"],
+    "selectionType": "single",
+    "displayOrder": 3,
+    "isDefault": true
+  },
+  {
+    "id": "sh-ovarian-cystectomy",
+    "name": "Ovarian Cystectomy",
+    "options": ["No", "Abdominal", "Laparoscopic"],
+    "selectionType": "single",
+    "displayOrder": 4,
+    "isDefault": true
+  },
+  {
+    "id": "sh-tubectomy",
+    "name": "Tubectomy",
+    "options": ["No", "Abdominal", "Laparoscopic"],
+    "selectionType": "single",
+    "displayOrder": 5,
+    "isDefault": true
+  },
+  {
+    "id": "sh-laparoscopy",
+    "name": "Laparoscopy",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 6,
+    "isDefault": true
+  },
+  {
+    "id": "sh-hysteroscopy",
+    "name": "Hysteroscopy",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 7,
+    "isDefault": true
+  },
+  {
+    "id": "sh-appendectomy",
+    "name": "Appendectomy",
+    "options": ["No", "Abdominal", "Laparoscopic"],
+    "selectionType": "single",
+    "displayOrder": 8,
+    "isDefault": true
+  },
+  {
+    "id": "sh-cholecystectomy",
+    "name": "Cholecystectomy",
+    "options": ["No", "Abdominal", "Laparoscopic"],
+    "selectionType": "single",
+    "displayOrder": 9,
+    "isDefault": true
+  },
+  {
+    "id": "sh-hysterotomy",
+    "name": "Hysterotomy",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 10,
+    "isDefault": true
+  },
+  {
+    "id": "sh-metroplasty",
+    "name": "Metroplasty/Septal resection",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 11,
+    "isDefault": true
+  },
+  {
+    "id": "sh-cardiac",
+    "name": "Cardiac",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 12,
+    "isDefault": false
+  },
+  {
+    "id": "sh-spine",
+    "name": "Spine",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 13,
+    "isDefault": false
+  },
+  {
+    "id": "sh-neuro",
+    "name": "Neuro",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 14,
+    "isDefault": false
+  },
+  {
+    "id": "sh-others",
+    "name": "Others",
+    "options": [],
+    "selectionType": "single",
+    "displayOrder": 15,
+    "isDefault": false
+  }
+]

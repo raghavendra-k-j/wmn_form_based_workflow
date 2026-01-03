@@ -1,0 +1,122 @@
+[
+  {
+    "id": "fh-diabetes",
+    "name": "Diabetes",
+    "options": ["Father", "Mother", "Siblings", "Others"],
+    "selectionType": "multi",
+    "displayOrder": 1,
+    "isDefault": true
+  },
+  {
+    "id": "fh-hypertension",
+    "name": "Hypertension",
+    "options": ["Father", "Mother", "Siblings", "Others"],
+    "selectionType": "multi",
+    "displayOrder": 2,
+    "isDefault": true
+  },
+  {
+    "id": "fh-thyroid",
+    "name": "Thyroid",
+    "options": ["Father", "Mother", "Siblings", "Others"],
+    "selectionType": "multi",
+    "displayOrder": 3,
+    "isDefault": true
+  },
+  {
+    "id": "fh-thromboembolism",
+    "name": "Thromboembolism",
+    "options": ["Father", "Mother", "Siblings", "Others"],
+    "selectionType": "multi",
+    "displayOrder": 4,
+    "isDefault": true
+  },
+  {
+    "id": "fh-psychiatric",
+    "name": "Psychiatric problems",
+    "options": ["No", "Anxiety", "Depression", "Schizophrenia", "Bipolar", "PND"],
+    "selectionType": "multi",
+    "displayOrder": 5,
+    "isDefault": true
+  },
+  {
+    "id": "fh-stroke",
+    "name": "Stroke",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 6,
+    "isDefault": true
+  },
+  {
+    "id": "fh-cancers",
+    "name": "Cancers",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 7,
+    "isDefault": true
+  },
+  {
+    "id": "fh-epilepsy",
+    "name": "Epilepsy",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 8,
+    "isDefault": true
+  },
+  {
+    "id": "fh-bleeding-disorders",
+    "name": "Bleeding Disorders",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 9,
+    "isDefault": true
+  },
+  {
+    "id": "fh-tb",
+    "name": "TB",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 10,
+    "isDefault": true
+  },
+  {
+    "id": "fh-twins",
+    "name": "Twins",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 11,
+    "isDefault": true
+  },
+  {
+    "id": "fh-mentally-challenged",
+    "name": "Mentally Challenged",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 12,
+    "isDefault": true
+  },
+  {
+    "id": "fh-physically-challenged",
+    "name": "Physically Challenged",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 13,
+    "isDefault": true
+  },
+  {
+    "id": "fh-thalassemia",
+    "name": "Thalassemia/Hemoglobinopathy",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 14,
+    "isDefault": false
+  },
+  {
+    "id": "fh-others",
+    "name": "Others",
+    "options": [],
+    "selectionType": "single",
+    "displayOrder": 15,
+    "isDefault": false
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "da-penicillin",
+    "name": "Penicillin",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 1,
+    "isDefault": true
+  },
+  {
+    "id": "da-cephalosporins",
+    "name": "Cephalosporins",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 2,
+    "isDefault": true
+  },
+  {
+    "id": "da-sulfa",
+    "name": "Sulfa Drugs",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 3,
+    "isDefault": true
+  },
+  {
+    "id": "da-nsaids",
+    "name": "NSAIDS",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 4,
+    "isDefault": true
+  },
+  {
+    "id": "da-lidocaine",
+    "name": "Lidocaine",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 5,
+    "isDefault": true
+  },
+  {
+    "id": "da-iron",
+    "name": "Iron preparations",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 6,
+    "isDefault": true
+  },
+  {
+    "id": "da-morphine",
+    "name": "Morphine",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 7,
+    "isDefault": true
+  },
+  {
+    "id": "da-latex",
+    "name": "Latex",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 8,
+    "isDefault": true
+  },
+  {
+    "id": "da-iodine",
+    "name": "Iodine",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 9,
+    "isDefault": true
+  },
+  {
+    "id": "da-others",
+    "name": "Others",
+    "options": [],
+    "selectionType": "single",
+    "displayOrder": 10,
+    "isDefault": false
+  }
+]

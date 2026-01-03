@@ -1,0 +1,74 @@
+[
+  {
+    "id": "per-smoking",
+    "name": "Smoking",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 1,
+    "isDefault": true
+  },
+  {
+    "id": "per-alcohol",
+    "name": "Alcohol",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 2,
+    "isDefault": true
+  },
+  {
+    "id": "per-substance-abuse",
+    "name": "Substance Abuse",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 3,
+    "isDefault": true
+  },
+  {
+    "id": "per-consanguinity",
+    "name": "Consanguinity",
+    "options": ["No", "I Deg", "II Deg", "III Deg"],
+    "selectionType": "single",
+    "displayOrder": 4,
+    "isDefault": true
+  },
+  {
+    "id": "per-single-mother",
+    "name": "Single Mother",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 5,
+    "isDefault": true
+  },
+  {
+    "id": "per-psychological-stress",
+    "name": "Psychological stress",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 6,
+    "isDefault": true
+  },
+  {
+    "id": "per-micturition",
+    "name": "Micturition Normal",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 7,
+    "isDefault": true
+  },
+  {
+    "id": "per-bowels",
+    "name": "Bowels Normal",
+    "options": ["No", "Yes"],
+    "selectionType": "single",
+    "displayOrder": 8,
+    "isDefault": true
+  },
+  {
+    "id": "per-others",
+    "name": "Others",
+    "options": [],
+    "selectionType": "single",
+    "displayOrder": 9,
+    "isDefault": false
+  }
+]
