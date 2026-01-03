@@ -1,0 +1,9 @@
+[
+  { "id": "cat-menstrual", "name": "Menstrual" },
+  { "id": "cat-pelvic-pain", "name": "Pelvic pain" },
+  { "id": "cat-uterine", "name": "Uterine" },
+  { "id": "cat-ovarian", "name": "Ovarian / Adnexal" },
+  { "id": "cat-cervical", "name": "Cervical" },
+  { "id": "cat-vulvovaginal", "name": "Vulvovaginal" },
+  { "id": "cat-breast", "name": "Breast" }
+]

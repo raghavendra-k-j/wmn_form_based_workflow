@@ -11,6 +11,7 @@ import {
   ExaminationsContent,
   ManagementContent,
   MedicalHistoryOverviewContent,
+  DiagnosisContent,
 } from './index';
 
 interface TabContentProps {
@@ -37,6 +38,8 @@ export const TabContent = observer(({ tab }: TabContentProps) => {
       return <AllergiesContent />;
     case GuyiniEncounterTab.EXAMINATIONS:
       return <ExaminationsContent />;
+    case GuyiniEncounterTab.DIAGNOSIS:
+      return <DiagnosisContent />;
     case GuyiniEncounterTab.MANAGEMENT:
       return <ManagementContent />;
     default:

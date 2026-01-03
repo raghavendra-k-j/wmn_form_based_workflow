@@ -10,6 +10,7 @@ import {
   Briefcase,
   FileText,
   LayoutGrid,
+  FileSearch,
 } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -44,6 +45,7 @@ const getTabIcon = (tab: GuyiniEncounterTab) => {
     case GuyiniEncounterTab.CURRENT_MEDICATIONS: return Pill;
     case GuyiniEncounterTab.ALLERGIES: return AlertTriangle;
     case GuyiniEncounterTab.EXAMINATIONS: return Stethoscope;
+    case GuyiniEncounterTab.DIAGNOSIS: return FileSearch;
     case GuyiniEncounterTab.MANAGEMENT: return Briefcase;
     default: return ClipboardList;
   }
@@ -61,6 +63,7 @@ const getTabColor = (tab: GuyiniEncounterTab) => {
     case GuyiniEncounterTab.CURRENT_MEDICATIONS: return 'text-teal-600';
     case GuyiniEncounterTab.ALLERGIES: return 'text-red-600';
     case GuyiniEncounterTab.EXAMINATIONS: return 'text-indigo-600';
+    case GuyiniEncounterTab.DIAGNOSIS: return 'text-cyan-600';
     case GuyiniEncounterTab.MANAGEMENT: return 'text-fuchsia-600';
     default: return 'text-slate-600';
   }
@@ -90,6 +93,7 @@ const SideNavButton = observer(({ tab, isActive, onClick }: { tab: GuyiniEncount
 /** Top-level tabs config for Layout 2 - New 4 tab structure */
 const LAYOUT2_TOP_TABS = [
   { id: 'hopi', label: 'HOPI', icon: ClipboardList, color: 'text-sky-600', tab: GuyiniEncounterTab.VISIT_FORM },
+  { id: 'diagnosis', label: 'Diagnosis', icon: FileSearch, color: 'text-cyan-600', tab: GuyiniEncounterTab.DIAGNOSIS },
   { id: 'history', label: 'Medical History', icon: FileText, color: 'text-amber-600', tab: null }, // Group
   { id: 'exams', label: 'Examination', icon: Stethoscope, color: 'text-indigo-600', tab: GuyiniEncounterTab.EXAMINATIONS },
   { id: 'management', label: 'Management', icon: Briefcase, color: 'text-fuchsia-600', tab: GuyiniEncounterTab.MANAGEMENT },

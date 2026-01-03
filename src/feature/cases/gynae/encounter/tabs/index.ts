@@ -9,3 +9,4 @@ export { AllergiesContent } from './allergies.tsx';
 export { ExaminationsContent } from '../examinations/examinations.tsx';
 export { Management as ManagementContent } from '../management/management.tsx';
 export { MedicalHistoryOverviewContent } from './medical-history-overview.tsx';
+export { DiagnosisContent } from './diagnosis.tsx';

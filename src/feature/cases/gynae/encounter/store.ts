@@ -11,6 +11,7 @@ export const GuyiniEncounterTab = {
   CURRENT_MEDICATIONS: 'current_medications',
   ALLERGIES: 'allergies',
   EXAMINATIONS: 'examinations',
+  DIAGNOSIS: 'diagnosis',
   MANAGEMENT: 'management',
 } as const;
 
@@ -28,6 +29,7 @@ export const GuyiniEncounterTabConfig: Record<GuyiniEncounterTab, { label: strin
   [GuyiniEncounterTab.CURRENT_MEDICATIONS]: { label: 'Current Medications' },
   [GuyiniEncounterTab.ALLERGIES]: { label: 'Drug Allergies' },
   [GuyiniEncounterTab.EXAMINATIONS]: { label: 'Examinations' },
+  [GuyiniEncounterTab.DIAGNOSIS]: { label: 'Diagnosis' },
   [GuyiniEncounterTab.MANAGEMENT]: { label: 'Management' },
 };
 
@@ -42,6 +44,7 @@ export const GuyiniEncounterTabList: GuyiniEncounterTab[] = [
   GuyiniEncounterTab.CURRENT_MEDICATIONS,
   GuyiniEncounterTab.ALLERGIES,
   GuyiniEncounterTab.EXAMINATIONS,
+  GuyiniEncounterTab.DIAGNOSIS,
   GuyiniEncounterTab.MANAGEMENT,
 ];
 
