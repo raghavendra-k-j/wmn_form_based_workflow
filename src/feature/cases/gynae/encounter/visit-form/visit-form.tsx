@@ -28,6 +28,8 @@ const CONTRACEPTION_OPTIONS = [
 
 const MENSTRUAL_PATTERN_OPTIONS = ['Regular', 'Irregular'];
 
+const MENOPAUSAL_STATUS_OPTIONS = ['Pre-menopausal', 'Post-menopausal'];
+
 const FLOW_OPTIONS = ['Light', 'Moderate', 'Heavy'];
 
 const YES_NO_OPTIONS = ['Yes', 'No'];
@@ -74,7 +76,9 @@ export const VisitForm = observer(() => {
 
   // Obstetric History
   const [para, setPara] = useState('');
+  const [menopausalStatus, setMenopausalStatus] = useState('');
   const [lmp, setLmp] = useState('');
+  const [menopauseYear, setMenopauseYear] = useState('');
   const [contraception, setContraception] = useState('');
 
   // Cervical Cancer Screening
@@ -140,13 +144,42 @@ export const VisitForm = observer(() => {
 
       {/* Section 2: Gynae History */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <FormField label="LMP">
-          <TextInput
-            type="date"
-            value={lmp}
-            onChange={setLmp}
+        <FormField label="Menopausal Status">
+          <SelectInput
+            value={menopausalStatus}
+            onChange={(val) => {
+              setMenopausalStatus(val);
+              // Clear fields when changing menopausal status
+              setLmp('');
+              setMenopauseYear('');
+            }}
+            options={MENOPAUSAL_STATUS_OPTIONS}
+            placeholder="Select..."
           />
         </FormField>
+        
+        {menopausalStatus === 'Pre-menopausal' && (
+          <FormField label="LMP">
+            <TextInput
+              type="text"
+              value={lmp}
+              onChange={setLmp}
+              placeholder="e.g. Nov 2025 or 15-11-2025"
+            />
+          </FormField>
+        )}
+        
+        {menopausalStatus === 'Post-menopausal' && (
+          <FormField label="Menopause Attained Year">
+            <TextInput
+              type="text"
+              value={menopauseYear}
+              onChange={setMenopauseYear}
+              placeholder="e.g. 2020"
+            />
+          </FormField>
+        )}
+        
         <FormField label="Para">
           <TextInput
             value={para}
